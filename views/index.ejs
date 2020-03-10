@@ -7,9 +7,14 @@
 </head>
 
 <body>
-  <h1><%= title %></h1>
-  <p>Welcome to <%= title %></p>
-  <button onclick="move();">Go to ...</button>
+  <div id="header">
+    <h1>Cookobot</h1>
+  </div>
+  <hr>
+  <div id="main">
+    <img id="map" src="./images/restaurante.png" alt="">
+    <button style="left: -671px;top: -638px;" class="table_button" onclick="move(1);">Go</button>
+  </div>
 
   <script>
     // Example POST method implementation:
@@ -31,8 +36,8 @@
       return await response.json(); // parses JSON response into native JavaScript objects
     }
 
-    function move() {
-      postData('/', { answer: 42 })
+    function move(tableNum) {
+      postData('/', { table: tableNum })
         .then((data) => {
           console.log(data); // JSON data parsed by `response.json()` call
         });

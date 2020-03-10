@@ -10,8 +10,8 @@ router.get('/', function(req, res, next) {
 router.post('/', (req, res) => {
   console.log(req.body);
   res.send(200);
-  //puts();
   shell.echo('hello world');
+  //shell.exec('roscore')
 });
 
 module.exports = router;
