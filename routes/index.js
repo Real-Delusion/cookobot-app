@@ -8,7 +8,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', (req, res) => {
-  let table = req.body.table;
+  let table = parseInt(req.body.table);
   console.log(table);
   res.send(200);
   shell.echo('Go to table '+table);
