@@ -14,7 +14,7 @@ router.post('/', (req, res) => {
   shell.echo('Go to table '+table);
   let command = `rosservice call /navegacion_autonoma_servicio "numeroMesa: '${table}'"`;
   console.log(command);
-  shell.exec();
+  shell.exec(command);
 });
 
 module.exports = router;
