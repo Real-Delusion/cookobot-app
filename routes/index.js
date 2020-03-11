@@ -8,11 +8,11 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', (req, res) => {
-  let table = req.body.table
+  let table = req.body.table;
   console.log(table);
   res.send(200);
   shell.echo('Go to table '+table);
-  shell.exec('rosservice call /navegacion_autonoma_servicio mesa='+table)
+  shell.exec('rosservice call /navegacion_autonoma_servicio mesa='+table);
 });
 
 module.exports = router;
