@@ -12,7 +12,7 @@ router.post('/', (req, res) => {
   console.log(table);
   res.send(200);
   shell.echo('Go to table '+table);
-  shell.exec('rosservice call /navegacion_autonoma_servicio mesa='+table);
+  shell.exec('rosservice call /navegacion_autonoma_servicio "numeroMesa: '+table)+'"';
 });
 
 module.exports = router;
