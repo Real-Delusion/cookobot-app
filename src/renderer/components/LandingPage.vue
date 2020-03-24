@@ -1,62 +1,44 @@
 <template>
   <div id="wrapper">
-    <img id="logo" src="~@/assets/logo.png" alt="electron-vue" />
     <main>
-      <div class="container">
-        <div class="row">
-          <div class="col-md-4">
-            <div class="card">
-              <div class="card-body">
-                <h3>ROS Connection</h3>
-                <hr />
-                <label>ROSBridge address</label>
-                <br />
-                <input type="text" v-model="rosbridge_address" />
-                <br />
-                <button class="mt-2 btn btn-success" v-if="connected" @click="disconnect">Connected!</button>
-                <button class="mt-2 btn btn-primary" v-else @click="connect">Connect!</button>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-8">
-            <div class="card">
-              <div class="card-body">
-                <h2 class="text-center">Robot Control Area</h2>
-                <hr />
-                <p>Some actions to move the Robot</p>
-                <button
-                  class="mt-2 btn btn-primary"
-                  :disabled="!connected"
-                  @click="sendCommand"
-                >Move the Robot!</button>
-                <button
-                  class="mt-2 btn btn-primary"
-                  :disabled="!connected"
-                  @click="sendTurnRight"
-                >Turn right!</button>
-                <button
-                  class="mt-2 btn btn-primary"
-                  :disabled="!connected"
-                  @click="sendStop"
-                >Stop the Robot!</button>
-                <button
-                  class="mt-2 btn btn-primary"
-                  :disabled="!connected"
-                  @click="goToTable(3)"
-                >Go to table 3</button>
-                <hr />
-                <p>Subscribing robot data</p>
-                <p>
-                  <span>X: {{ position.x.toFixed(2) }}</span>
-                  <br />
-                  <span>Y: {{ position.y.toFixed(2) }}</span>
-                  <br />
-                  <span>Z: {{ position.z.toFixed(2) }}</span>
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div>
+        <h3>ROS Connection</h3>
+        <hr />
+        <label>ROSBridge address</label>
+        <input type="text" v-model="rosbridge_address" />
+        <button v-if="connected" @click="disconnect">Connected!</button>
+        <button v-else @click="connect">Connect!</button>
+      </div>
+      <div>
+        <button
+          :disabled="!connected"
+          @click="sendCommand"
+        >Move the Robot!</button>
+        <button
+          :disabled="!connected"
+          @click="sendTurnRight"
+        >Turn right!</button>
+        <button
+          :disabled="!connected"
+          @click="sendStop"
+        >Stop the Robot!</button>
+        <hr />
+        <p>Subscribing robot data</p>
+        <p>
+          <span>X: {{ position.x.toFixed(2) }}</span>
+          <br />
+          <span>Y: {{ position.y.toFixed(2) }}</span>
+          <br />
+          <span>Z: {{ position.z.toFixed(2) }}</span>
+        </p>
+      </div>
+      <div id="main">
+        <img id="map" src="@/assets/restaurante.png" alt />
+        <button :disabled="!connected" style="left: 225px;top: 146px;" class="table_button" @click="goToTable(1)">1</button>
+        <button :disabled="!connected" style="left: 465px;top: 312px;" class="table_button" @click="goToTable(2)">2</button>
+        <button :disabled="!connected" style="left: 560px;top: 94px;" class="table_button table_double" @click="goToTable(3)">3</button>
+        <button :disabled="!connected" style="left: 755px;top: 312px;" class="table_button" @click="goToTable(4)">4</button>
+        <button :disabled="!connected" style="left: 469px;top: 673px;" class="kitchen_button" @click="goToTable(0)">Cocina</button>
       </div>
     </main>
   </div>
@@ -171,88 +153,63 @@ export default {
 </script>
 
 <style>
-@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro");
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
 body {
-  font-family: "Source Sans Pro", sans-serif;
+  padding: 0px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
-#wrapper {
-  background: radial-gradient(
-    ellipse at top left,
-    rgba(255, 255, 255, 1) 40%,
-    rgba(229, 229, 229, 0.9) 100%
-  );
-  height: 100vh;
-  padding: 60px 80px;
-  width: 100vw;
+a {
+  color: #00b7ff;
 }
-
-#logo {
-  height: auto;
-  margin-bottom: 20px;
-  width: 420px;
+#map {
+  max-height: 90vh;
+  width: 925px;
 }
-
-main {
-  display: flex;
-  justify-content: space-between;
-}
-
-main > div {
-  flex-basis: 50%;
-}
-
-.left-side {
-  display: flex;
-  flex-direction: column;
-}
-
-.welcome {
-  color: #555;
-  font-size: 23px;
-  margin-bottom: 10px;
-}
-
-.title {
-  color: #2c3e50;
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 6px;
-}
-
-.title.alt {
-  font-size: 18px;
-  margin-bottom: 10px;
-}
-
-.doc p {
-  color: black;
-  margin-bottom: 10px;
-}
-
-.doc button {
-  font-size: 0.8em;
-  cursor: pointer;
-  outline: none;
-  padding: 0.75em 2em;
-  border-radius: 2em;
+#main {
+  text-align: center;
+  position: relative;
   display: inline-block;
-  color: #fff;
-  background-color: #4fc08d;
-  transition: all 0.15s ease;
-  box-sizing: border-box;
-  border: 1px solid #4fc08d;
+}
+.table_button {
+  float: left;
+  position: absolute;
+  background-color: white;
+  border: 4px solid black;
+  border-radius: 29px;
+  font-size: 37px;
+  width: 116px;
+  height: 116px;
+  box-shadow: 0 2px rgb(22, 22, 22);
+}
+.table_button:hover {
+  background-color: #00b7ff;
+}
+.table_button:active {
+  color: white;
+  box-shadow: 0 2px rgb(22, 22, 22);
+  transform: translateY(2px);
+}
+.table_double {
+  width: 226px;
 }
 
-.doc button.alt {
-  color: #42b983;
-  background-color: transparent;
+.kitchen_button {
+  float: left;
+  position: absolute;
+  background-color: white;
+  border: 4px solid black;
+  font-size: 37px;
+  width: 431px;
+  height: 116px;
+  box-shadow: 0 2px rgb(22, 22, 22);
+  height: 185px;
+}
+.kitchen_button:hover {
+  background-color: #00b7ff;
+}
+.kitchen_button:active {
+  color: white;
+  box-shadow: 0 2px rgb(22, 22, 22);
+  transform: translateY(2px);
 }
 </style>
