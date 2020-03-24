@@ -39,6 +39,11 @@
                   :disabled="!connected"
                   @click="sendStop"
                 >Stop the Robot!</button>
+                <button
+                  class="mt-2 btn btn-primary"
+                  :disabled="!connected"
+                  @click="goToTable(3)"
+                >Go to table 3</button>
                 <hr />
                 <p>Subscribing robot data</p>
                 <p>
@@ -59,7 +64,7 @@
 
 <script>
 import SystemInformation from "./LandingPage/SystemInformation";
-import ROSLIB from 'roslib';
+import ROSLIB from "roslib";
 
 export default {
   name: "landing-page",
@@ -109,6 +114,17 @@ export default {
     },
     disconnect: function() {
       this.ros.close();
+    },
+    goToTable: table => {
+      let topic = new ROSLIB.Topic({
+        ros: this.ros,
+        name: "/navegacion_autonoma_servicio",
+        messageType: "geometry_msgs/Twist"
+      });
+      let message = new ROSLIB.Message({
+        numeroMesa: table
+      });
+      topic.publish(message);
     },
     sendCommand: function() {
       let topic = new ROSLIB.Topic({
