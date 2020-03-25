@@ -10,18 +10,9 @@
         <button v-else @click="connect">Connect!</button>
       </div>
       <div>
-        <button
-          :disabled="!connected"
-          @click="sendCommand"
-        >Move the Robot!</button>
-        <button
-          :disabled="!connected"
-          @click="sendTurnRight"
-        >Turn right!</button>
-        <button
-          :disabled="!connected"
-          @click="sendStop"
-        >Stop the Robot!</button>
+        <button :disabled="!connected" @click="sendCommand">Move the Robot!</button>
+        <button :disabled="!connected" @click="sendTurnRight">Turn right!</button>
+        <button :disabled="!connected" @click="sendStop">Stop the Robot!</button>
         <hr />
         <p>Subscribing robot data</p>
         <p>
@@ -34,11 +25,36 @@
       </div>
       <div id="main">
         <img id="map" src="@/assets/restaurante.png" alt />
-        <button :disabled="!connected" style="left: 225px;top: 146px;" class="table_button" @click="goToTable(1)">1</button>
-        <button :disabled="!connected" style="left: 465px;top: 312px;" class="table_button" @click="goToTable(2)">2</button>
-        <button :disabled="!connected" style="left: 560px;top: 94px;" class="table_button table_double" @click="goToTable(3)">3</button>
-        <button :disabled="!connected" style="left: 755px;top: 312px;" class="table_button" @click="goToTable(4)">4</button>
-        <button :disabled="!connected" style="left: 469px;top: 673px;" class="kitchen_button" @click="goToTable(0)">Cocina</button>
+        <button
+          :disabled="!connected"
+          style="left: 225px;top: 146px;"
+          class="table_button"
+          @click="goToTable(1)"
+        >1</button>
+        <button
+          :disabled="!connected"
+          style="left: 465px;top: 312px;"
+          class="table_button"
+          @click="goToTable(2)"
+        >2</button>
+        <button
+          :disabled="!connected"
+          style="left: 560px;top: 94px;"
+          class="table_button table_double"
+          @click="goToTable(3)"
+        >3</button>
+        <button
+          :disabled="!connected"
+          style="left: 755px;top: 312px;"
+          class="table_button"
+          @click="goToTable(4)"
+        >4</button>
+        <button
+          :disabled="!connected"
+          style="left: 469px;top: 673px;"
+          class="kitchen_button"
+          @click="goToTable(0)"
+        >Cocina</button>
       </div>
     </main>
   </div>
@@ -98,15 +114,28 @@ export default {
       this.ros.close();
     },
     goToTable: table => {
-      let topic = new ROSLIB.Topic({
-        ros: this.ros,
+      // define the service to be called
+      let service = new ROSLIB.Service({
+        ros: ros,
         name: "/navegacion_autonoma_servicio",
-        messageType: "geometry_msgs/Twist"
+        serviceType: "rossrv/Type"
       });
-      let message = new ROSLIB.Message({
+
+      // define the request
+      let request = new ROSLIB.ServiceRequest({
         numeroMesa: table
       });
-      topic.publish(message);
+
+      service.callService(
+        request,
+        result => {
+          console.log("This is the response of the service ");
+          console.log(result);
+        },
+        error => {
+          console.error(error);
+        }
+      );
     },
     sendCommand: function() {
       let topic = new ROSLIB.Topic({
