@@ -98,7 +98,7 @@ export default {
         });
         topic.subscribe(message => {
           this.position = message.pose.pose.position;
-          console.log(message);
+          //console.log(message);
         });
       });
       this.ros.on("error", error => {
@@ -113,11 +113,11 @@ export default {
     disconnect: function() {
       this.ros.close();
     },
-    goToTable: table => {
+    goToTable: function(table) {
       // define the service to be called
       let service = new ROSLIB.Service({
-        ros: ros,
-        name: "/navegacion_autonoma_servicio",
+        ros: this.ros,
+        name: "navegacion_autonoma_servicio",
         serviceType: "rossrv/Type"
       });
 
