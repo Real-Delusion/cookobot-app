@@ -2,26 +2,31 @@
   <div id="main">
     <img id="map" src="@/assets/restaurante.png" alt />
     <button
+      :disabled="!connected"
       style="left: 225px;top: 146px;"
       class="table_button"
       @click="goToTable(1)"
     >1</button>
     <button
+      :disabled="!connected"
       style="left: 465px;top: 312px;"
       class="table_button"
       @click="goToTable(2)"
     >2</button>
     <button
+      :disabled="!connected"
       style="left: 560px;top: 94px;"
       class="table_button table_double"
       @click="goToTable(3)"
     >3</button>
     <button
+      :disabled="!connected"
       style="left: 755px;top: 312px;"
       class="table_button"
       @click="goToTable(4)"
     >4</button>
     <button
+      :disabled="!connected"
       style="left: 469px;top: 673px;"
       class="kitchen_button"
       @click="goToTable(0)"
@@ -30,7 +35,10 @@
 </template>
 
 <script>
+import Ros from "@/mixins/ros.js"
+
 export default {
+  mixins: [Ros],
   data() {
     return {};
   },

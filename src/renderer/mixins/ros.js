@@ -8,10 +8,10 @@ export default {
         }
     },
     created: function () {
-        this.connect()
+
     },
     methods: {
-        connect: function () {
+        connectRos: function () {
             // define ROSBridge connection object
             this.ros = new ROSLIB.Ros({
                 url: this.rosbridge_address

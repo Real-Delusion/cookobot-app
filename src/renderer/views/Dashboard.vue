@@ -7,7 +7,7 @@
         <label>ROSBridge address</label>
         <input type="text" v-model="rosbridge_address" />
         <button v-if="connected" @click="disconnect">Connected!</button>
-        <button v-else @click="connectRos">Connect!</button>
+        <button v-else @click="connect">Connect!</button>
       </div>
       <div>
         <button :disabled="!connected" @click="sendCommand">Move the Robot!</button>
@@ -43,8 +43,8 @@ export default {
     };
   },
   methods: {
-    connectRos: function() {
-     this.connect()
+    connect: function() {
+      this.connectRos()
     },
     sendCommand: function() {
       let topic = new ROSLIB.Topic({
