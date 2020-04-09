@@ -61,12 +61,11 @@
 </template>
 
 <script>
-import SystemInformation from "./LandingPage/SystemInformation";
-import ROSLIB from "roslib";
+//import ROSLIB from "roslib";
 
 export default {
   name: "landing-page",
-  components: { SystemInformation },
+  components: {},
   data() {
     return {
       // ros connection
