@@ -64,7 +64,7 @@
 //import ROSLIB from "roslib";
 
 export default {
-  name: "landing-page",
+  name: "dashboard",
   components: {},
   data() {
     return {
