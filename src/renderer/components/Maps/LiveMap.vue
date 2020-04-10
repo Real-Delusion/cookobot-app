@@ -52,7 +52,7 @@ export default {
       this.updateRobotPosition()
     }
   },
-  created: function() {
+  created: async function() {
     await this.connectRos();
   },
   methods: {
