@@ -177,5 +177,6 @@ a {
 #robotIndicator {
   position: absolute;
   width: 50px;
+  z-index: 99;
 }
 </style>
