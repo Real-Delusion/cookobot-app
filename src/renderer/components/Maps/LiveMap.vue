@@ -1,6 +1,8 @@
 <template>
   <div id="main">
-    <img id="map" src="@/assets/restaurante.png" alt />
+    <img id="map" src="@/assets/restaurantMap.png" alt />
+    <img v-bind:style="{bottom: robotBottom+'px', left: robotLeft+'px' }" id="robotIndicator" src="@/assets/robot.png" />
+    <!--
     <button
       :disabled="!connected"
       style="left: 225px;top: 146px;"
@@ -30,22 +32,47 @@
       style="left: 469px;top: 673px;"
       class="kitchen_button"
       @click="goToTable(0)"
-    >Cocina</button>
+    >Cocina</button>-->
+    <button @click="updateRobotPosition">Update Pos</button>
+    <button v-if="!connected" @click="disconnect">Disconnect</button>
+    <button :disabled="!connected" @click="sendStop">Stop the Robot!</button>
   </div>
 </template>
 
 <script>
-import Ros from "@/mixins/ros.js"
+import Ros from "@/mixins/ros.js";
 
 export default {
+  name: "livemap",
   mixins: [Ros],
   data() {
-    return {};
+    return {
+      robotLeft: 0,
+      robotBottom: 0
+    };
+  },
+  created: function() {
+    this.connectRos();
   },
   methods: {
-    initMap: function (ros){
+    updateRobotPosition: function() {
+
+      let x = this.position.x.toFixed(2);
+      let y = this.position.y.toFixed(2);
+
+      let width = 925;
+      let height = 903.89;
+
+      let xWidth = 5.26;
+      let yHeight = 5.27;
+
+      this.robotLeft = ((x*width)/xWidth).toFixed(2);
+      this.robotBottom = ((y*height)/yHeight).toFixed(2);
+
+      console.log(this.robotLeft, this.robotTop)
 
     },
+    initMap: function(ros) {},
     goToTable: function(table) {
       // define the service to be called
       let service = new ROSLIB.Service({
@@ -69,6 +96,18 @@ export default {
           console.error(error);
         }
       );
+    },
+    sendStop: function() {
+      let topic = new ROSLIB.Topic({
+        ros: this.ros,
+        name: "/cmd_vel",
+        messageType: "geometry_msgs/Twist"
+      });
+      let message = new ROSLIB.Message({
+        linear: { x: 0, y: 0, z: 0 },
+        angular: { x: 0, y: 0, z: 0 }
+      });
+      topic.publish(message);
     }
   }
 };
@@ -133,5 +172,9 @@ a {
   color: white;
   box-shadow: 0 2px rgb(22, 22, 22);
   transform: translateY(2px);
+}
+#robotIndicator {
+  position: absolute;
+  width: 50px;
 }
 </style>
