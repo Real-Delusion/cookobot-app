@@ -3,7 +3,7 @@
     <img id="map" src="@/assets/restaurantMap.png" alt />
     <img v-bind:style="{bottom: robotBottom+'px', left: robotLeft+'px' }" id="robotIndicator" src="@/assets/robot.png" />
     <!-- I create the TableButton component -->
-    <TableButton mesa="1"></TableButton>
+    <TableButton table="6"></TableButton>
 
     <button
       :disabled="!connected"

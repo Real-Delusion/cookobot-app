@@ -2,8 +2,8 @@
     <button
     style="left: 100px;top: 146px;" 
     class="table_button"
-    @click="addTable(1)"
-    >P</button>
+    @click="addTable(table)"
+    >{{table}}</button>
 </template>
 
 <script>
@@ -12,9 +12,14 @@ import { bus } from '../../main'
 
 export default {
   mixins: [],
+  props: {
+    table:{
+        type: String
+    }
+  },
   data() {
     return {
-    
+      
     };
   },
   created: async function() {
@@ -24,7 +29,6 @@ export default {
     addTable: function(table) {
     //Send table value to TableList
     bus.$emit('tableAdded', table);
-
     }
     
   }
