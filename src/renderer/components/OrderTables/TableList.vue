@@ -14,14 +14,19 @@ export default {
   mixins: [],
   data() {
     return {
-      details:["Mesa 1", "Mesa 2"]
+      details:["Table 1", "Table 2"]
     };
   },
 
   created: async function() {
     bus.$on('tableAdded', (table) => {
         //Adding data to the list
-        console.log("Mesa: " + table)
+        console.log("Table: " + this.details.includes("Table " + table))
+        if(this.details.includes("Table " + table)){
+          this.details.splice(this.details.indexOf("Table " + table), 1);
+        }else{
+          this.details.push("Table " + table)
+        }
       })
   },
 
