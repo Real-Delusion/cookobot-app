@@ -5,8 +5,10 @@
 <script>
 //import ROS2D from "ros2d";
 //import ROSLIB from "roslib";
+import Ros from "@/mixins/ros.js";
 
 export default {
+  mixins: [Ros],
   data() {
     return {
       mapViewer: null,
@@ -14,8 +16,12 @@ export default {
       interval: null
     };
   },
+  created: async function() {
+    await this.connectRos();
+    this.initMap();
+  },
   methods: {
-    initMap: function(ros) {
+    initMap: function() {
       this.mapViewer = new ROS2D.Viewer({
         divID: "rosmap",
         width: 420,
@@ -24,7 +30,7 @@ export default {
 
       // Setup the map client.
       this.mapGridClient = new ROS2D.OccupancyGridClient({
-        ros: ros,
+        ros: this.ros,
         rootObject: this.mapViewer.scene,
         continuous: true
       });
