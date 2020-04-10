@@ -14,7 +14,7 @@ export default {
   mixins: [],
   data() {
     return {
-      details:["Table 1", "Table 2"]
+      details:[]
     };
   },
 

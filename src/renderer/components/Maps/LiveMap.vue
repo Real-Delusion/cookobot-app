@@ -27,6 +27,7 @@ export default {
     return {
       robotLeft: 0,
       robotBottom: 0,
+      //Table buttons
       buttons:[
         {tableNumber: 1, left: 225, top: 146},
         {tableNumber: 2, left: 465,top: 312},
