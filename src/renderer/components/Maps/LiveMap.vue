@@ -53,7 +53,7 @@ export default {
     }
   },
   created: function() {
-    this.connectRos();
+    await this.connectRos();
   },
   methods: {
     updateRobotPosition: function() {
@@ -73,7 +73,6 @@ export default {
       console.log(this.robotLeft, this.robotTop)
 
     },
-    initMap: function(ros) {},
     goToTable: function(table) {
       // define the service to be called
       let service = new ROSLIB.Service({
