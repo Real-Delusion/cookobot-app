@@ -1,6 +1,5 @@
 <template>
     <button
-    style="left: 100px;top: 146px;" 
     class="table_button"
     @click="addTable(table)"
     >{{table}}</button>

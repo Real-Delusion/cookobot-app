@@ -3,32 +3,9 @@
     <img id="map" src="@/assets/restaurantMap.png" alt />
     <img v-bind:style="{bottom: robotBottom+'px', left: robotLeft+'px' }" id="robotIndicator" src="@/assets/robot.png" />
     <!-- I create the TableButton component -->
-    <TableButton table="6"></TableButton>
-
-    <button
-      :disabled="!connected"
-      style="left: 225px;top: 146px;"
-      class="table_button"
-      @click="goToTable(1)"
-    >1</button>
-    <button
-      :disabled="!connected"
-      style="left: 465px;top: 312px;"
-      class="table_button"
-      @click="goToTable(2)"
-    >2</button>
-    <button
-      :disabled="!connected"
-      style="left: 560px;top: 94px;"
-      class="table_button table_double"
-      @click="goToTable(3)"
-    >3</button>
-    <button
-      :disabled="!connected"
-      style="left: 755px;top: 312px;"
-      class="table_button"
-      @click="goToTable(4)"
-    >4</button>
+    <TableButton v-for="parameter in buttons" v-bind:table="parameter.tableNumber" 
+    v-bind:style="{left: parameter.left + 'px',  
+                  top: parameter.top + 'px'}" v-bind:key="parameter"></TableButton>
     <button
       :disabled="!connected"
       style="left: 462px;bottom: 6px;"
@@ -49,7 +26,13 @@ export default {
   data() {
     return {
       robotLeft: 0,
-      robotBottom: 0
+      robotBottom: 0,
+      buttons:[
+        {tableNumber: 1, left: 225, top: 146},
+        {tableNumber: 2, left: 465,top: 312},
+        {tableNumber: 3, left: 560,top: 94},
+        {tableNumber: 4, left: 755,top: 312}
+        ],
     };
   },
   watch: {
