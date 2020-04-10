@@ -2,7 +2,6 @@
   <div id="main">
     <img id="map" src="@/assets/restaurantMap.png" alt />
     <img v-bind:style="{bottom: robotBottom+'px', left: robotLeft+'px' }" id="robotIndicator" src="@/assets/robot.png" />
-    <!--
     <button
       :disabled="!connected"
       style="left: 225px;top: 146px;"
@@ -29,13 +28,10 @@
     >4</button>
     <button
       :disabled="!connected"
-      style="left: 469px;top: 673px;"
+      style="left: 462px;bottom: 6px;"
       class="kitchen_button"
       @click="goToTable(0)"
-    >Cocina</button>-->
-    <button @click="updateRobotPosition">Update Pos</button>
-    <button v-if="!connected" @click="disconnect">Disconnect</button>
-    <button :disabled="!connected" @click="sendStop">Stop the Robot!</button>
+    >Cocina</button>
   </div>
 </template>
 
@@ -50,6 +46,11 @@ export default {
       robotLeft: 0,
       robotBottom: 0
     };
+  },
+  watch: {
+    position: function (){
+      this.updateRobotPosition()
+    }
   },
   created: function() {
     this.connectRos();
@@ -160,10 +161,10 @@ a {
   background-color: white;
   border: 4px solid black;
   font-size: 37px;
-  width: 431px;
+  width: 463px;
   height: 116px;
   box-shadow: 0 2px rgb(22, 22, 22);
-  height: 185px;
+  height: 199px;
 }
 .kitchen_button:hover {
   background-color: #00b7ff;
