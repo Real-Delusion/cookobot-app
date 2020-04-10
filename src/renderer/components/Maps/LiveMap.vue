@@ -2,6 +2,9 @@
   <div id="main">
     <img id="map" src="@/assets/restaurantMap.png" alt />
     <img v-bind:style="{bottom: robotBottom+'px', left: robotLeft+'px' }" id="robotIndicator" src="@/assets/robot.png" />
+    <!-- I create the TableButton component -->
+    <TableButton mesa="1"></TableButton>
+
     <button
       :disabled="!connected"
       style="left: 225px;top: 146px;"
@@ -37,9 +40,11 @@
 
 <script>
 import Ros from "@/mixins/ros.js";
+import TableButton from "@/components/OrderTables/TableButton";
 
 export default {
   name: "livemap",
+  components: {TableButton},
   mixins: [Ros],
   data() {
     return {
