@@ -5,6 +5,7 @@ export default {
             ros: null,
             rosbridge_address: "ws://127.0.0.1:9090/",
             connected: false,
+            position: { x: 0, y: 0, z: 0 }
         }
     },
     created: function () {
