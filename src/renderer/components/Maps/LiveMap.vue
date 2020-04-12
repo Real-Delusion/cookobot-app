@@ -59,7 +59,7 @@ export default {
       this.robotLeft = ((x*width)/xWidth).toFixed(2);
       this.robotBottom = ((y*height)/yHeight).toFixed(2);
 
-      console.log(this.robotLeft, this.robotTop)
+      //console.log(this.robotLeft, this.robotTop)
 
     },
     goToTable: function(table) {
