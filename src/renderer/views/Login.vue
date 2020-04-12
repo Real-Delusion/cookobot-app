@@ -28,11 +28,11 @@ export default {
       if (userId != "") {
         // Get user from db
         let getUser;
-        await queryAllProduct().then(data => {
+        await getUserById(userId).then(data => {
           getUser = data;
-        });
+        });$
 
-        if (userId == this.$parent.mockAccount.userid) {
+        if (userId == getUser.user_id) {
           this.$emit("authenticated", true);
           this.$router.replace({ name: "dashboard" });
         } else {
