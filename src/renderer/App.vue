@@ -10,10 +10,7 @@ export default {
   name: "cookobot-app",
   data() {
     return {
-      authenticated: false,
-      mockAccount: {
-        userid: "1234",
-      }
+      authenticated: false
     };
   },
   mounted() {
