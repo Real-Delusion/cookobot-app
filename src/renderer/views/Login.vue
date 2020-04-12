@@ -8,6 +8,8 @@
 </template>
 
 <script>
+import { getUserById } from "@/utils/db";
+
 export default {
   name: "login",
   components: {},
@@ -20,13 +22,21 @@ export default {
     };
   },
   methods: {
-    login() {
-      if (this.input.userid != "") {
-        if (this.input.userid == this.$parent.mockAccount.userid) {
+    async login() {
+      let userId = this.input.userid;
+
+      if (userId != "") {
+        // Get user from db
+        let getUser;
+        await queryAllProduct().then(data => {
+          getUser = data;
+        });
+
+        if (userId == this.$parent.mockAccount.userid) {
           this.$emit("authenticated", true);
           this.$router.replace({ name: "dashboard" });
         } else {
-         this.message = "The user id is incorrect";
+          this.message = "The user id is incorrect";
         }
       } else {
         this.message = "Please, fill the user id";
