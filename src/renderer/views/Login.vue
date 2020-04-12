@@ -1,19 +1,37 @@
 <template>
   <div id="login">
+    <h1>Login</h1>
+    <input type="text" name="userid" v-model="input.userid" placeholder="User id" />
+    <button type="button" v-on:click="login()">Login</button>
+    <p class="message">{{message}}</p>
   </div>
 </template>
 
 <script>
-
 export default {
   name: "login",
   components: {},
   data() {
     return {
+      input: {
+        userid: ""
+      },
+      message: ""
     };
   },
   methods: {
-
+    login() {
+      if (this.input.userid != "") {
+        if (this.input.userid == this.$parent.mockAccount.userid) {
+          this.$emit("authenticated", true);
+          this.$router.replace({ name: "dashboard" });
+        } else {
+         this.message = "The user id is incorrect";
+        }
+      } else {
+        this.message = "Please, fill the user id";
+      }
+    }
   }
 };
 </script>
