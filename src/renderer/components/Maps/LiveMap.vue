@@ -5,7 +5,7 @@
     <!-- I create the TableButton component -->
     <TableButton v-for="parameter in buttons" v-bind:table="parameter.tableNumber" 
     v-bind:style="{left: parameter.left + 'px',  
-                  top: parameter.top + 'px'}" v-bind:key="parameter"></TableButton>
+                  top: parameter.top + 'px'}" v-bind:key="parameter.tableNumber"></TableButton>
     <button
       :disabled="!connected"
       style="left: 462px;bottom: 6px;"

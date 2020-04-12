@@ -11,11 +11,7 @@ import { bus } from '../../main'
 
 export default {
   mixins: [],
-  props: {
-    table:{
-        type: String
-    }
-  },
+  props: ['table'],
   data() {
     return {
       
