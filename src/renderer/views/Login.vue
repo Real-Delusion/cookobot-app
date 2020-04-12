@@ -30,7 +30,7 @@ export default {
         let getUser;
         await getUserById(userId).then(data => {
           getUser = data;
-        });$
+        });
 
         if (userId == getUser.user_id) {
           this.$emit("authenticated", true);
