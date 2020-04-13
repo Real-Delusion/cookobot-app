@@ -1,39 +1,59 @@
 <template>
-  <div id="tablelist" class="queue_list">
-    <ul>
-      <li  v-for="detail in details" v-bind:key="detail">{{detail}}</li>
-    </ul>
+  <div class="card queue_list">
+    <header class="card-header">
+      <p class="card-header-title">Robot 98R2X3</p>
+      <a href="#" class="card-header-icon" aria-label="Settings">
+        <span class="icon">
+          <i class="fas fa-cog"></i>
+        </span>
+      </a>
+    </header>
+    <div class="card-content">
+      <draggable v-model="tables">
+        <transition-group>
+          <div v-for="table in tables" :key="table" class="element_list">{{table}}</div>
+        </transition-group>
+      </draggable>
+    </div>
+    <footer class="card-footer footer">
+      <button class="button is-danger" type="button">Cancel</button>
+      <button class="button is-success" type="button">Accept</button>
+    </footer>
   </div>
 </template>
 
 <script>
 // import bus for events
-import { bus } from '../../main'
+import { bus } from "../../main";
+import draggable from "vuedraggable";
 
 export default {
   mixins: [],
+  components: {
+    draggable
+  },
   data() {
     return {
-      details:[]
+      tables: []
     };
   },
 
   created: async function() {
-    bus.$on('tableAdded', (table) => {
-        //Adding data to the list
-        console.log("Table: " + this.details.includes("Table " + table))
-        if(this.details.includes("Table " + table)){
-          this.details.splice(this.details.indexOf("Table " + table), 1);
-        }else{
-          this.details.push("Table " + table)
-        }
-      })
+    bus.$on("tableAdded", table => {
+      //Adding data to the list
+      //console.log("Table: " + this.details.includes("Table " + table))
+      if (this.tables.includes("Table " + table)) {
+        this.tables.splice(this.tables.indexOf("Table " + table), 1);
+      } else {
+        this.tables.push("Table " + table);
+      }
+    });
   },
 
   methods: {
     addTable: function() {
-      details.push(table)
-      console.log(details)
+      details.push(table);
+      //console.log(tables);
     }
   }
 };
@@ -43,15 +63,22 @@ export default {
 .queue_list {
   float: left;
   left: 950px;
-  top: 50px;
+  top: 20px;
   position: absolute;
-  background-color: white;
-  border: 4px solid black;
-  border-radius: 29px;
-  font-size: 37px;
-  width: 300px;
-  height: 300px;
-  box-shadow: 0 2px rgb(22, 22, 22);
+  font-size: 20px;
+  width: 500px;
+  height: auto;
+  min-height: 200px;
 }
-
+.footer {
+  padding: 20px;
+}
+.element_list {
+box-shadow: 0px 0px 107px 11px rgba(0,0,0,0.07);
+  padding: 10px;
+  border-radius: 0.5ch;
+  margin-top: 10px;
+  padding-top: 1.5ch;
+  padding-bottom: 1.5ch;
+}
 </style>
