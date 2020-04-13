@@ -5,7 +5,7 @@
     <nav>
       <ul>
         <li>
-          <a href>Home</a>
+          <router-link to="/dashboard" replace>Home</router-link>
         </li>
         <li>
           <router-link to="/login" v-on:click="logout()" replace>Logout</router-link>
