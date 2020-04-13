@@ -2,7 +2,7 @@
   <div id="login">
     <h1>Login</h1>
     <input type="text" name="userid" v-model="input.userid" placeholder="User id" />
-    <button type="button" v-on:click="login()">Login</button>
+    <button class="button is-success" type="button" v-on:click="login()">Login</button>
     <p class="message">{{message}}</p>
   </div>
 </template>
