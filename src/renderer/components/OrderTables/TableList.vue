@@ -21,7 +21,7 @@ export default {
   created: async function() {
     bus.$on('tableAdded', (table) => {
         //Adding data to the list
-        console.log("Table: " + this.details.includes("Table " + table))
+        //console.log("Table: " + this.details.includes("Table " + table))
         if(this.details.includes("Table " + table)){
           this.details.splice(this.details.indexOf("Table " + table), 1);
         }else{
