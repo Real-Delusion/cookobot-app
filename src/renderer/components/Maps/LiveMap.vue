@@ -3,9 +3,9 @@
     <img id="map" src="@/assets/restaurantMap.png" alt />
     <img v-bind:style="{bottom: robotBottom+'px', left: robotLeft+'px' }" id="robotIndicator" src="@/assets/robot.png" />
     <!-- I create the TableButton component -->
-    <TableButton v-for="parameter in buttons" v-bind:table="parameter.tableNumber" 
-    v-bind:style="{left: parameter.left + 'px',  
-                  top: parameter.top + 'px'}" v-bind:key="parameter.tableNumber"></TableButton>
+    <TableButton v-for="button in buttons" v-bind:table="button.tableNumber" 
+    v-bind:style="{left: button.left + 'px',  
+                  top: button.top + 'px'}" v-bind:key="button.tableNumber"></TableButton>
     <button
       :disabled="!connected"
       style="left: 462px;bottom: 6px;"
@@ -120,17 +120,7 @@ a {
   position: relative;
   display: inline-block;
 }
-.table_button {
-  float: left;
-  position: absolute;
-  background-color: white;
-  border: 4px solid black;
-  border-radius: 29px;
-  font-size: 37px;
-  width: 116px;
-  height: 116px;
-  box-shadow: 0 2px rgb(22, 22, 22);
-}
+
 .table_button:hover {
   background-color: #00b7ff;
 }
