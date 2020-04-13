@@ -2,7 +2,10 @@
   <div class="card">
     <div class="card-content">
       <div class="content">
-        <progress v-if="!connected" class="progress is-small is-primary" max="100">15%</progress>
+        <div class="loading" v-if="!connected">
+          <progress class="progress is-small is-primary" max="100">15%</progress>
+          <p>Loading map ...</p>
+        </div>
         <div v-if="connected">
           <img id="map" src="@/assets/restaurantMap.png" alt />
           <img
@@ -163,5 +166,8 @@ a {
   position: absolute;
   width: 50px;
   z-index: 99;
+}
+.loading{
+  text-align: center;
 }
 </style>
