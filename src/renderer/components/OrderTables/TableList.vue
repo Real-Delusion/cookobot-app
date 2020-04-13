@@ -4,17 +4,22 @@
       <p class="card-header-title">Robot 98R2X3</p>
       <a href="#" class="card-header-icon" aria-label="Settings">
         <span class="icon">
-          <font-awesome-icon icon="cog" />
+          <font-awesome-icon icon="cog" class="settings_icon" />
         </span>
       </a>
     </header>
     <div class="card-content">
-      <draggable class="w-full max-w-md" ghost-class="moving-card" :list="tables" :animation="200">
-        <div v-for="table in tables" :key="table" class="card box_element_list">
+      <SlickList lockAxis="y" v-model="tables">
+        <SlickItem
+          v-for="(table, index) in tables"
+          :key="table"
+          :index="index"
+          class="card box_element_list"
+        >
           <font-awesome-icon class="draggable_icon" icon="grip-vertical" />
-          {{table}}
-        </div>
-      </draggable>
+          Table {{ table }}
+        </SlickItem>
+      </SlickList>
     </div>
     <footer class="card-footer footer">
       <button class="button is-danger" type="button">Cancel</button>
@@ -23,15 +28,19 @@
   </div>
 </template>
 
+
 <script>
 // import bus for events
 import { bus } from "../../main";
 import draggable from "vuedraggable";
+import { SlickList, SlickItem } from "vue-slicksort";
 
 export default {
   mixins: [],
   components: {
-    draggable
+    draggable,
+    SlickItem,
+    SlickList
   },
   data() {
     return {
@@ -43,10 +52,10 @@ export default {
     bus.$on("tableAdded", table => {
       //Adding data to the list
       //console.log("Table: " + this.details.includes("Table " + table))
-      if (this.tables.includes("Table " + table)) {
-        this.tables.splice(this.tables.indexOf("Table " + table), 1);
+      if (this.tables.includes(table)) {
+        this.tables.splice(this.tables.indexOf(table), 1);
       } else {
-        this.tables.push("Table " + table);
+        this.tables.push(table);
       }
     });
   },
@@ -60,13 +69,14 @@ export default {
 };
 </script>
 
+
+
 <style scoped>
 .queue_list {
   float: left;
   left: 50px;
   top: 20px;
   position: absolute;
-  font-size: 20px;
   width: 500px;
   height: auto;
   min-height: 200px;
@@ -79,16 +89,16 @@ export default {
   margin-top: 10px;
   padding-top: 1.5ch;
   padding-bottom: 1.5ch;
-  -webkit-user-drag:table;
 }
 .draggable_icon {
   margin-right: 1ch;
   margin-left: 1ch;
 }
-.moving-card {
-  opacity: 100%;
-  background-color: rgba(0, 0, 0, 0.685);
-  border: 10px;
-  border-color: rgb(255, 0, 0);
+
+.box_element_list:hover {
+  transform: scale(1.05);
+}
+.settings_icon{
+  color: gray;
 }
 </style>
