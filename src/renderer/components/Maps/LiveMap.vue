@@ -63,8 +63,7 @@ export default {
     await this.connectRos();
   },
   methods: {
-    updateRo        <progress class="progress is-small is-primary" max="100">15%</progress>
-botPosition: function() {
+    updateRobotPosition: function() {
       let x = this.position.x.toFixed(2);
       let y = this.position.y.toFixed(2);
 

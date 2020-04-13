@@ -71,7 +71,6 @@ nav li {
 nav a {
   color: #fff;
   font-size: 1em;
-  font-family: "helvetica neue", helvetica, arial, sans-serif;
   text-decoration: none;
   display: block;
   padding: 12px 15px;
@@ -84,7 +83,6 @@ nav a:hover {
 }
 label {
   display: block;
-  font-family: "helvetica neue", helvetica, arial, sans-serif;
   font-weight: 700;
   width: 42px;
   height: 42px;
