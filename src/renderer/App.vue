@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <router-link v-if="authenticated" to="/login" v-on:click.native="logout()" replace>Logout</router-link>
     <router-view @authenticated="setAuthenticated"></router-view>
   </div>
 </template>
@@ -10,7 +9,7 @@ export default {
   name: "cookobot-app",
   data() {
     return {
-      authenticated: false
+      authenticated: true
     };
   },
   mounted() {
