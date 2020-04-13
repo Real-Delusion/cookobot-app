@@ -1,6 +1,6 @@
 <template>
   <div>
-    <input type="checkbox" id="navigation" />
+    <input v-model="checked" type="checkbox" id="navigation" />
     <label for="navigation">&#9776;</label>
     <nav>
       <ul>
@@ -8,24 +8,41 @@
           <a href>Home</a>
         </li>
         <li>
-          <router-link to="/login" v-on:click.native="logout()" replace>Logout</router-link>
+          <router-link to="/login" v-on:click="logout()" replace>Logout</router-link>
         </li>
       </ul>
     </nav>
+    <div v-on:click="closeMenu()" class="overlay"></div>
   </div>
 </template>
 
 <script>
 export default {
-    methods:{
-        logout: function(){
-            this.$emit("authenticated");
-        }
+  data() {
+    return {
+        checked: false
+    };
+  },
+  methods: {
+    logout: function() {
+      this.$emit("authenticated");
+    },
+    closeMenu: function() {
+        this.checked = false;
     }
+  }
 };
 </script>
 
 <style scoped>
+.overlay {
+  display: none;
+  position: absolute;
+  height: 100vh;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 95;
+}
 nav {
   position: fixed;
   top: 0;
@@ -93,5 +110,8 @@ input[type="checkbox"]:checked ~ nav {
 }
 input[type="checkbox"]:checked ~ label {
   left: 260px;
+}
+input[type="checkbox"]:checked ~ .overlay {
+  display: inline;
 }
 </style>
