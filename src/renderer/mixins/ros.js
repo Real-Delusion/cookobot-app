@@ -4,7 +4,7 @@ export default {
             // ros connection
             ros: null,
             rosbridge_address: "ws://127.0.0.1:9090/",
-            connected: false,
+            connected: true,
             position: { x: 0, y: 0, z: 0 }
         }
     },
@@ -38,7 +38,7 @@ export default {
                     console.log(error);
                 });
                 this.ros.on("close", () => {
-                    this.connected = false;
+                    this.connected = true;
                     console.log("Connection to ROSBridge was closed!");
                 });
                 return resolve(0);

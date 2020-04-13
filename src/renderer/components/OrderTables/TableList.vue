@@ -4,14 +4,17 @@
       <p class="card-header-title">Robot 98R2X3</p>
       <a href="#" class="card-header-icon" aria-label="Settings">
         <span class="icon">
-          <i class="fas fa-cog"></i>
+          <font-awesome-icon icon="cog" />
         </span>
       </a>
     </header>
     <div class="card-content">
       <draggable v-model="tables">
         <transition-group>
-          <div v-for="table in tables" :key="table" class="element_list">{{table}}</div>
+          <div v-for="table in tables" :key="table" class="box_element_list">                
+            <font-awesome-icon class="draggable_icon" icon="grip-vertical"/>
+            {{table}}
+            </div>
         </transition-group>
       </draggable>
     </div>
@@ -62,7 +65,7 @@ export default {
 <style scoped>
 .queue_list {
   float: left;
-  left: 950px;
+  left: 50px;
   top: 20px;
   position: absolute;
   font-size: 20px;
@@ -73,12 +76,15 @@ export default {
 .footer {
   padding: 20px;
 }
-.element_list {
-box-shadow: 0px 0px 107px 11px rgba(0,0,0,0.07);
-  padding: 10px;
+.box_element_list {
+  box-shadow: 0px 0px 107px 11px rgba(0, 0, 0, 0.07);
   border-radius: 0.5ch;
   margin-top: 10px;
   padding-top: 1.5ch;
   padding-bottom: 1.5ch;
 }
+.draggable_icon{
+  margin-right: 1ch;
+  margin-left: 1ch;
+  }
 </style>
