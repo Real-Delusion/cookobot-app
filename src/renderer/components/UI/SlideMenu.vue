@@ -16,7 +16,13 @@
 </template>
 
 <script>
-export default {};
+export default {
+    methods:{
+        logout: function(){
+            this.$emit("authenticated");
+        }
+    }
+};
 </script>
 
 <style scoped>
