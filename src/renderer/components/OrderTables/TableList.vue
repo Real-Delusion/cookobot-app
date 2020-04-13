@@ -1,17 +1,37 @@
 <template>
-  <div id="tablelist" class="queue_list">
-    <ul>
-      <li  v-for="detail in details" v-bind:key="detail">{{detail}}</li>
-    </ul>
+  <div class="card queue_list">
+    <header class="card-header">
+    <p class="card-header-title">
+      Robot 98R2X3
+    </p>
+    <a href="#" class="card-header-icon" aria-label="more options">
+      <span class="icon">
+        <i class="fas fa-angle-down" aria-hidden="true"></i>
+      </span>
+    </a>
+  </header>
+  <div class="card-content">
+    <draggable group="people" @start="drag=true" @end="drag=false">
+      <div v-for="detail in details" :key="detail">{{detail}}</div>
+    </draggable>
+  </div>
+  <footer class="card-footer footer">
+    <button class="button is-danger" type="button">Cancel</button>
+    <button class="button is-success" type="button">Accept</button>
+  </footer>
   </div>
 </template>
 
 <script>
 // import bus for events
 import { bus } from '../../main'
+import draggable from 'vuedraggable'
 
 export default {
   mixins: [],
+  components: {
+            draggable,
+        },
   data() {
     return {
       details:[]
@@ -45,13 +65,13 @@ export default {
   left: 950px;
   top: 50px;
   position: absolute;
-  background-color: white;
-  border: 4px solid black;
-  border-radius: 29px;
-  font-size: 37px;
-  width: 300px;
-  height: 300px;
-  box-shadow: 0 2px rgb(22, 22, 22);
+  font-size: 20px;
+  width: 500px;
+  height:auto;
+  min-height:100px;
+}
+.footer{
+  padding: 20px;
 }
 
 </style>
