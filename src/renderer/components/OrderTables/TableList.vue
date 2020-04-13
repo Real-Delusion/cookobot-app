@@ -9,13 +9,11 @@
       </a>
     </header>
     <div class="card-content">
-      <draggable v-model="tables">
-        <transition-group>
-          <div v-for="table in tables" :key="table" class="box_element_list">                
-            <font-awesome-icon class="draggable_icon" icon="grip-vertical"/>
-            {{table}}
-            </div>
-        </transition-group>
+      <draggable class="w-full max-w-md" ghost-class="moving-card" :list="tables" :animation="200">
+        <div v-for="table in tables" :key="table" class="card box_element_list">
+          <font-awesome-icon class="draggable_icon" icon="grip-vertical" />
+          {{table}}
+        </div>
       </draggable>
     </div>
     <footer class="card-footer footer">
@@ -77,14 +75,20 @@ export default {
   padding: 20px;
 }
 .box_element_list {
-  box-shadow: 0px 0px 107px 11px rgba(0, 0, 0, 0.07);
   border-radius: 0.5ch;
   margin-top: 10px;
   padding-top: 1.5ch;
   padding-bottom: 1.5ch;
+  -webkit-user-drag:table;
 }
-.draggable_icon{
+.draggable_icon {
   margin-right: 1ch;
   margin-left: 1ch;
-  }
+}
+.moving-card {
+  opacity: 100%;
+  background-color: rgba(0, 0, 0, 0.685);
+  border: 10px;
+  border-color: rgb(255, 0, 0);
+}
 </style>
