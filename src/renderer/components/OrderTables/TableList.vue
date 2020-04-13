@@ -9,6 +9,7 @@
       </a>
     </header>
     <div class="card-content">
+      <!-- Draggable list -->
       <SlickList lockAxis="y" v-model="tables">
         <SlickItem
           v-for="(table, index) in tables"
@@ -18,12 +19,23 @@
         >
           <font-awesome-icon class="draggable_icon" icon="grip-vertical" />
           Table {{ table }}
+          <button class="icon delete_icon" @click="deleteTable(table)">
+            <font-awesome-icon icon="times-circle" />
+          </button>
         </SlickItem>
       </SlickList>
     </div>
     <footer class="card-footer footer">
-      <button class="button is-danger is-fullwidth is-flex-tablet-only" type="button">Cancel</button>
-      <button class="button is-success is-fullwidth is-flex-tablet-only" type="button">Accept</button>
+      <button
+        class="button is-danger is-fullwidth is-flex-tablet-only"
+        type="button"
+        v-on:click="deleteAllTables()"
+      >Cancel</button>
+      <button
+        class="button is-success is-fullwidth is-flex-tablet-only"
+        type="button"
+        v-on:click="accept()"
+      >Accept</button>
     </footer>
   </div>
 </template>
@@ -32,13 +44,12 @@
 <script>
 // import bus for events
 import { bus } from "../../main";
-import draggable from "vuedraggable";
+// import slicsor for draggable list elements
 import { SlickList, SlickItem } from "vue-slicksort";
 
 export default {
   mixins: [],
   components: {
-    draggable,
     SlickItem,
     SlickList
   },
@@ -51,7 +62,7 @@ export default {
   created: async function() {
     bus.$on("tableAdded", table => {
       //Adding data to the list
-      //console.log("Table: " + this.details.includes("Table " + table))
+      //console.log(this.tables)
       if (this.tables.includes(table)) {
         this.tables.splice(this.tables.indexOf(table), 1);
       } else {
@@ -61,14 +72,21 @@ export default {
   },
 
   methods: {
-    addTable: function() {
-      details.push(table);
-      //console.log(tables);
+    deleteAllTables: function() {
+      this.tables = [];
+    },
+    accept: function() {
+      //Insert action with ros sending the list: tables
+    },
+    deleteTable: function(table) {
+      // It doesn't work well because of the draggable list 
+      console.log('before' + this.tables)
+      this.tables.splice(this.tables.indexOf(table), 1);
+      console.log('after' + this.tables)
     }
   }
 };
 </script>
-
 
 
 <style scoped>
@@ -94,15 +112,27 @@ export default {
   margin-right: 1ch;
   margin-left: 1ch;
 }
-
 .box_element_list:hover {
-  transform: scale(1.05);
+  /*transform: scale(1.05);*/
 }
-.settings_icon{
+.settings_icon {
+  color: gray;
+  font-size: 20px;
+}
+.button {
+  margin-right: 10px;
+  margin-left: 10px;
+}
+.delete_icon {
+  justify-content: center;
+  align-items: center;
+  float: right;
+  margin-right: 10px;
+  font-size: 20px;
   color: gray;
 }
-.button{
-  margin-right: 10px;
-  margin-left:10px
+.delete_icon:hover{
+  color: red;
+  transform: scale(1.05);
 }
 </style>

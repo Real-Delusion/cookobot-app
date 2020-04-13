@@ -10,7 +10,9 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faCog } from '@fortawesome/free-solid-svg-icons'
 import { faGripLinesVertical } from '@fortawesome/free-solid-svg-icons'
 import { faGripVertical } from '@fortawesome/free-solid-svg-icons'
+import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 
+library.add(faTimesCircle)
 library.add(faGripVertical)
 library.add(faGripLinesVertical)
 library.add(faCog)

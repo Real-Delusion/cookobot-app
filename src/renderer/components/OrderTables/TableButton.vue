@@ -33,7 +33,8 @@ export default {
 		  } else {
 			  this.backgroundColor = 'white';
 		  }
-	  } 
+    },
+    
   }
 };
 </script>
