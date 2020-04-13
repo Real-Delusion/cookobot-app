@@ -1,9 +1,10 @@
 <template>
   <div id="wrapper">
-    <main>
+    <SlideMenu></SlideMenu>
+    <section>
       <LiveMap></LiveMap>
       <TableList></TableList>
-    </main>
+    </section>
   </div>
 </template>
 
@@ -11,20 +12,17 @@
 //import ROSLIB from "roslib";
 import LiveMap from "@/components/Maps/LiveMap";
 import TableList from "@/components/OrderTables/TableList";
-
+import SlideMenu from "@/components/UI/SlideMenu";
 
 export default {
   name: "dashboard",
-  components: {LiveMap, TableList},
+  components: { LiveMap, TableList, SlideMenu },
   data() {
-    return {
-    };
+    return {};
   },
-  methods: {
-
-  }
+  methods: {}
 };
 </script>
 
-<style>
+<style scoped>
 </style>
