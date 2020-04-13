@@ -22,8 +22,8 @@
       </SlickList>
     </div>
     <footer class="card-footer footer">
-      <button class="button is-danger" type="button">Cancel</button>
-      <button class="button is-success" type="button">Accept</button>
+      <button class="button is-danger is-fullwidth is-flex-tablet-only" type="button">Cancel</button>
+      <button class="button is-success is-fullwidth is-flex-tablet-only" type="button">Accept</button>
     </footer>
   </div>
 </template>
@@ -79,7 +79,7 @@ export default {
   position: absolute;
   width: 500px;
   height: auto;
-  min-height: 200px;
+  min-height: 100px;
 }
 .footer {
   padding: 20px;
@@ -100,5 +100,9 @@ export default {
 }
 .settings_icon{
   color: gray;
+}
+.button{
+  margin-right: 10px;
+  margin-left:10px
 }
 </style>
