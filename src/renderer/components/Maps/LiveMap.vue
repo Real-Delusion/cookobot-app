@@ -1,17 +1,32 @@
 <template>
-  <div id="main">
-    <img id="map" src="@/assets/restaurantMap.png" alt />
-    <img v-bind:style="{bottom: robotBottom+'px', left: robotLeft+'px' }" id="robotIndicator" src="@/assets/robot.png" />
-    <!-- I create the TableButton component -->
-    <TableButton v-for="button in buttons" v-bind:table="button.tableNumber" 
-    v-bind:style="{left: button.left + 'px',  
-                  top: button.top + 'px'}" v-bind:key="button.tableNumber"></TableButton>
-    <button
-      :disabled="!connected"
-      style="left: 462px;bottom: 6px;"
-      class="kitchen_button"
-      @click="goToTable(0)"
-    >Cocina</button>
+  <div class="card">
+    <div class="card-content">
+      <div class="content">
+        <progress v-if="!connected" class="progress is-small is-primary" max="100">15%</progress>
+        <div v-if="connected">
+          <img id="map" src="@/assets/restaurantMap.png" alt />
+          <img
+            v-bind:style="{bottom: robotBottom+'px', left: robotLeft+'px' }"
+            id="robotIndicator"
+            src="@/assets/robot.png"
+          />
+          <!-- I create the TableButton component -->
+          <TableButton
+            v-for="button in buttons"
+            v-bind:table="button.tableNumber"
+            v-bind:style="{left: button.left + 'px',  
+                  top: button.top + 'px'}"
+            v-bind:key="button.tableNumber"
+          ></TableButton>
+          <button
+            :disabled="!connected"
+            style="left: 462px;bottom: 6px;"
+            class="kitchen_button"
+            @click="goToTable(0)"
+          >Cocina</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -21,24 +36,24 @@ import TableButton from "@/components/OrderTables/TableButton";
 
 export default {
   name: "livemap",
-  components: {TableButton},
+  components: { TableButton },
   mixins: [Ros],
   data() {
     return {
       robotLeft: 0,
       robotBottom: 0,
       //Table buttons
-      buttons:[
-        {tableNumber: 1, left: 225, top: 146},
-        {tableNumber: 2, left: 465,top: 312},
-        {tableNumber: 3, left: 560,top: 94},
-        {tableNumber: 4, left: 755,top: 312}
-        ],
+      buttons: [
+        { tableNumber: 1, left: 225, top: 146 },
+        { tableNumber: 2, left: 465, top: 312 },
+        { tableNumber: 3, left: 560, top: 94 },
+        { tableNumber: 4, left: 755, top: 312 }
+      ]
     };
   },
   watch: {
-    position: function (){
-      this.updateRobotPosition()
+    position: function() {
+      this.updateRobotPosition();
     }
   },
   created: async function() {
@@ -46,7 +61,6 @@ export default {
   },
   methods: {
     updateRobotPosition: function() {
-
       let x = this.position.x.toFixed(2);
       let y = this.position.y.toFixed(2);
 
@@ -56,11 +70,10 @@ export default {
       let xWidth = 5.26;
       let yHeight = 5.27;
 
-      this.robotLeft = ((x*width)/xWidth).toFixed(2);
-      this.robotBottom = ((y*height)/yHeight).toFixed(2);
+      this.robotLeft = ((x * width) / xWidth).toFixed(2);
+      this.robotBottom = ((y * height) / yHeight).toFixed(2);
 
       //console.log(this.robotLeft, this.robotTop)
-
     },
     goToTable: function(table) {
       // define the service to be called
@@ -115,10 +128,16 @@ a {
   max-height: 90vh;
   width: 925px;
 }
-#main {
-  text-align: center;
-  position: relative;
-  display: inline-block;
+.table_button:hover {
+  background-color: #00b7ff;
+}
+.table_button:active {
+  color: white;
+  box-shadow: 0 2px rgb(22, 22, 22);
+  transform: translateY(2px);
+}
+.table_double {
+  width: 226px;
 }
 
 .kitchen_button {
