@@ -34,6 +34,8 @@ export default {
 
         if (userId == getUser.user_id) {
           this.$emit("authenticated", true);
+          this.$userData.user_name = getUser.name;
+          this.$userData.user_type = getUser.user_type
           this.$router.replace({ name: "dashboard" });
         } else {
           this.message = "The user id is incorrect";
