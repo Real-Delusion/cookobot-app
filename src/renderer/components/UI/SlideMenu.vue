@@ -4,7 +4,11 @@
     <label for="navigation">&#9776;</label>
     <nav>
       <ul>
-        <li class="user-info">{{this.$store.state.user_name}}</li>
+        <li class="user-info">
+          {{this.$store.state.user_name}}
+          <span v-if="this.$store.state.user_type >0 ">(Admin)</span>
+          <span v-else>(User)</span>
+        </li>
         <li>
           <router-link to="/dashboard" replace>Home</router-link>
         </li>
