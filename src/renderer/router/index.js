@@ -21,6 +21,7 @@ export default new Router({
       path: '/users',
       name: 'users',
       component: require('@/views/Users').default,
+      beforeEnter: checkAdmin
     },
     {
       path: '*',
@@ -36,6 +37,18 @@ function checkAuth(to, from, next) {
 
   if (!auth) {
     next('/login')  // they are not authorized, so redirect to login
+
+  } else {
+    next() // we are authorized, continue on to the requested route
+  }
+}
+
+function checkAdmin(to, from, next) {
+  // Read current user type
+  let userType = store.state.user_type;
+
+  if (userType <= 0) {
+    next(from)  // they are not authorized, so redirect to login
 
   } else {
     next() // we are authorized, continue on to the requested route
