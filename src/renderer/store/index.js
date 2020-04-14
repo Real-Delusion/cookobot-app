@@ -15,3 +15,8 @@ export default new Vuex.Store({
   ],
   strict: process.env.NODE_ENV !== 'production'
 })
+
+Vue.prototype.$userData = {
+  user_name: "",
+  user_type: 0
+}
