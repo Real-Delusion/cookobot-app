@@ -44,7 +44,7 @@
 <script>
 // import bus for events
 import { bus } from "../../main";
-// import slicsor for draggable list elements
+// import slicksort for draggable list elements
 import { SlickList, SlickItem } from "vue-slicksort";
 
 export default {
@@ -74,15 +74,15 @@ export default {
   methods: {
     deleteAllTables: function() {
       this.tables = [];
+      bus.$emit('deleteTables', this.tables);
     },
     accept: function() {
       //Insert action with ros sending the list: tables
     },
     deleteTable: function(table) {
-      // It doesn't work well because of the draggable list 
-      console.log('before' + this.tables)
       this.tables.splice(this.tables.indexOf(table), 1);
-      console.log('after' + this.tables)
+      bus.$emit('deleteTables', this.tables);
+
     }
   }
 };

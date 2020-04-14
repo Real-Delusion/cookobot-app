@@ -1,6 +1,7 @@
 <template>
     <button
     class="table_button"
+    v-bind:value="table"
     @click="addTable(table)"
     v-bind:style="{ 'background-color': backgroundColor }"
     v-on:click="changeColor">{{table}}</button>
@@ -19,14 +20,19 @@ export default {
     };
   },
   created: async function() {
-    
+    bus.$on("deleteTables", tables => {
+      //if the list of tables is cancelled
+      if (tables == 0) {
+        this.backgroundColor = 'white';
+      } 
+    });
   },
   methods: {
     addTable: function(table) {
       //Send table value to TableList
       bus.$emit('tableAdded', table);
-    },
 
+    },
     changeColor: function() {
 		  if (this.backgroundColor == 'white') {
 			  this.backgroundColor = '#00b7ff';
@@ -34,7 +40,6 @@ export default {
 			  this.backgroundColor = 'white';
 		  }
     },
-    
   }
 };
 </script>
