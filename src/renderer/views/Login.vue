@@ -23,20 +23,27 @@ export default {
   },
   methods: {
     async login() {
+      // Get input id
       let userId = this.input.userid;
 
       if (userId != "") {
-        // Get user from db
+        // Get user data from db
         let getUser;
         await getUserById(userId).then(data => {
           getUser = data;
         });
 
+        // Check if input id equals user id
         if (userId == getUser.user_id) {
-          this.$emit("authenticated", true);
-          this.$userData.user_name = getUser.name;
-          this.$userData.user_type = getUser.user_type
-          this.$router.replace({ name: "dashboard" });
+          // Authorized
+          this.$store.dispatch("auth", true); // Set Auth Vuex state to true
+
+          // Set Vuex user data
+          this.$store.dispatch("name", getUser.name);
+          this.$store.dispatch("type", getUser.user_type);
+
+          // Go to dashboard
+          this.$router.push("dashboard");
         } else {
           this.message = "The user id is incorrect";
         }

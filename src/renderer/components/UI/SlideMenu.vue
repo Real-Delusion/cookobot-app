@@ -4,11 +4,11 @@
     <label for="navigation">&#9776;</label>
     <nav>
       <ul>
-        <li class="user-info">{{this.$userData.user_name}}</li>
+        <li class="user-info">{{this.$store.state.user_name}}</li>
         <li>
           <router-link to="/dashboard" replace>Home</router-link>
         </li>
-        <li v-if="this.$userData.user_type > 0">
+        <li v-if="this.$store.state.user_type > 0">
           <router-link to="/users" replace>Users</router-link>
         </li>
         <li>

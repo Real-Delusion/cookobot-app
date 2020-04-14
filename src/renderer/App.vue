@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <router-view @authenticated="setAuthenticated"></router-view>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -8,21 +8,12 @@
 export default {
   name: "cookobot-app",
   data() {
-    return {
-      authenticated: true
-    };
+    return {};
   },
-  mounted() {
-    if (!this.authenticated) {
-      this.$router.replace({ name: "login" });
-    }
-  },
+  mounted() {},
   methods: {
-    setAuthenticated(status) {
-      this.authenticated = status;
-    },
     logout() {
-      this.authenticated = false;
+      this.$store.dispatch("auth", false);
     }
   }
 };
@@ -30,7 +21,7 @@ export default {
 
 <style>
 /* CSS */
-body{
+body {
   margin: 0;
   padding: 0;
   width: 100%;
