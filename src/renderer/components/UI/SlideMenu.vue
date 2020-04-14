@@ -4,8 +4,12 @@
     <label for="navigation">&#9776;</label>
     <nav>
       <ul>
+        <li class="user-info">{{this.$userData.user_name}}</li>
         <li>
           <router-link to="/dashboard" replace>Home</router-link>
+        </li>
+        <li v-if="this.$userData.user_type > 0">
+          <router-link to="/users" replace>Users</router-link>
         </li>
         <li>
           <router-link to="/login" v-on:click="logout()" replace>Logout</router-link>
@@ -20,7 +24,7 @@
 export default {
   data() {
     return {
-        checked: false
+      checked: false
     };
   },
   methods: {
@@ -28,7 +32,7 @@ export default {
       this.$emit("authenticated");
     },
     closeMenu: function() {
-        this.checked = false;
+      this.checked = false;
     }
   }
 };
@@ -111,5 +115,10 @@ input[type="checkbox"]:checked ~ label {
 }
 input[type="checkbox"]:checked ~ .overlay {
   display: inline;
+}
+.user-info {
+  color: #e1e2e5;
+  text-align: center;
+  background-color: #0d161d;
 }
 </style>
