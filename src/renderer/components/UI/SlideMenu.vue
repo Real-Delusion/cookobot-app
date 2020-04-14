@@ -136,4 +136,7 @@ input[type="checkbox"]:checked ~ label {
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
 }
+.router-link-active {
+  background-color: #4e5a66;
+}
 </style>
