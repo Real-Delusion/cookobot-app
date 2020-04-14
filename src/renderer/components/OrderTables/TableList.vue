@@ -19,7 +19,7 @@
         >
           <font-awesome-icon class="draggable_icon" icon="grip-vertical" />
           Table {{ table }}
-          <button class="icon delete_icon" @click="deleteTable(table)">
+          <button class="icon delete_icon" @touchstart="deleteTable(table)" @mousedown="deleteTable(table)">
             <font-awesome-icon icon="times-circle" />
           </button>
         </SlickItem>
