@@ -20,7 +20,9 @@
         </li>
       </ul>
     </nav>
-    <div v-on:click="closeMenu()" class="overlay"></div>
+    <transition name="fade">
+      <div v-if="checked" v-on:click="closeMenu()" class="overlay"></div>
+    </transition>
   </div>
 </template>
 
@@ -37,6 +39,9 @@ export default {
     },
     closeMenu: function() {
       this.checked = false;
+    },
+    openMenu: function() {
+      this.checked = true;
     }
   }
 };
@@ -44,7 +49,6 @@ export default {
 
 <style scoped>
 .overlay {
-  display: none;
   position: absolute;
   height: 100vh;
   width: 100%;
@@ -117,12 +121,16 @@ input[type="checkbox"]:checked ~ nav {
 input[type="checkbox"]:checked ~ label {
   left: 260px;
 }
-input[type="checkbox"]:checked ~ .overlay {
-  display: inline;
-}
 .user-info {
   color: #e1e2e5;
   text-align: center;
   background-color: #0d161d;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>
