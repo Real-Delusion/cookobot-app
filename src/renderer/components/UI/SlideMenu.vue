@@ -1,7 +1,10 @@
 <template>
   <div>
     <input v-model="checked" type="checkbox" id="navigation" />
-    <label for="navigation">&#9776;</label>
+    <transition name="fade">
+      <label v-if="!checked" for="navigation">&#9776;</label>
+      <label v-if="checked" for="navigation">x</label>
+    </transition>
     <nav>
       <ul>
         <li class="user-info">
