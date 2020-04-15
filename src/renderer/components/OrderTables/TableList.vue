@@ -25,7 +25,7 @@
         </SlickItem>
       </SlickList>
     </div>
-    <footer class="card-footer footer">
+    <footer class="card-footer footer is-fixed-bottom">
       <button
         class="button is-danger is-fullwidth is-flex-tablet-only"
         type="button"
@@ -91,12 +91,8 @@ export default {
 
 <style scoped>
 .queue_list {
-  float: left;
-  left: 50px;
-  top: 20px;
-  position: absolute;
-  width: 500px;
-  height: auto;
+  width: 100%;
+  height: 100%;
   min-height: 100px;
 }
 .footer {
@@ -134,5 +130,14 @@ export default {
 .delete_icon:hover{
   color: red;
   transform: scale(1.05);
+}
+.card-header {
+  height: 15%;
+}
+.card-content {
+  height: 75%;
+}
+.card-footer {
+  height: 10%;
 }
 </style>

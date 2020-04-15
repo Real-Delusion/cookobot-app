@@ -7,12 +7,16 @@
           <p>Loading map ...</p>
         </div>
         <div v-if="connected">
-          <img id="map" src="@/assets/restaurantMap.png" alt />
-          <img
-            v-bind:style="{bottom: robotBottom+'px', left: robotLeft+'px' }"
-            id="robotIndicator"
-            src="@/assets/robot.png"
-          />
+          <div class="columns">
+            <div class="column has-text-centered">
+              <img id="map" src="@/assets/restaurantMap.png" alt />
+              <img
+                v-bind:style="{bottom: robotBottom+'px', left: robotLeft+'px' }"
+                id="robotIndicator"
+                src="@/assets/robot.png"
+              />
+            </div>
+          </div>
           <!-- I create the TableButton component -->
           <TableButton
             v-for="button in buttons"
@@ -167,7 +171,7 @@ a {
   width: 50px;
   z-index: 99;
 }
-.loading{
+.loading {
   text-align: center;
 }
 </style>
