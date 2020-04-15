@@ -1,9 +1,9 @@
 {
   "name": "cookobot-app",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "author": "Joan Ciprià <joancipria@gmail.com>",
   "description": "Web interface for Cookobot ",
-  "license": null,
+  "license": "GPL-3.0",
   "main": "./dist/electron/main.js",
   "scripts": {
     "build": "node .electron-vue/build.js && electron-builder",
@@ -20,8 +20,8 @@
     "rebuild": "electron-rebuild -f -w sqlite3"
   },
   "build": {
-    "productName": "cookobot-app",
-    "appId": "com.example.yourapp",
+    "productName": "Cookobot Control Panel",
+    "appId": "com.realdelusion.cookobot",
     "directories": {
       "output": "build"
     },
