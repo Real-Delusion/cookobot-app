@@ -4,12 +4,14 @@ import { remote } from 'electron'
 const sqlite3 = require('sqlite3').verbose()
 
 let db
-const dbPath = path.join(remote.app.getPath('appData'), '/database.db');
+const dbPath = path.join(remote.app.getPath('appData'), '/cookobot/database.db');
+//console.log("Database path: ",dbPath)
 
 // Check for db file
 try {
     if (!fs.existsSync(dbPath)) {
         // Create if does not exist
+        fs.mkdirSync(path.join(remote.app.getPath('appData'),'/cookobot'));
         initDataBase()
     }
 } catch (err) {
