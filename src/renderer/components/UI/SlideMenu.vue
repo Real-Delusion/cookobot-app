@@ -7,13 +7,19 @@
     </transition>
     <nav>
       <ul>
+        <div id="logo">
+          <img src="@/assets/logo-blanco.png" />
+          <span>Dashboard</span>
+        </div>
         <li class="user-info">
-          {{this.$store.state.user_name}}
-          <span v-if="this.$store.state.user_type >0 ">(Admin)</span>
-          <span v-else>(User)</span>
+          <div>
+            {{this.$store.state.user_name}}
+            <span v-if="this.$store.state.user_type >0 ">Admin</span>
+            <!--  <span v-else>User</span> -->
+          </div>
         </li>
         <li>
-          <router-link to="/dashboard" replace>Home</router-link>
+          <router-link to="/dashboard" replace>My Restaurant</router-link>
         </li>
         <li v-if="this.$store.state.user_type > 0">
           <router-link to="/users" replace>Users</router-link>
@@ -83,12 +89,12 @@ nav ul {
 nav li {
   margin: 0;
 }
-nav a {
+li > * {
   color: #fff;
   font-size: 1em;
   text-decoration: none;
   display: block;
-  padding: 12px 15px;
+  padding: 2rem;
   font-weight: 300;
   letter-spacing: 2px;
   border-bottom: 1px solid #333;
@@ -126,8 +132,24 @@ input[type="checkbox"]:checked ~ label {
 }
 .user-info {
   color: #e1e2e5;
-  text-align: center;
   background-color: #0d161d;
+}
+#logo {
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  color:#4e5a66
+}
+#logo img {
+  height: 3rem;
+}
+.user-info div {
+  display: flex;
+  justify-content: space-between;
+}
+.user-info div span {
+  color: #4e5a66;
 }
 .fade-enter-active,
 .fade-leave-active {

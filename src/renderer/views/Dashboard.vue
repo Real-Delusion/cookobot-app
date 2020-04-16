@@ -2,8 +2,17 @@
   <div id="wrapper">
     <SlideMenu></SlideMenu>
     <section>
-      <LiveMap></LiveMap>
-      <TableList></TableList>
+      <div class="columns is-marginless">
+        <div class="column is-full has-margin-7" style="height: 10vh"></div>
+      </div>
+      <div class="columns is-marginless">
+        <div class="column is-two-thirds has-margin-7">
+          <LiveMap></LiveMap>
+        </div>
+        <div class="column has-margin-7">
+          <TableList></TableList>
+        </div>
+      </div>
     </section>
   </div>
 </template>

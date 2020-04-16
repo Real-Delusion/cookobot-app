@@ -1,17 +1,28 @@
+/*------------------------------------
+----------- DataBase Logic -----------
+-------------------------------------*/
+
+// Import file system
 import path from 'path'
 import fs from 'fs'
 import { remote } from 'electron'
+
+// Import sqlite3
 const sqlite3 = require('sqlite3').verbose()
 
-let db
+// Database path
 const dbPath = path.join(remote.app.getPath('appData'), '/cookobot/database.db');
 //console.log("Database path: ",dbPath)
 
+
+let db;
 // Check for db file
 try {
     if (!fs.existsSync(dbPath)) {
-        // Create if does not exist
+        // Create database file if does not exist
         fs.mkdirSync(path.join(remote.app.getPath('appData'),'/cookobot'));
+
+        // Run database script
         initDataBase()
     }
 } catch (err) {
@@ -40,6 +51,10 @@ function connect() {
     }
     return db
 }
+
+/*------------------------------------
+------------- SQL METHODS ------------
+-------------------------------------*/
 
 // Get user by id
 export const getUserById = (id) => {

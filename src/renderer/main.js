@@ -4,7 +4,11 @@ import axios from 'axios'
 import App from './App'
 import router from './router'
 import store from './store'
+
+// Bulma
 import 'bulma/css/bulma.css';
+
+// Font Awesome
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faCog } from '@fortawesome/free-solid-svg-icons'
@@ -12,10 +16,10 @@ import { faGripLinesVertical } from '@fortawesome/free-solid-svg-icons'
 import { faGripVertical } from '@fortawesome/free-solid-svg-icons'
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 
-library.add(faTimesCircle)
-library.add(faGripVertical)
-library.add(faGripLinesVertical)
-library.add(faCog)
+library.add([faTimesCircle,faGripVertical,faGripLinesVertical,faCog])
+
+// Socket.io
+import io from './utils/socket.js'
  
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
