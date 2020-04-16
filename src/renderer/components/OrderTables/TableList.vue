@@ -127,7 +127,7 @@ export default {
   color: gray;
 }
 .delete_icon:hover{
-  color: red;
+  color: rgb(204, 80, 80);
   transform: scale(1.05);
 }
 .card-header {

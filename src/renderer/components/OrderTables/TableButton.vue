@@ -29,13 +29,14 @@ export default {
       }
     });
     bus.$on("deleteTable", table => {
-        //if the table is deleted from the list
-        for(var i=0;i<this.buttonsEvents.length;i++){
-          if(this.buttonsEvents[i].value == table){
-            this.buttonsEvents[i].style.backgroundColor = "white"
-          }
+      //if the table is deleted from the list
+      for (var i = 0; i < this.buttonsEvents.length; i++) {
+        if (this.buttonsEvents[i].value == table) {
+          this.buttonsEvents[i].style.backgroundColor = "white";
+          this.backgroundColor="white"
         }
-      });
+      }
+    });
   },
   methods: {
     addTable: function(table) {
@@ -43,18 +44,15 @@ export default {
       bus.$emit("tableAdded", table);
     },
     changeColor: function(event) {
-      if(!this.buttonsEvents.includes(event.currentTarget)){
-      this.buttonsEvents.push(event.currentTarget);
+      if (!this.buttonsEvents.includes(event.currentTarget)) {
+        this.buttonsEvents.push(event.currentTarget);
       }
 
-      
-
-		  if (this.backgroundColor == 'white') {
-			  this.backgroundColor = '#00b7ff';
-		  } else {
-			  this.backgroundColor = 'white';
+      if (this.backgroundColor == "white") {
+        this.backgroundColor = "#00b7ff";
+      } else {
+        this.backgroundColor = "white";
       }
-      
     }
   }
 };
