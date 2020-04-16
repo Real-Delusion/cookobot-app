@@ -8,7 +8,13 @@
         </span>
       </a>
     </header>
-    <div class="card-content">
+    <div class="card-content-message" v-if="tables.length==0">
+      <span class="icon warning_icon">
+        <font-awesome-icon class icon="exclamation-circle" />
+      </span>
+      <span>Please select the tables that the robot has to attend.</span>
+    </div>
+    <div class="card-content" v-else>
       <!-- Draggable list -->
       <SlickList lockAxis="y" v-model="tables">
         <SlickItem
@@ -19,7 +25,11 @@
         >
           <font-awesome-icon class="draggable_icon" icon="grip-vertical" />
           Table {{ table }}
-          <div class="icon delete_icon" @touchstart="deleteTable(table)" @mousedown="deleteTable(table)">
+          <div
+            class="icon delete_icon"
+            @touchstart="deleteTable(table)"
+            @mousedown="deleteTable(table)"
+          >
             <font-awesome-icon icon="times-circle" />
           </div>
         </SlickItem>
@@ -27,14 +37,16 @@
     </div>
     <footer class="card-footer footer is-fixed-bottom">
       <button
-        class="button is-danger is-fullwidth is-flex-tablet-only"
+        class="button is-danger is-fullwidth is-flex-tablet-only cancel_button"
         type="button"
         v-on:click="deleteAllTables()"
-      >Cancel</button>
+        :disabled="tables.length==0"
+      >Clear all</button>
       <button
-        class="button is-success is-fullwidth is-flex-tablet-only"
+        class="button is-success is-fullwidth is-flex-tablet-only accept_button"
         type="button"
         v-on:click="accept()"
+        :disabled="tables.length==0"
       >Accept</button>
     </footer>
   </div>
@@ -74,14 +86,14 @@ export default {
   methods: {
     deleteAllTables: function() {
       this.tables = [];
-      bus.$emit('deleteTables', this.tables);
+      bus.$emit("deleteTables", this.tables);
     },
     accept: function() {
       //Insert action with ros sending the list: tables
     },
     deleteTable: function(table) {
       this.tables.splice(this.tables.indexOf(table), 1);
-      bus.$emit('deleteTable', table);
+      bus.$emit("deleteTable", table);
     }
   }
 };
@@ -107,9 +119,6 @@ export default {
   margin-right: 1ch;
   margin-left: 1ch;
 }
-.box_element_list:hover {
-  /*transform: scale(1.05);*/
-}
 .settings_icon {
   color: gray;
   font-size: 20px;
@@ -126,7 +135,7 @@ export default {
   font-size: 20px;
   color: gray;
 }
-.delete_icon:hover{
+.delete_icon:hover {
   color: rgb(204, 80, 80);
   transform: scale(1.05);
 }
@@ -139,5 +148,28 @@ export default {
 .card-footer {
   height: 10%;
   align-items: center;
+}
+.cancel_button {
+  background-color: rgb(204, 80, 80);
+}
+.accept_button {
+  background-color: rgb(126, 179, 66);
+}
+.card-content-message {
+  height: 75%;
+  align-items: center;
+  font-size: 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2rem;
+}
+.settings_icon {
+  font-size: 2rem;
+}
+.warning_icon {
+  font-size: 6rem;
+  padding: 4rem;
 }
 </style>
