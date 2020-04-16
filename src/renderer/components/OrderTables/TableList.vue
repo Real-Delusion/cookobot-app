@@ -139,5 +139,6 @@ export default {
 }
 .card-footer {
   height: 10%;
+  align-items: center;
 }
 </style>
