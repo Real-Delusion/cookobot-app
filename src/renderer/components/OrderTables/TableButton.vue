@@ -1,45 +1,61 @@
 <template>
-    <button
+  <button
     class="table_button"
-    v-bind:value="table"
     @click="addTable(table)"
+    v-bind:value="table"
     v-bind:style="{ 'background-color': backgroundColor }"
-    v-on:click="changeColor">{{table}}</button>
+    v-on:click="changeColor($event)"
+  >{{table}}</button>
 </template>
 
 <script>
 // import bus for events
-import { bus } from '../../main'
+import { bus } from "../../main";
 
 export default {
   mixins: [],
-  props: ['table'],
+  props: ["table"],
   data() {
     return {
-      backgroundColor:'white',
+      backgroundColor: "white",
+      buttonsEvents: []
     };
   },
   created: async function() {
     bus.$on("deleteTables", tables => {
       //if the list of tables is cancelled
       if (tables == 0) {
-        this.backgroundColor = 'white';
-      } 
+        this.backgroundColor = "white";
+      }
     });
+    bus.$on("deleteTable", table => {
+        //if the table is deleted from the list
+        for(var i=0;i<this.buttonsEvents.length;i++){
+          if(this.buttonsEvents[i].value == table){
+            this.buttonsEvents[i].style.backgroundColor = "white"
+          }
+        }
+      });
   },
   methods: {
     addTable: function(table) {
       //Send table value to TableList
-      bus.$emit('tableAdded', table);
-
+      bus.$emit("tableAdded", table);
     },
-    changeColor: function() {
+    changeColor: function(event) {
+      if(!this.buttonsEvents.includes(event.currentTarget)){
+      this.buttonsEvents.push(event.currentTarget);
+      }
+
+      
+
 		  if (this.backgroundColor == 'white') {
 			  this.backgroundColor = '#00b7ff';
 		  } else {
 			  this.backgroundColor = 'white';
-		  }
-    },
+      }
+      
+    }
   }
 };
 </script>

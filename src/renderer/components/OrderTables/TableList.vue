@@ -81,8 +81,7 @@ export default {
     },
     deleteTable: function(table) {
       this.tables.splice(this.tables.indexOf(table), 1);
-      bus.$emit('deleteTables', this.tables);
-
+      bus.$emit('deleteTable', table);
     }
   }
 };
