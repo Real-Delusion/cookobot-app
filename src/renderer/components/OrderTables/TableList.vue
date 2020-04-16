@@ -105,6 +105,7 @@ export default {
   width: 100%;
   height: 100%;
   min-height: 100px;
+  font-size: 1.8rem;
 }
 .footer {
   padding: 20px;
@@ -122,6 +123,7 @@ export default {
 .settings_icon {
   color: gray;
   font-size: 20px;
+  margin-right: 3rem;
 }
 .button {
   margin-right: 10px;
@@ -132,8 +134,9 @@ export default {
   align-items: center;
   float: right;
   margin-right: 10px;
-  font-size: 20px;
+  font-size: 1em;
   color: gray;
+  align-items: center;
 }
 .delete_icon:hover {
   color: rgb(204, 80, 80);
