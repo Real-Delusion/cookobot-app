@@ -7,7 +7,7 @@ const io = require('socket.io')();
 
 // On client connected
 io.on('connection', client => {
-    //console.log("Client connected")
+    console.log("Client connected")
 
     // Receive issue event
     client.on('issue', (msg) => {
