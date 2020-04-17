@@ -94,7 +94,10 @@ export default {
     deleteTable: function(table) {
       this.tables.splice(this.tables.indexOf(table), 1);
       bus.$emit("deleteTable", table);
-    }
+    },
+    elementList: function(event) {
+      console.log("Style element" + event.currentTarget)
+    },
   }
 };
 </script>
@@ -115,6 +118,8 @@ export default {
   margin-top: 10px;
   padding-top: 1.5ch;
   padding-bottom: 1.5ch;
+  font-size: 1.8rem;
+
 }
 .draggable_icon {
   margin-right: 1ch;
@@ -167,6 +172,8 @@ export default {
   flex-direction: column;
   justify-content: center;
   padding: 2rem;
+  color: rgba(149, 149, 149, 0.712);
+
 }
 .settings_icon {
   font-size: 2rem;
@@ -174,5 +181,6 @@ export default {
 .warning_icon {
   font-size: 6rem;
   padding: 4rem;
+  color: rgba(149, 149, 149, 0.712);
 }
 </style>
