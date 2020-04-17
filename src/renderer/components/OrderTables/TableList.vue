@@ -37,17 +37,27 @@
     </div>
     <footer class="card-footer footer is-fixed-bottom">
       <button
-        class="button is-danger is-fullwidth is-flex-tablet-only cancel_button"
+        class="button cancel_button is-danger is-fullwidth is-flex-tablet-only"
         type="button"
         v-on:click="deleteAllTables()"
         :disabled="tables.length==0"
-      >Clear all</button>
+      >
+        <span class="btn_icon">
+          <font-awesome-icon icon="trash-alt" />
+        </span>
+        Clear all
+      </button>
       <button
-        class="button is-success is-fullwidth is-flex-tablet-only accept_button"
+        class="button accept_button is-success is-fullwidth is-flex-tablet-only"
         type="button"
         v-on:click="accept()"
         :disabled="tables.length==0"
-      >Accept</button>
+      >
+        <span class="btn_icon">
+          <font-awesome-icon icon="check-circle" />
+        </span>
+        Accept
+      </button>
     </footer>
   </div>
 </template>
@@ -118,7 +128,6 @@ export default {
   font-size: 1.8rem;
   display: flex;
   align-items: center;
-
 }
 .draggable_icon {
   margin-right: 1ch;
@@ -154,14 +163,17 @@ export default {
   height: 75%;
 }
 .card-footer {
-  height: 10%;
   align-items: center;
 }
 .cancel_button {
   background-color: rgb(204, 80, 80);
+  height: 40%;
+  font-size: 1.5rem;
 }
 .accept_button {
   background-color: rgb(126, 179, 66);
+  height: 40%;
+  font-size: 1.5rem;
 }
 .card-content-message {
   height: 75%;
@@ -181,5 +193,8 @@ export default {
   font-size: 6rem;
   padding: 4rem;
   color: rgba(149, 149, 149, 0.712);
+}
+.btn_icon{
+  margin-right: inherit;
 }
 </style>
