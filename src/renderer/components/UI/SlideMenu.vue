@@ -9,23 +9,40 @@
       <ul>
         <div id="logo">
           <img src="@/assets/logo-blanco.png" />
-          <span>Dashboard</span>
+          <span style="font-size: 1rem">CONTROL PANEL</span>
         </div>
         <li class="user-info">
           <div>
+            <span class="icon">
+              <font-awesome-icon icon="user" />
+            </span>
             {{this.$store.state.user_name}}
-            <span v-if="this.$store.state.user_type >0 ">Admin</span>
+            <span
+              v-if="this.$store.state.user_type >0 "
+            >Admin</span>
             <!--  <span v-else>User</span> -->
           </div>
         </li>
         <li>
-          <router-link to="/dashboard" replace>My Restaurant</router-link>
+          <router-link to="/dashboard" replace>
+            <span class="icon">
+              <font-awesome-icon icon="utensils" />
+            </span>My Restaurant
+          </router-link>
         </li>
         <li v-if="this.$store.state.user_type > 0">
-          <router-link to="/users" replace>Users</router-link>
+          <router-link to="/users" replace>
+            <span class="icon">
+              <font-awesome-icon icon="users" />
+            </span>Users
+          </router-link>
         </li>
         <li>
-          <router-link to="/login" v-on:click="logout()" replace>Logout</router-link>
+          <router-link to="/login" v-on:click="logout()" replace>
+            <span class="icon">
+              <font-awesome-icon icon="sign-out-alt" />
+            </span>Logout
+          </router-link>
         </li>
       </ul>
     </nav>
@@ -68,17 +85,22 @@ nav {
   position: fixed;
   top: 0;
   left: 0;
-  width: 250px;
+  width: 25%;
   height: 100%;
-  margin: 0 0 0 -250px;
+  margin: 0 0 0 -25%;
   -moz-transition: all 200ms ease-in;
   -webkit-transition: all 200ms ease-in;
   -o-transition: all 200ms ease-in;
   transition: all 200ms ease-in;
   z-index: 999;
+  font-size: 2rem;
+}
+.icon {
+  padding-right: 2rem;
+  padding-left: 1rem;
 }
 nav ul {
-  width: 250px;
+  width: 100%;
   height: 100%;
   padding: 0;
   margin: 0;
@@ -98,6 +120,8 @@ li > * {
   font-weight: 300;
   letter-spacing: 2px;
   border-bottom: 1px solid #333;
+  align-items: center;
+  display: flex;
 }
 nav a:hover {
   background: #4e5a66;
@@ -139,10 +163,9 @@ input[type="checkbox"]:checked ~ label {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  color:#4e5a66
-}
-#logo img {
-  height: 3rem;
+  color: #ffffff;
+  flex-direction: column;
+  text-align: center;
 }
 .user-info div {
   display: flex;

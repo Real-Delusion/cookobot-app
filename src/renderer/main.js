@@ -11,12 +11,12 @@ import 'bulma/css/bulma.css';
 // Font Awesome
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faCog, faExclamationCircle } from '@fortawesome/free-solid-svg-icons'
+import { faCog, faUsers, faExclamationCircle, faUtensils, faSignOutAlt, faUser } from '@fortawesome/free-solid-svg-icons'
 import { faGripLinesVertical } from '@fortawesome/free-solid-svg-icons'
 import { faGripVertical } from '@fortawesome/free-solid-svg-icons'
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 
-library.add([faTimesCircle,faGripVertical,faGripLinesVertical,faCog,faExclamationCircle])
+library.add([faTimesCircle, faUsers, faGripVertical,faGripLinesVertical,faCog,faExclamationCircle, faUtensils, faSignOutAlt, faUser])
 
 // Socket.io
 import io from './utils/socket.js'
