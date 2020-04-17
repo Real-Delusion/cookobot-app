@@ -1,24 +1,41 @@
 <template>
-  <div id="login">
-    <h1>Login</h1>
-    <input type="password" name="userid" v-model="input.userid" placeholder="User id" />
-    <button class="button is-success" type="button" v-on:click="login()">Login</button>
-    <p class="message">{{message}}</p>
+  <div id="login" class="container is-fluid" style="background:#293948">
+    <div class="column">
+      <input 
+        id="inputLogIn"
+        class="input is-large is.primary"
+        type="password" 
+        name="userid" 
+        v-model="input.userid" 
+        placeholder="User id" 
+        maxlength="4"
+        color="input-disabled-background-color"
+      />
+      <!-- <button class="button is-success" type="button" v-on:click="login()">Login</button> -->
+      <p class="message">{{message}}</p>
+
+      <NumericKeyboard 
+        @pressed="input.userid = $event"
+        :selfValue="input.userid">
+      </NumericKeyboard>
+    </div>
   </div>
 </template>
 
 <script>
 import { getUserById } from "@/utils/db";
+import NumericKeyboard from "@/components/UI/NumericKeyboard/NumericKeyboard";
 
 export default {
   name: "login",
-  components: {},
+  components: {NumericKeyboard},
   data() {
     return {
       input: {
         userid: ""
       },
-      message: ""
+      message: "",
+      value: '',
     };
   },
   methods: {
@@ -55,5 +72,6 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+
 </style>
