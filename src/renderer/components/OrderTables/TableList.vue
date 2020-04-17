@@ -1,7 +1,10 @@
 <template>
   <div class="card queue_list">
     <header class="card-header">
-      <p class="card-header-title">Robot 98R2X3</p>
+      <div class="robot_info">
+        <p class="card-header-title">Robot 98R2X3</p>
+        <p class="card-header-description description_robot">Description</p>
+      </div>
       <a href="#" class="card-header-icon" aria-label="Settings">
         <span class="icon">
           <font-awesome-icon icon="cog" class="settings_icon" />
@@ -12,7 +15,7 @@
       <span class="icon warning_icon">
         <font-awesome-icon class icon="exclamation-circle" />
       </span>
-      <span>Please select the tables that the robot has to attend.</span>
+      <span>Please select the tables that the robot has to attend</span>
     </div>
     <div class="card-content" v-else>
       <!-- Draggable list -->
@@ -158,9 +161,11 @@ export default {
 }
 .card-header {
   height: 15%;
-  border-left-color: rgb(32, 146, 131);
-  border-left-style: solid;
-  border-left-width: 1rem;
+  justify-content: space-between;
+}
+.card-header-title {
+  padding-top: 0rem;
+  padding-bottom: 0rem;
 }
 .card-content {
   height: 75%;
@@ -169,12 +174,12 @@ export default {
   align-items: center;
 }
 .cancel_button {
-  background-color: rgb(204, 80, 80);
+  background-color: rgb(204, 80, 80) !important;
   height: 40%;
   font-size: 1.5rem;
 }
 .accept_button {
-  background-color: rgb(126, 179, 66);
+  background-color: rgb(126, 179, 66) !important;
   height: 40%;
   font-size: 1.5rem;
 }
@@ -197,7 +202,20 @@ export default {
   padding: 4rem;
   color: rgba(149, 149, 149, 0.712);
 }
-.btn_icon{
+.btn_icon {
   margin-right: inherit;
+}
+.robot_info {
+  margin: 1.8rem;
+  border-left-color: rgb(32, 146, 131);
+  border-left-style: solid;
+  border-left-width: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.description_robot {
+  margin-left: 1rem;
+  font-size: 1.5rem;
 }
 </style>
