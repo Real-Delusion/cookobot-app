@@ -94,10 +94,7 @@ export default {
     deleteTable: function(table) {
       this.tables.splice(this.tables.indexOf(table), 1);
       bus.$emit("deleteTable", table);
-    },
-    elementList: function(event) {
-      console.log("Style element" + event.currentTarget)
-    },
+    }
   }
 };
 </script>
@@ -115,10 +112,12 @@ export default {
 }
 .box_element_list {
   border-radius: 0.5ch;
-  margin-top: 10px;
+  margin-top: 1rem;
   padding-top: 1.5ch;
   padding-bottom: 1.5ch;
   font-size: 1.8rem;
+  display: flex;
+  align-items: center;
 
 }
 .draggable_icon {
@@ -139,9 +138,10 @@ export default {
   align-items: center;
   float: right;
   margin-right: 10px;
-  font-size: 1em;
+  font-size: 1.2em;
   color: gray;
-  align-items: center;
+  margin-right: 1.5rem;
+  margin-left: auto;
 }
 .delete_icon:hover {
   color: rgb(204, 80, 80);
@@ -173,7 +173,6 @@ export default {
   justify-content: center;
   padding: 2rem;
   color: rgba(149, 149, 149, 0.712);
-
 }
 .settings_icon {
   font-size: 2rem;
