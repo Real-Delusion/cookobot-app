@@ -158,6 +158,9 @@ export default {
 }
 .card-header {
   height: 15%;
+  border-left-color: rgb(32, 146, 131);
+  border-left-style: solid;
+  border-left-width: 1rem;
 }
 .card-content {
   height: 75%;
