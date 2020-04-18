@@ -169,7 +169,7 @@ a {
 #robotIndicator {
   position: absolute;
   width: 50px;
-  z-index: 99;
+  z-index: 90;
 }
 .loading {
   text-align: center;
