@@ -84,22 +84,21 @@
 <style scoped>
   #login {
     background: #293948;
-    height: 100vh;
+    height: 100%;
     width: 100%;
-    /* box-sizing: border-box; */
+    box-sizing: border-box;
   }
 
   #inputLogIn {
     /* -webkit-text-security: circle; */
-    color: white;
-    background-color: #293948;
+    color: white;    
   }
 
   #loginContainer {
     display: flex;
     align-content: center;
     align-items: center;
-    height: 100%;
+    height: 100vh;
   }
 
   #keyboard{
