@@ -17,9 +17,9 @@
               <font-awesome-icon icon="user" />
             </span>
             {{this.$store.state.user_name}}
-            <span
-              v-if="this.$store.state.user_type >0 "
-            >Admin</span>
+            <div class="user-type">
+              <span v-if="this.$store.state.user_type >0 ">Admin</span>
+            </div>
             <!--  <span v-else>User</span> -->
           </div>
         </li>
@@ -157,6 +157,13 @@ input[type="checkbox"]:checked ~ label {
 .user-info {
   color: #e1e2e5;
   background-color: #0d161d;
+  text-transform: uppercase;
+}
+.user-type {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  font-size: 1.2rem;
 }
 #logo {
   padding: 1rem;
@@ -167,11 +174,10 @@ input[type="checkbox"]:checked ~ label {
   align-items: center;
 }
 #logo img {
-  max-width: 80%;
+  max-width: 70%;
 }
 .user-info div {
   display: flex;
-  justify-content: space-between;
 }
 .user-info div span {
   color: #4e5a66;
@@ -185,5 +191,8 @@ input[type="checkbox"]:checked ~ label {
 }
 .router-link-active {
   background-color: #4e5a66;
+  border-left: 0.5rem solid white;
+  border-top: 1px solid #6f838e;
+  border-bottom: 1px solid #6f838e;
 }
 </style>
