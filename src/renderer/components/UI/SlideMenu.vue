@@ -161,11 +161,13 @@ input[type="checkbox"]:checked ~ label {
 #logo {
   padding: 1rem;
   display: flex;
-  justify-content: center;
   flex-wrap: wrap;
   color: #ffffff;
   flex-direction: column;
-  text-align: center;
+  align-items: center;
+}
+#logo img {
+  max-width: 80%;
 }
 .user-info div {
   display: flex;
