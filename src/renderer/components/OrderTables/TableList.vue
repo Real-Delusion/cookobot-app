@@ -81,7 +81,8 @@ export default {
   },
   data() {
     return {
-      tables: []
+      tables: [],
+      indexTables:0,
     };
   },
 
@@ -102,8 +103,17 @@ export default {
       this.tables = [];
       bus.$emit("deleteTables", this.tables);
     },
-    accept: function() {
+    accept: async function() {
       //Insert action with ros sending the list: tables
+      bus.$emit("sendTables", this.tables[this.indexTables]);
+      bus.$on("sendRes", async res => {
+        if (this.indexTables < this.tables.length -1) {
+          this.indexTables++;
+          this.accept();
+        } else {
+          console.log("FIN DE SERVIR MESAS");
+        }
+      });
     },
     deleteTable: function(table) {
       this.tables.splice(this.tables.indexOf(table), 1);

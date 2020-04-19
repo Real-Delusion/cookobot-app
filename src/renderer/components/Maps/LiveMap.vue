@@ -34,6 +34,8 @@
 <script>
 import Ros from "@/mixins/ros.js";
 import TableButton from "@/components/OrderTables/TableButton";
+// import bus for events
+import { bus } from "../../main";
 
 export default {
   name: "livemap",
@@ -45,11 +47,12 @@ export default {
       robotBottom: 0,
       //Table buttons
       buttons: [
-        { tableNumber: 0, x: 4.28, y: 3.24 },
-        { tableNumber: 1, x: 2.35, y: 3.25 },
-        { tableNumber: 2, x: 3.83, y: 4.65 },
-        { tableNumber: 3, x: 2.37, y: 4.7 },
-        { tableNumber: 4, x: 0.92, y: 4.7 }
+        { tableNumber: 0, x: 4.63, y: 1.64 },
+        { tableNumber: 1, x: 4.28, y: 3.24 },
+        { tableNumber: 2, x: 2.35, y: 3.25 },
+        { tableNumber: 3, x: 3.83, y: 4.65 },
+        { tableNumber: 4, x: 2.37, y: 4.7 },
+        { tableNumber: 5, x: 0.92, y: 4.7 }
       ]
     };
   },
@@ -60,6 +63,11 @@ export default {
   },
   created: async function() {
     await this.connectRos();
+    bus.$on("sendTables", async (table) => {
+      console.log("Enviando mesa:" + table);
+      let res = await this.goToTable(parseInt(table));
+      bus.$emit("sendRes", res);
+    });
   },
   methods: {
     updateRobotPosition: function() {
@@ -92,28 +100,34 @@ export default {
       return { left: left + "px", bottom: bottom + "px" };
     },
     goToTable: function(table) {
-      // define the service to be called
-      let service = new ROSLIB.Service({
-        ros: this.ros,
-        name: "navegacion_autonoma_servicio",
-        serviceType: "rossrv/Type"
-      });
+      return new Promise((resolve, reject) => {
+        console.log("ESTOY DENTRO DE GO TO TABLE");
 
-      // define the request
-      let request = new ROSLIB.ServiceRequest({
-        numeroMesa: table
-      });
+        // define the service to be called
+        let service = new ROSLIB.Service({
+          ros: this.ros,
+          name: "navegacion_autonoma_servicio",
+          serviceType: "rossrv/Type"
+        });
 
-      service.callService(
-        request,
-        result => {
-          console.log("This is the response of the service ");
-          console.log(result);
-        },
-        error => {
-          console.error(error);
-        }
-      );
+        // define the request
+        let request = new ROSLIB.ServiceRequest({
+          numeroMesa: table
+        });
+
+        service.callService(
+          request,
+          result => {
+            console.log("This is the response of the service ");
+            console.log(result);
+            resolve(result);
+          },
+          error => {
+            console.error(error);
+            reject(error);
+          }
+        );
+      });
     },
     sendStop: function() {
       let topic = new ROSLIB.Topic({

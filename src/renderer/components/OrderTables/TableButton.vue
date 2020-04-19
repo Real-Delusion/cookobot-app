@@ -5,7 +5,7 @@
     v-bind:value="table"
     v-bind:style="{ 'background-color': backgroundColor }"
     v-on:click="changeColor($event)"
-  >{{table+1}}</button>
+  >{{table}}</button>
 </template>
 
 <script>
