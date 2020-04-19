@@ -103,6 +103,8 @@
 
   #keyboard{
     margin: 2em;
+    width: 40%;
+    justify-content: center;
   }
 
 
