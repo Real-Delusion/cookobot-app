@@ -25,6 +25,7 @@
           :key="table"
           :index="index"
           class="card box_element_list"
+          v-bind:style="{ 'background-color': backgroundColor }"
         >
           <font-awesome-icon class="draggable_icon" icon="grip-vertical" />
           <p v-if="table!=0">Table {{ table }}</p>
@@ -45,6 +46,7 @@
         type="button"
         v-on:click="deleteAllTables()"
         :disabled="tables.length==0"
+        v-if="serving==false"
       >
         <span class="btn_icon">
           <font-awesome-icon icon="trash-alt" />
@@ -56,11 +58,24 @@
         type="button"
         v-on:click="accept()"
         :disabled="tables.length==0"
+        v-if="serving==false"
       >
         <span class="btn_icon">
           <font-awesome-icon icon="check-circle" />
         </span>
         Accept
+      </button>
+      <button
+        class="button cancel_button is-danger is-fullwidth is-flex-tablet-only"
+        type="button"
+        v-on:click="deleteAllTables()"
+        :disabled="tables.length==0"
+        v-else
+      >
+        <span class="btn_icon">
+          <font-awesome-icon icon="trash-alt" />
+        </span>
+        Cancel
       </button>
     </footer>
   </div>
@@ -83,6 +98,8 @@ export default {
     return {
       tables: [],
       indexTables:0,
+      backgroundColor: "white",
+      serving:false,
     };
   },
 
@@ -104,6 +121,8 @@ export default {
       bus.$emit("deleteTables", this.tables);
     },
     accept: async function() {
+      this.serving = true;
+      this.backgroundColor="var(--disabled)"
       //Insert action with ros sending the list: tables
       bus.$emit("sendTables", this.tables[this.indexTables]);
       bus.$on("sendRes", async res => {
@@ -112,6 +131,7 @@ export default {
           this.accept();
         } else {
           console.log("FIN DE SERVIR MESAS");
+          this.serving=false;
         }
       });
     },
