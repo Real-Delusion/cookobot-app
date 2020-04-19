@@ -22,8 +22,7 @@
           <TableButton
             v-for="button in buttons"
             v-bind:table="button.tableNumber"
-            v-bind:style="{left: button.left + 'px',  
-                  top: button.top + 'px'}"
+            v-bind:style="calcTablePos(button)"
             v-bind:key="button.tableNumber"
           ></TableButton>
         </div>
@@ -46,11 +45,11 @@ export default {
       robotBottom: 0,
       //Table buttons
       buttons: [
-        { tableNumber: 0, left: 540, top: 730 },
-        { tableNumber: 1, left: 225, top: 146 },
-        { tableNumber: 2, left: 465, top: 312 },
-        { tableNumber: 3, left: 560, top: 94 },
-        { tableNumber: 4, left: 755, top: 312 }
+        { tableNumber: 0, x: 4.28, y: 3.24 },
+        { tableNumber: 1, x: 2.35, y: 3.25 },
+        { tableNumber: 2, x: 3.83, y: 4.65 },
+        { tableNumber: 3, x: 2.37, y: 4.7 },
+        { tableNumber: 4, x: 0.92, y: 4.7 }
       ]
     };
   },
@@ -67,8 +66,8 @@ export default {
       let x = this.position.x.toFixed(2);
       let y = this.position.y.toFixed(2);
 
-      let width = document.getElementById('map').width;
-      let height = document.getElementById('map').height;
+      let width = document.getElementById("map").width;
+      let height = document.getElementById("map").height;
 
       let xWidth = 5.26;
       let yHeight = 5.27;
@@ -77,6 +76,20 @@ export default {
       this.robotBottom = ((y * height) / yHeight).toFixed(2);
 
       //console.log(this.robotLeft, this.robotTop)
+    },
+    calcTablePos: function name(table) {
+      let x = table.x;
+      let y = table.y; 
+      let width = 925;
+      let height = 845;
+
+      let xWidth = 5.26;
+      let yHeight = 5.27;
+
+      let left = ((x * width) / xWidth).toFixed(2);
+      let bottom = ((y * height) / yHeight).toFixed(2);
+
+      return { left: left + "px", bottom: bottom + "px" };
     },
     goToTable: function(table) {
       // define the service to be called
