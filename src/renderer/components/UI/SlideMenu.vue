@@ -37,12 +37,12 @@
             </span>Users
           </router-link>
         </li>
-        <li>
-          <router-link to="/login" v-on:click="logout()" replace>
+        <li v-on:click="logout()">
+          <a href="#">
             <span class="icon">
               <font-awesome-icon icon="sign-out-alt" />
             </span>Logout
-          </router-link>
+          </a>
         </li>
       </ul>
     </nav>
@@ -61,7 +61,13 @@ export default {
   },
   methods: {
     logout: function() {
-      this.$emit("authenticated");
+      // Clear auth
+      this.$store.dispatch("auth", false);
+      this.$store.dispatch("name", "");
+      this.$store.dispatch("type", 0);
+
+      // Go to login
+      this.$router.push("login");
     },
     closeMenu: function() {
       this.checked = false;
