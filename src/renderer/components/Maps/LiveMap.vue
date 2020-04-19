@@ -26,12 +26,6 @@
                   top: button.top + 'px'}"
             v-bind:key="button.tableNumber"
           ></TableButton>
-          <button
-            :disabled="!connected"
-            style="left: 462px;bottom: 6px;"
-            class="kitchen_button"
-            @click="goToTable(0)"
-          >Cocina</button>
         </div>
       </div>
     </div>
@@ -52,6 +46,7 @@ export default {
       robotBottom: 0,
       //Table buttons
       buttons: [
+        { tableNumber: 0, left: 540, top: 730 },
         { tableNumber: 1, left: 225, top: 146 },
         { tableNumber: 2, left: 465, top: 312 },
         { tableNumber: 3, left: 560, top: 94 },
@@ -159,14 +154,7 @@ a {
   box-shadow: 0 2px rgb(22, 22, 22);
   height: 199px;
 }
-.kitchen_button:hover {
-  background-color: #00b7ff;
-}
-.kitchen_button:active {
-  color: white;
-  box-shadow: 0 2px rgb(22, 22, 22);
-  transform: translateY(2px);
-}
+
 #robotIndicator {
   position: absolute;
   width: 50px;

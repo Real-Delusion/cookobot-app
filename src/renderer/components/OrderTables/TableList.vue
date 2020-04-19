@@ -27,7 +27,8 @@
           class="card box_element_list"
         >
           <font-awesome-icon class="draggable_icon" icon="grip-vertical" />
-          Table {{ table }}
+          <p v-if="table!=0">Table {{ table }}</p>
+          <p v-else>Kitchen</p>
           <div
             class="icon delete_icon"
             @touchstart="deleteTable(table)"
