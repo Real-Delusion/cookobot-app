@@ -67,8 +67,8 @@ export default {
       let x = this.position.x.toFixed(2);
       let y = this.position.y.toFixed(2);
 
-      let width = 925;
-      let height = 903.89;
+      let width = document.getElementById('map').width;
+      let height = document.getElementById('map').height;
 
       let xWidth = 5.26;
       let yHeight = 5.27;
@@ -119,16 +119,17 @@ export default {
 </script>
 
 <style scoped>
-body {
-  padding: 0px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+.card {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-
 a {
   color: #00b7ff;
 }
 #map {
-  max-height: 90vh;
+  max-height: 80vh;
   width: 925px;
 }
 .table_button:hover {
