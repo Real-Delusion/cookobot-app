@@ -28,4 +28,10 @@ body {
   height: 100vh;
   background-color: #eaebed;
 }
+#app {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100vh;
+}
 </style>
