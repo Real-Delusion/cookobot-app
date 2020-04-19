@@ -49,7 +49,8 @@ export default {
       }
 
       if (this.backgroundColor == "white") {
-        this.backgroundColor = "#00b7ff";
+        var style = getComputedStyle(document.body);
+        this.backgroundColor = style.getPropertyValue('--primary');
       } else {
         this.backgroundColor = "white";
       }

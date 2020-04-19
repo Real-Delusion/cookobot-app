@@ -18,7 +18,7 @@
             </span>
             {{this.$store.state.user_name}}
             <div class="user-type">
-              <span v-if="this.$store.state.user_type >0 ">Admin</span>
+              <span v-if="this.$store.state.user_type>0 ">Admin</span>
             </div>
             <!--  <span v-else>User</span> -->
           </div>
@@ -152,12 +152,15 @@ input[type="checkbox"]:checked ~ nav {
   margin: 0;
 }
 input[type="checkbox"]:checked ~ label {
-  left: 260px;
+  left: 25%;
 }
 .user-info {
-  color: #e1e2e5;
+  color: var(--disabled);
   background-color: #0d161d;
   text-transform: uppercase;
+}
+.user-info svg {
+  color: white;
 }
 .user-type {
   display: flex;

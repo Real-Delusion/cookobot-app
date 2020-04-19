@@ -174,12 +174,12 @@ export default {
   align-items: center;
 }
 .cancel_button {
-  background-color: rgb(204, 80, 80) !important;
+  background-color: var(--danger) !important;
   height: 40%;
   font-size: 1.5rem;
 }
 .accept_button {
-  background-color: rgb(126, 179, 66) !important;
+  background-color: var(--success) !important;
   height: 40%;
   font-size: 1.5rem;
 }
@@ -192,7 +192,7 @@ export default {
   flex-direction: column;
   justify-content: center;
   padding: 2rem;
-  color: rgba(149, 149, 149, 0.712);
+  color: var(--disabled);
 }
 .settings_icon {
   font-size: 2rem;
@@ -200,14 +200,14 @@ export default {
 .warning_icon {
   font-size: 6rem;
   padding: 4rem;
-  color: rgba(149, 149, 149, 0.712);
+  color: var(--disabled);
 }
 .btn_icon {
   margin-right: inherit;
 }
 .robot_info {
   margin: 1.8rem;
-  border-left-color: rgb(32, 146, 131);
+  border-left-color: var(--robot1);
   border-left-style: solid;
   border-left-width: 1rem;
   display: flex;
