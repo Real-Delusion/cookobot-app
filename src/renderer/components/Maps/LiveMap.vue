@@ -10,10 +10,11 @@
           <div class="columns">
             <div class="column has-text-centered">
               <img id="map" src="@/assets/restaurantMap.png" alt />
-              <img
+              <font-awesome-icon
+                icon="robot"
                 v-bind:style="{bottom: robotBottom+'px', left: robotLeft+'px' }"
                 id="robotIndicator"
-                src="@/assets/robot.png"
+                style="font-size: 4rem"
               />
             </div>
           </div>
