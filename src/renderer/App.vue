@@ -38,4 +38,10 @@ body {
   --disabled: rgba(149, 149, 149, 0.712);
   --primary: #579597;
 }
+#app {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100vh;
+}
 </style>
