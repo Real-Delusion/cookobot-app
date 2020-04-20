@@ -66,7 +66,7 @@ export default {
   background-color: white;
   border: 4px solid black;
   border-radius: 29px;
-  font-size: 37px;
+  font-size: 2rem;
   width: 12%;
   height: 12%;
   box-shadow: 0 2px rgb(22, 22, 22);
