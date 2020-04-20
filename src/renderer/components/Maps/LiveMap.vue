@@ -2,11 +2,11 @@
   <div class="card">
     <div class="card-content">
       <div class="content">
-        <div class="loading" v-if="!connected">
+        <div class="loading" v-show="!connected">
           <progress class="progress is-small is-primary" max="100">15%</progress>
           <p>Loading map ...</p>
         </div>
-        <div v-if="connected">
+        <div v-show="connected">
           <div class="columns">
             <div class="column has-text-centered">
               <img id="map" ref="map" src="@/assets/restaurantMap.png" alt />
@@ -75,12 +75,13 @@ export default {
 
     // Update tables position on window resize
     window.addEventListener("resize", this.calcTablePos);
-    window.addEventListener("load", this.calcTablePos);
   },
   destroyed() {
     // Remove resize event
     window.removeEventListener("resize", this.calcTablePos);
-    window.removeEventListener("load", this.calcTablePos);
+  },
+  mounted: function () {
+    this.calcTablePos()
   },
   methods: {
     updateRobotPosition: function() {
