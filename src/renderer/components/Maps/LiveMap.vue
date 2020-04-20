@@ -104,7 +104,7 @@ export default {
       let realMapSize = { x: 5.26, y: 5.27 }; // Map size in coords
 
       // Calc new left and bottom using a simple rule of three
-      let left = ((x * this.$refs.map.width) / realMapSize.x).toFixed(2);
+      let left = (((x * this.$refs.map.width) / realMapSize.x)+this.$refs.map.x).toFixed(2);
       let bottom = ((y * this.$refs.map.height) / realMapSize.y).toFixed(2);
       
       // Return result
