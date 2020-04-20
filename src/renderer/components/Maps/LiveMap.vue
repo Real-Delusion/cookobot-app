@@ -10,10 +10,11 @@
           <div class="columns">
             <div class="column has-text-centered">
               <img id="map" src="@/assets/restaurantMap.png" alt />
-              <img
+              <font-awesome-icon
+                icon="robot"
                 v-bind:style="{bottom: robotBottom+'px', left: robotLeft+'px' }"
                 id="robotIndicator"
-                src="@/assets/robot.png"
+                style="font-size: 4rem"
               />
             </div>
           </div>
@@ -21,16 +22,9 @@
           <TableButton
             v-for="button in buttons"
             v-bind:table="button.tableNumber"
-            v-bind:style="{left: button.left + 'px',  
-                  top: button.top + 'px'}"
+            v-bind:style="calcTablePos(button)"
             v-bind:key="button.tableNumber"
           ></TableButton>
-          <button
-            :disabled="!connected"
-            style="left: 462px;bottom: 6px;"
-            class="kitchen_button"
-            @click="goToTable(0)"
-          >Cocina</button>
         </div>
       </div>
     </div>
@@ -40,6 +34,8 @@
 <script>
 import Ros from "@/mixins/ros.js";
 import TableButton from "@/components/OrderTables/TableButton";
+// import bus for events
+import { bus } from "../../main";
 
 export default {
   name: "livemap",
@@ -51,10 +47,12 @@ export default {
       robotBottom: 0,
       //Table buttons
       buttons: [
-        { tableNumber: 1, left: 225, top: 146 },
-        { tableNumber: 2, left: 465, top: 312 },
-        { tableNumber: 3, left: 560, top: 94 },
-        { tableNumber: 4, left: 755, top: 312 }
+        { tableNumber: 0, x: 4.63, y: 1.64 },
+        { tableNumber: 1, x: 4.28, y: 3.24 },
+        { tableNumber: 2, x: 2.35, y: 3.25 },
+        { tableNumber: 3, x: 3.83, y: 4.65 },
+        { tableNumber: 4, x: 2.37, y: 4.7 },
+        { tableNumber: 5, x: 0.92, y: 4.7 }
       ]
     };
   },
@@ -65,14 +63,19 @@ export default {
   },
   created: async function() {
     await this.connectRos();
+    bus.$on("sendTables", async (table) => {
+      console.log("Enviando mesa:" + table);
+      let res = await this.goToTable(parseInt(table));
+      bus.$emit("sendRes", res);
+    });
   },
   methods: {
     updateRobotPosition: function() {
       let x = this.position.x.toFixed(2);
       let y = this.position.y.toFixed(2);
 
-      let width = 925;
-      let height = 903.89;
+      let width = document.getElementById("map").width;
+      let height = document.getElementById("map").height;
 
       let xWidth = 5.26;
       let yHeight = 5.27;
@@ -82,29 +85,49 @@ export default {
 
       //console.log(this.robotLeft, this.robotTop)
     },
+    calcTablePos: function name(table) {
+      let x = table.x;
+      let y = table.y; 
+      let width = 925;
+      let height = 845;
+
+      let xWidth = 5.26;
+      let yHeight = 5.27;
+
+      let left = ((x * width) / xWidth).toFixed(2);
+      let bottom = ((y * height) / yHeight).toFixed(2);
+
+      return { left: left + "px", bottom: bottom + "px" };
+    },
     goToTable: function(table) {
-      // define the service to be called
-      let service = new ROSLIB.Service({
-        ros: this.ros,
-        name: "navegacion_autonoma_servicio",
-        serviceType: "rossrv/Type"
-      });
+      return new Promise((resolve, reject) => {
+        console.log("ESTOY DENTRO DE GO TO TABLE");
 
-      // define the request
-      let request = new ROSLIB.ServiceRequest({
-        numeroMesa: table
-      });
+        // define the service to be called
+        let service = new ROSLIB.Service({
+          ros: this.ros,
+          name: "navegacion_autonoma_servicio",
+          serviceType: "rossrv/Type"
+        });
 
-      service.callService(
-        request,
-        result => {
-          console.log("This is the response of the service ");
-          console.log(result);
-        },
-        error => {
-          console.error(error);
-        }
-      );
+        // define the request
+        let request = new ROSLIB.ServiceRequest({
+          numeroMesa: table
+        });
+
+        service.callService(
+          request,
+          result => {
+            console.log("This is the response of the service ");
+            console.log(result);
+            resolve(result);
+          },
+          error => {
+            console.error(error);
+            reject(error);
+          }
+        );
+      });
     },
     sendStop: function() {
       let topic = new ROSLIB.Topic({
@@ -123,16 +146,17 @@ export default {
 </script>
 
 <style scoped>
-body {
-  padding: 0px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+.card {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-
 a {
   color: #00b7ff;
 }
 #map {
-  max-height: 90vh;
+  max-height: 80vh;
   width: 925px;
 }
 .table_button:hover {
@@ -158,18 +182,11 @@ a {
   box-shadow: 0 2px rgb(22, 22, 22);
   height: 199px;
 }
-.kitchen_button:hover {
-  background-color: #00b7ff;
-}
-.kitchen_button:active {
-  color: white;
-  box-shadow: 0 2px rgb(22, 22, 22);
-  transform: translateY(2px);
-}
+
 #robotIndicator {
   position: absolute;
   width: 50px;
-  z-index: 99;
+  z-index: 90;
 }
 .loading {
   text-align: center;

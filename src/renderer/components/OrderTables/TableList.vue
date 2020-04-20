@@ -1,7 +1,10 @@
 <template>
   <div class="card queue_list">
     <header class="card-header">
-      <p class="card-header-title">Robot 98R2X3</p>
+      <div class="robot_info">
+        <p class="card-header-title">Robot 98R2X3</p>
+        <p class="card-header-description description_robot">Description</p>
+      </div>
       <a href="#" class="card-header-icon" aria-label="Settings">
         <span class="icon">
           <font-awesome-icon icon="cog" class="settings_icon" />
@@ -12,7 +15,7 @@
       <span class="icon warning_icon">
         <font-awesome-icon class icon="exclamation-circle" />
       </span>
-      <span>Please select the tables that the robot has to attend.</span>
+      <span>Please select the tables that the robot has to attend</span>
     </div>
     <div class="card-content" v-else>
       <!-- Draggable list -->
@@ -22,9 +25,11 @@
           :key="table"
           :index="index"
           class="card box_element_list"
+          v-bind:style="{ 'background-color': backgroundColor }"
         >
           <font-awesome-icon class="draggable_icon" icon="grip-vertical" />
-          Table {{ table }}
+          <p v-if="table!=0">Table {{ table }}</p>
+          <p v-else>Kitchen</p>
           <div
             class="icon delete_icon"
             @touchstart="deleteTable(table)"
@@ -37,17 +42,41 @@
     </div>
     <footer class="card-footer footer is-fixed-bottom">
       <button
-        class="button is-danger is-fullwidth is-flex-tablet-only cancel_button"
+        class="button cancel_button is-danger is-fullwidth is-flex-tablet-only"
         type="button"
         v-on:click="deleteAllTables()"
         :disabled="tables.length==0"
-      >Clear all</button>
+        v-if="serving==false"
+      >
+        <span class="btn_icon">
+          <font-awesome-icon icon="trash-alt" />
+        </span>
+        Clear all
+      </button>
       <button
-        class="button is-success is-fullwidth is-flex-tablet-only accept_button"
+        class="button accept_button is-success is-fullwidth is-flex-tablet-only"
         type="button"
         v-on:click="accept()"
         :disabled="tables.length==0"
-      >Accept</button>
+        v-if="serving==false"
+      >
+        <span class="btn_icon">
+          <font-awesome-icon icon="check-circle" />
+        </span>
+        Accept
+      </button>
+      <button
+        class="button cancel_button is-danger is-fullwidth is-flex-tablet-only"
+        type="button"
+        v-on:click="deleteAllTables()"
+        :disabled="tables.length==0"
+        v-else
+      >
+        <span class="btn_icon">
+          <font-awesome-icon icon="trash-alt" />
+        </span>
+        Cancel
+      </button>
     </footer>
   </div>
 </template>
@@ -67,7 +96,10 @@ export default {
   },
   data() {
     return {
-      tables: []
+      tables: [],
+      indexTables:0,
+      backgroundColor: "white",
+      serving:false,
     };
   },
 
@@ -88,8 +120,20 @@ export default {
       this.tables = [];
       bus.$emit("deleteTables", this.tables);
     },
-    accept: function() {
+    accept: async function() {
+      this.serving = true;
+      this.backgroundColor="var(--disabled)"
       //Insert action with ros sending the list: tables
+      bus.$emit("sendTables", this.tables[this.indexTables]);
+      bus.$on("sendRes", async res => {
+        if (this.indexTables < this.tables.length -1) {
+          this.indexTables++;
+          this.accept();
+        } else {
+          console.log("FIN DE SERVIR MESAS");
+          this.serving=false;
+        }
+      });
     },
     deleteTable: function(table) {
       this.tables.splice(this.tables.indexOf(table), 1);
@@ -112,9 +156,12 @@ export default {
 }
 .box_element_list {
   border-radius: 0.5ch;
-  margin-top: 10px;
+  margin-top: 1rem;
   padding-top: 1.5ch;
   padding-bottom: 1.5ch;
+  font-size: 1.8rem;
+  display: flex;
+  align-items: center;
 }
 .draggable_icon {
   margin-right: 1ch;
@@ -134,9 +181,10 @@ export default {
   align-items: center;
   float: right;
   margin-right: 10px;
-  font-size: 1em;
+  font-size: 1.2em;
   color: gray;
-  align-items: center;
+  margin-right: 1.5rem;
+  margin-left: auto;
 }
 .delete_icon:hover {
   color: rgb(204, 80, 80);
@@ -144,19 +192,27 @@ export default {
 }
 .card-header {
   height: 15%;
+  justify-content: space-between;
+}
+.card-header-title {
+  padding-top: 0rem;
+  padding-bottom: 0rem;
 }
 .card-content {
   height: 75%;
 }
 .card-footer {
-  height: 10%;
   align-items: center;
 }
 .cancel_button {
-  background-color: rgb(204, 80, 80);
+  background-color: var(--danger) !important;
+  height: 40%;
+  font-size: 1.5rem;
 }
 .accept_button {
-  background-color: rgb(126, 179, 66);
+  background-color: var(--success) !important;
+  height: 40%;
+  font-size: 1.5rem;
 }
 .card-content-message {
   height: 75%;
@@ -167,6 +223,7 @@ export default {
   flex-direction: column;
   justify-content: center;
   padding: 2rem;
+  color: var(--disabled);
 }
 .settings_icon {
   font-size: 2rem;
@@ -174,5 +231,22 @@ export default {
 .warning_icon {
   font-size: 6rem;
   padding: 4rem;
+  color: var(--disabled);
+}
+.btn_icon {
+  margin-right: inherit;
+}
+.robot_info {
+  margin: 1.8rem;
+  border-left-color: var(--robot1);
+  border-left-style: solid;
+  border-left-width: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.description_robot {
+  margin-left: 1rem;
+  font-size: 1.5rem;
 }
 </style>

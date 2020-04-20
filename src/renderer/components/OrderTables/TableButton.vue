@@ -49,7 +49,8 @@ export default {
       }
 
       if (this.backgroundColor == "white") {
-        this.backgroundColor = "#00b7ff";
+        var style = getComputedStyle(document.body);
+        this.backgroundColor = style.getPropertyValue('--primary');
       } else {
         this.backgroundColor = "white";
       }
@@ -66,8 +67,8 @@ export default {
   border: 4px solid black;
   border-radius: 29px;
   font-size: 37px;
-  width: 116px;
-  height: 116px;
+  width: 12%;
+  height: 12%;
   box-shadow: 0 2px rgb(22, 22, 22);
 }
 .table_button:active {

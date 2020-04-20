@@ -17,9 +17,9 @@
               <font-awesome-icon icon="user" />
             </span>
             {{this.$store.state.user_name}}
-            <span
-              v-if="this.$store.state.user_type >0 "
-            >Admin</span>
+            <div class="user-type">
+              <span v-if="this.$store.state.user_type>0 ">Admin</span>
+            </div>
             <!--  <span v-else>User</span> -->
           </div>
         </li>
@@ -37,12 +37,12 @@
             </span>Users
           </router-link>
         </li>
-        <li>
-          <router-link to="/login" v-on:click="logout()" replace>
+        <li v-on:click="logout()">
+          <a href="#">
             <span class="icon">
               <font-awesome-icon icon="sign-out-alt" />
             </span>Logout
-          </router-link>
+          </a>
         </li>
       </ul>
     </nav>
@@ -61,7 +61,13 @@ export default {
   },
   methods: {
     logout: function() {
-      this.$emit("authenticated");
+      // Clear auth
+      this.$store.dispatch("auth", false);
+      this.$store.dispatch("name", "");
+      this.$store.dispatch("type", 0);
+
+      // Go to login
+      this.$router.push("login");
     },
     closeMenu: function() {
       this.checked = false;
@@ -152,24 +158,35 @@ input[type="checkbox"]:checked ~ nav {
   margin: 0;
 }
 input[type="checkbox"]:checked ~ label {
-  left: 260px;
+  left: 25%;
 }
 .user-info {
-  color: #e1e2e5;
+  color: var(--disabled);
   background-color: #0d161d;
+  text-transform: uppercase;
+}
+.user-info svg {
+  color: white;
+}
+.user-type {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  font-size: 1.2rem;
 }
 #logo {
   padding: 1rem;
   display: flex;
-  justify-content: center;
   flex-wrap: wrap;
   color: #ffffff;
   flex-direction: column;
-  text-align: center;
+  align-items: center;
+}
+#logo img {
+  max-width: 70%;
 }
 .user-info div {
   display: flex;
-  justify-content: space-between;
 }
 .user-info div span {
   color: #4e5a66;
@@ -183,5 +200,8 @@ input[type="checkbox"]:checked ~ label {
 }
 .router-link-active {
   background-color: #4e5a66;
+  border-left: 0.5rem solid white;
+  border-top: 1px solid #6f838e;
+  border-bottom: 1px solid #6f838e;
 }
 </style>

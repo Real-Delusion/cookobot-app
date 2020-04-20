@@ -3,7 +3,9 @@
     <SlideMenu></SlideMenu>
     <section>
       <div class="columns is-marginless">
-        <div class="column is-full has-margin-7" style="height: 10vh"></div>
+        <div class="column is-full has-margin-7" style="height: 10vh">
+          <RobotButton></RobotButton>
+        </div>
       </div>
       <div class="columns is-marginless">
         <div class="column is-two-thirds has-margin-7">
@@ -22,10 +24,11 @@
 import LiveMap from "@/components/Maps/LiveMap";
 import TableList from "@/components/OrderTables/TableList";
 import SlideMenu from "@/components/UI/SlideMenu";
+import RobotButton from "@/components/UI/RobotButton";
 
 export default {
   name: "dashboard",
-  components: { LiveMap, TableList, SlideMenu },
+  components: { LiveMap, TableList, SlideMenu, RobotButton },
   data() {
     return {};
   },
