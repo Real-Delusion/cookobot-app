@@ -75,10 +75,12 @@ export default {
 
     // Update tables position on window resize
     window.addEventListener("resize", this.calcTablePos);
+    window.addEventListener("load", this.calcTablePos);
   },
   destroyed() {
     // Remove resize event
     window.removeEventListener("resize", this.calcTablePos);
+    window.removeEventListener("load", this.calcTablePos);
   },
   mounted: function () {
     this.calcTablePos()
