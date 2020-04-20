@@ -25,17 +25,23 @@
           :key="table"
           :index="index"
           class="card box_element_list"
-          v-bind:style="{ 'background-color': backgroundColor }"
+          v-bind:style="{ 'backgroundColor': 'white' }"
+          ref="table"
+          :disabled="serving"
         >
-          <font-awesome-icon class="draggable_icon" icon="grip-vertical" />
+          <font-awesome-icon 
+          :style="{'color':colorDraggableIcon}"
+          class="draggable_icon" icon="grip-vertical" />
           <p v-if="table!=0">Table {{ table }}</p>
           <p v-else>Kitchen</p>
           <div
             class="icon delete_icon"
+            :v-show="!serving"
+            ref="deleteTableIcon"
             @touchstart="deleteTable(table)"
             @mousedown="deleteTable(table)"
           >
-            <font-awesome-icon icon="times-circle" />
+            <font-awesome-icon icon="times-circle"/>
           </div>
         </SlickItem>
       </SlickList>
@@ -68,7 +74,7 @@
       <button
         class="button cancel_button is-danger is-fullwidth is-flex-tablet-only"
         type="button"
-        v-on:click="deleteAllTables()"
+        v-on:click="cancelServing()"
         :disabled="tables.length==0"
         v-else
       >
@@ -97,9 +103,11 @@ export default {
   data() {
     return {
       tables: [],
-      indexTables:0,
-      backgroundColor: "white",
-      serving:false,
+      indexTables: 0,
+      serving: false,
+      displayServing: "",
+      served: false,
+      colorDraggableIcon: ''
     };
   },
 
@@ -121,23 +129,49 @@ export default {
       bus.$emit("deleteTables", this.tables);
     },
     accept: async function() {
-      this.serving = true;
-      this.backgroundColor="var(--disabled)"
-      //Insert action with ros sending the list: tables
+      // Send robot to serve the tables from the list
       bus.$emit("sendTables", this.tables[this.indexTables]);
-      bus.$on("sendRes", async res => {
-        if (this.indexTables < this.tables.length -1) {
-          this.indexTables++;
-          this.accept();
-        } else {
-          console.log("FIN DE SERVIR MESAS");
-          this.serving=false;
-        }
-      });
+
+      // Changing style for the table that is serving
+      let $refServing = this.$refs.table[this.indexTables].$el;
+      $refServing.style.backgroundColor = "#ffff";
+      $refServing.style.border = "solid";
+      $refServing.style.borderColor = "var(--robot1)";
+
+      this.colorDraggableIcon= "white"
+      this.$refs.deleteTableIcon[this.indexTables].style.display='none'
+      this.serving = true;
+
+      waitResponse();
     },
     deleteTable: function(table) {
       this.tables.splice(this.tables.indexOf(table), 1);
       bus.$emit("deleteTable", table);
+    },
+    cancelServing: function() {
+      bus.$emit("sendTables", -1);
+      this.deleteAllTables();
+      this.serving = false;
+    },
+    waitResponse: function(){
+      // Waiting for the response
+      bus.$on("sendRes", async res => {
+        // Changing style for the table that is served
+        let $refServed = this.$refs.table[this.indexTables].$el;
+        $refServed.style.border = "solid";
+        $refServed.style.borderColor = "var(--success)";
+
+        this.served = true;
+
+        if (this.indexTables < this.tables.length - 1) {
+          this.indexTables++;
+          this.accept();
+        } else {
+          console.log("END SERVING TABLES");
+          this.deleteAllTables();
+          this.serving = false;
+        }
+      });
     }
   }
 };
@@ -162,6 +196,7 @@ export default {
   font-size: 1.8rem;
   display: flex;
   align-items: center;
+  
 }
 .draggable_icon {
   margin-right: 1ch;
