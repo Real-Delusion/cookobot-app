@@ -82,10 +82,13 @@
           } else {
             this.errorMessage = true;
             this.message = "The user id is incorrect";
+            setTimeout(this.hideError, 5000);
+
           }
         } else {
           this.errorMessage = true;
           this.message = "Please, fill the user id";
+          setTimeout(this.hideError, 5000);
         }
       },
 
