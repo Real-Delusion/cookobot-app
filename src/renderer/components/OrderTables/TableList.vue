@@ -25,7 +25,8 @@
           :key="table"
           :index="index"
           class="card box_element_list"
-          v-bind:style="{ 'background-color': backgroundColor }"
+          v-bind:style="{ 'backgroundColor': 'white' }"
+          ref="table"
         >
           <font-awesome-icon class="draggable_icon" icon="grip-vertical" />
           <p v-if="table!=0">Table {{ table }}</p>
@@ -97,9 +98,8 @@ export default {
   data() {
     return {
       tables: [],
-      indexTables:0,
-      backgroundColor: "white",
-      serving:false,
+      indexTables: 0,
+      serving: false,
     };
   },
 
@@ -121,17 +121,27 @@ export default {
       bus.$emit("deleteTables", this.tables);
     },
     accept: async function() {
+      // Changing style for the table that is serving
+      let $refServing = this.$refs.table[this.indexTables].$el;
+      $refServing.style.backgroundColor = "#ffff";
+      $refServing.style.border="solid";
+      $refServing.style.borderColor="var(--robot1)";
+
       this.serving = true;
-      this.backgroundColor="var(--disabled)"
+      //this.backgroundColor = "var(--disabled)";
       //Insert action with ros sending the list: tables
       bus.$emit("sendTables", this.tables[this.indexTables]);
       bus.$on("sendRes", async res => {
-        if (this.indexTables < this.tables.length -1) {
+        // Changing style for the table that is served
+          let $refServed = this.$refs.table[this.indexTables].$el;
+          $refServed.style.backgroundColor = "gray";
+          $refServed.style.color="gray"
+        if (this.indexTables < this.tables.length - 1) {
           this.indexTables++;
           this.accept();
         } else {
           console.log("FIN DE SERVIR MESAS");
-          this.serving=false;
+          this.serving = false;
         }
       });
     },
