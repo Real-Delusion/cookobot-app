@@ -75,10 +75,12 @@ export default {
 
     // Update tables position on window resize
     window.addEventListener("resize", this.calcTablePos);
+    window.addEventListener("load", this.calcTablePos);
   },
   destroyed() {
     // Remove resize event
     window.removeEventListener("resize", this.calcTablePos);
+    window.removeEventListener("load", this.calcTablePos);
   },
   methods: {
     updateRobotPosition: function() {
@@ -163,7 +165,6 @@ a {
 }
 #map {
   max-height: 80vh;
-  width: 925px;
 }
 .table_button:hover {
   background-color: #00b7ff;
@@ -173,10 +174,6 @@ a {
   box-shadow: 0 2px rgb(22, 22, 22);
   transform: translateY(2px);
 }
-.table_double {
-  width: 226px;
-}
-
 .kitchen_button {
   float: left;
   position: absolute;
