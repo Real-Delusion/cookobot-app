@@ -1,13 +1,27 @@
 <template>
   <div id="login" class="container-fluid">
     <div class="columns is-marginless">
-      <div class="column is-full" style="height: 25vh">
-        <label class="title is-1" id="inputLogIn">{{userid}}</label>
-        <div v-if="errorMessage == true" class="column is-full">
-          <p class="message">{{message}}</p>
+      <div class="columns is-full" style="height: 25vh">
+
+        <div class="column is-one-third">
+          <div id="logo">
+            <img src="@/assets/logo-blanco.png" />
+          </div>
         </div>
+
+        <div class="column is-one-third is-centered">
+          <div class="column is-full" style="height: 50%">
+            <p class="message">{{message}}</p>
+          </div>
+          <div class="column is-full is-centered" id="loginInputContainer">
+            <label class="title is-1" id="inputLogIn">{{userid}}</label>
+          </div>
+          
+        </div>
+        
       </div>
     </div>
+    
     <div class="columns is-marginless is-centered">
       <div class="column is-one-third" style="height: 75vh">
         <NumericKeyboard @pressed="userid = $event" :selfValue="userid"></NumericKeyboard>
@@ -81,20 +95,29 @@ export default {
 }
 
 #inputLogIn {
-  /* -webkit-text-security: circle; */
+  -webkit-text-security: disc;
   color: white;
-}
-
-#loginContainer {
-  display: flex;
-  align-content: center;
-  align-items: center;
-  height: 100vh;
+  text-align: center;
 }
 
 #keyboard {
   margin: 2em;
   width: 40%;
   justify-content: center;
+}
+
+#logo {
+  padding: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  color: #ffffff;
+  flex-direction: column;
+  width: 50%;
+}
+
+#loginInputContainer{
+  display: flex;
+  flex-flow: column;
+  height: 50%;
 }
 </style>
