@@ -167,7 +167,7 @@ a {
   color: #00b7ff;
 }
 #map {
-  width: 100%;
+  width: 83%;
   height: auto;
 }
 .table_button:hover {

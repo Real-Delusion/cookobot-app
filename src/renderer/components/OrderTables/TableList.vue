@@ -250,7 +250,7 @@ export default {
   font-size: 1.5rem;
 }
 .card-content-message {
-  height: 75%;
+  height: 70%;
   align-items: center;
   font-size: 2rem;
   text-align: center;
