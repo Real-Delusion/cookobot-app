@@ -4,7 +4,12 @@
     <section>
       <div class="columns is-marginless">
         <div class="column is-full has-margin-7" style="height: 10vh">
-          <RobotButton></RobotButton>
+          <RobotButton
+            v-for="robot in robots"
+            v-bind:id="robot.id"
+            v-bind:description="robot.description"
+            v-bind:key="robot.id"
+          ></RobotButton>
         </div>
       </div>
       <div class="columns is-marginless">
@@ -30,7 +35,12 @@ export default {
   name: "dashboard",
   components: { LiveMap, TableList, SlideMenu, RobotButton },
   data() {
-    return {};
+    return {
+      robots: [
+        { id: "123456", description: "kitchen aid" },
+        { id: "789023", description: "bar aid" }
+      ]
+    };
   },
   methods: {}
 };
