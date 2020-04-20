@@ -54,7 +54,7 @@ export default {
       else this.value = this.value.substring(0, this.value.length - 1);
     },
     login() {
-      console.log("logIn");
+        this.$parent.login();
     }
   },
   watch: {
