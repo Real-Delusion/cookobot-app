@@ -14,7 +14,7 @@
             <p class="message">{{message}}</p>
           </div>
           <div class="column is-full is-centered" id="loginInputContainer">
-            <label class="title is-1" id="inputLogIn">{{userid}}</label>
+            <h1 class="title is-1" id="inputLogIn">{{userid}}</h1>
           </div>
           
         </div>
@@ -98,6 +98,7 @@ export default {
   -webkit-text-security: disc;
   color: white;
   text-align: center;
+  font-size: 5rem;
 }
 
 #keyboard {
