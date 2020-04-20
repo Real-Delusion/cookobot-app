@@ -7,7 +7,7 @@
     v-on:click="changeColor($event)"
   >
     <div class="columns is-marginless">
-      <div class="column robot-icon is-two-fifths">
+      <div class="column robot-icon is-two-fifths" v-bind:style="{backgroundColor: bgcolor}">
         <span class="icon">
           <font-awesome-icon icon="robot" />
         </span>
@@ -16,7 +16,7 @@
         <div>
           <b>#{{id}}</b>
         </div>
-        <div>Robot pasillo 1</div>
+        <div>{{description}}</div>
       </div>
     </div>
   </button>
@@ -28,7 +28,7 @@ import { bus } from "../../main";
 
 export default {
   mixins: [],
-  props: ["id", "description"],
+  props: ["id", "description", "bgcolor"],
   data() {
     return {
       /* backgroundColor: "white",
@@ -55,10 +55,10 @@ export default {
   methods: {
     selectRobot: function(robot) {
       //Send table value to TableList
-     // bus.$emit("robotSelected", robot);
+      // bus.$emit("robotSelected", robot);
     },
     changeColor: function(event) {
-     /* if (!this.buttonsEvents.includes(event.currentTarget)) {
+      /* if (!this.buttonsEvents.includes(event.currentTarget)) {
         this.buttonsEvents.push(event.currentTarget);
       }
 
@@ -78,6 +78,7 @@ export default {
   background: none;
   border: none;
   padding: 0;
+  width: 30vh;
 }
 .robot-button div {
   height: 100%;
@@ -98,8 +99,9 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  font-size: 1rem;
+  font-size: 1.5rem;
   align-items: flex-start;
+  text-transform: capitalize;
 }
 .icon {
   padding: 2.5rem;
