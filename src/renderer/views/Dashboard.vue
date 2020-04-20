@@ -3,15 +3,8 @@
     <SlideMenu></SlideMenu>
     <section>
       <div class="columns is-marginless">
-        <div class="column is-full has-margin-7 robot-buttons" style="height: 13vh">
-          <RobotButton
-            v-for="robot in robots"
-            v-bind:id="robot.id"
-            v-bind:description="robot.description"
-            v-bind:bgcolor="robot.color"
-            v-bind:key="robot.id"
-            v-bind:style="{ 'margin-right': '1rem'}"
-          ></RobotButton>
+        <div class="column is-full has-margin-7" style="height: 13vh">
+         <RobotList></RobotList>
         </div>
       </div>
       <div class="columns is-marginless">
@@ -31,17 +24,13 @@
 import LiveMap from "@/components/Maps/LiveMap";
 import TableList from "@/components/OrderTables/TableList";
 import SlideMenu from "@/components/UI/SlideMenu";
-import RobotButton from "@/components/UI/RobotButton";
+import RobotList from "@/components/UI/ShowRobots/RobotList";
 
 export default {
   name: "dashboard",
-  components: { LiveMap, TableList, SlideMenu, RobotButton },
+  components: { LiveMap, TableList, SlideMenu, RobotList },
   data() {
     return {
-      robots: [
-        { id: "123456", description: "kitchen", color: "var(--robot1)" },
-        { id: "789023", description: "terrace", color: "var(--robot2)" }
-      ]
     };
   },
   methods: {}
@@ -49,9 +38,4 @@ export default {
 </script>
 
 <style scoped>
-.robot-buttons {
-  padding: 1rem;
-  padding-top: 1.75rem;
-  padding-left: 0.75rem;
-}
 </style>

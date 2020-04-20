@@ -77,6 +77,7 @@ export default {
   border: none;
   padding: 0;
   width: 30vh;
+  border: 0.5rem solid transparent;
 }
 
 .robot-icon {

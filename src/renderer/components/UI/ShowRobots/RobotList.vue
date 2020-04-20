@@ -35,7 +35,7 @@ export default {
 <style scoped>
 .robot-buttons {
   padding: 1rem;
-  padding-top: 1.75rem;
+  padding-top: 0.5rem;
   padding-left: 0.75rem;
 }
 
@@ -48,8 +48,11 @@ export default {
 .radio input[type="radio"]:checked + div {
   border: 0.5rem solid white;
   border-radius: 0.7rem;
-  -webkit-box-shadow: 0px 0px 17px -8px rgba(0, 0, 0, 0.63);
-  -moz-box-shadow: 0px 0px 17px -8px rgba(0, 0, 0, 0.63);
-  box-shadow: 0px 0px 17px -8px rgba(0, 0, 0, 0.63);
+  -webkit-box-shadow: 0px 0px 64px -1px rgba(0, 0, 0, 0.21);
+  -moz-box-shadow: 0px 0px 64px -1px rgba(0, 0, 0, 0.21);
+  box-shadow: 0px 0px 64px -1px rgba(0, 0, 0, 0.21);
+}
+.radio input[type="radio"]:checked + div:first-child .robot-text {
+  border-radius: 0;
 }
 </style>
