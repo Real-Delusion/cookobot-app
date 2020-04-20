@@ -164,7 +164,8 @@ a {
   color: #00b7ff;
 }
 #map {
-  max-height: 80vh;
+  width: 100%;
+  height: auto;
 }
 .table_button:hover {
   background-color: #00b7ff;

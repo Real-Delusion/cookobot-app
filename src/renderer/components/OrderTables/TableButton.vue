@@ -61,7 +61,6 @@ export default {
 
 <style scoped>
 .table_button {
-  float: left;
   position: absolute;
   background-color: white;
   border: 4px solid black;
