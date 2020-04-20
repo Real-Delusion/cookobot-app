@@ -27,6 +27,7 @@
           class="card box_element_list"
           v-bind:style="{ 'backgroundColor': 'white' }"
           ref="table"
+          :disabled="serving"
         >
           <font-awesome-icon 
           :style="{'color':colorDraggableIcon}"
@@ -35,7 +36,7 @@
           <p v-else>Kitchen</p>
           <div
             class="icon delete_icon"
-            :style="{ 'display': displayServing }"
+            :v-show="!serving"
             ref="deleteTableIcon"
             @touchstart="deleteTable(table)"
             @mousedown="deleteTable(table)"
@@ -128,28 +129,39 @@ export default {
       bus.$emit("deleteTables", this.tables);
     },
     accept: async function() {
+      // Send robot to serve the tables from the list
+      bus.$emit("sendTables", this.tables[this.indexTables]);
+
       // Changing style for the table that is serving
       let $refServing = this.$refs.table[this.indexTables].$el;
       $refServing.style.backgroundColor = "#ffff";
       $refServing.style.border = "solid";
       $refServing.style.borderColor = "var(--robot1)";
-      //this.displayServing = "none";
+
       this.colorDraggableIcon= "white"
-
       this.$refs.deleteTableIcon[this.indexTables].style.display='none'
-
       this.serving = true;
-      //this.backgroundColor = "var(--disabled)";
-      //Insert action with ros sending the list: tables
-      bus.$emit("sendTables", this.tables[this.indexTables]);
+
+      waitResponse();
+    },
+    deleteTable: function(table) {
+      this.tables.splice(this.tables.indexOf(table), 1);
+      bus.$emit("deleteTable", table);
+    },
+    cancelServing: function() {
+      bus.$emit("sendTables", -1);
+      this.deleteAllTables();
+      this.serving = false;
+    },
+    waitResponse: function(){
+      // Waiting for the response
       bus.$on("sendRes", async res => {
         // Changing style for the table that is served
         let $refServed = this.$refs.table[this.indexTables].$el;
-        $refServing.style.border = "solid";
-        $refServing.style.borderColor = "var(--success)";
-  
+        $refServed.style.border = "solid";
+        $refServed.style.borderColor = "var(--success)";
+
         this.served = true;
-        this.displayServing=''
 
         if (this.indexTables < this.tables.length - 1) {
           this.indexTables++;
@@ -160,15 +172,6 @@ export default {
           this.serving = false;
         }
       });
-    },
-    deleteTable: function(table) {
-      this.tables.splice(this.tables.indexOf(table), 1);
-      bus.$emit("deleteTable", table);
-    },
-    cancelServing: function() {
-      bus.$emit("sendTables", -1);
-      this.serving = false;
-      this.tables=[];
     }
   }
 };
@@ -193,8 +196,7 @@ export default {
   font-size: 1.8rem;
   display: flex;
   align-items: center;
-  -webkit-user-drag:none;
-  user-select: none;
+  
 }
 .draggable_icon {
   margin-right: 1ch;
