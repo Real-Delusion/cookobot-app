@@ -15,7 +15,7 @@
       <div class="column is-one-third">
         <button class="button is-medium is-danger" @click="clear()">
           <span class="icon">
-            <font-awesome-icon icon="backspace"/>
+            <font-awesome-icon icon="backspace" />
           </span>
         </button>
       </div>
@@ -46,7 +46,7 @@ export default {
     press(key) {
       if (this.value.length < 4) {
         this.value = `${this.value}${key}`;
-        console.log(this.value);
+        //console.log(this.value);
       }
     },
     clear(type) {
@@ -54,7 +54,7 @@ export default {
       else this.value = this.value.substring(0, this.value.length - 1);
     },
     login() {
-        this.$parent.login();
+      this.$parent.login();
     }
   },
   watch: {
@@ -76,12 +76,13 @@ button {
   width: 100%;
   height: 100%;
   min-height: 3rem;
+  font-size: 4rem !important;
 }
 .keyboard-container {
   width: 100%;
   height: 100%;
 }
 .columns {
-    height: 25%;
+  height: 25%;
 }
 </style>
