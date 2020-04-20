@@ -34,9 +34,10 @@ body {
   --danger: rgb(204, 80, 80);
   --darkbackground: #293948;
   --lightbackground: #eaebed;
-  --robot1: #00b4be;
   --disabled: rgba(149, 149, 149, 0.712);
   --primary: #579597;
+  --robot1: #00b4be;
+  --robot2: #ffaa67;
 }
 #app {
   margin: 0;
