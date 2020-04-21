@@ -68,9 +68,13 @@ export default {
 
     // TODO: Remove events
     bus.$on("sendTables", async table => {
+      if(table!=-1){
       console.log("Enviando mesa:" + table);
       let res = await this.goToTable(parseInt(table));
       bus.$emit("sendRes", res);
+      }else{
+        this.sendStop()
+      }
     });
 
     // Update tables position on window resize
