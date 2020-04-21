@@ -3,6 +3,7 @@
     class="robot-button"
     v-bind:id="id"
     v-bind:description="description"
+    v-bind:selected="selected"
   >
     <div class="columns is-marginless">
       <div class="column robot-icon is-two-fifths" v-bind:style="{backgroundColor: bgcolor}">

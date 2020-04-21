@@ -1,18 +1,13 @@
 <template>
   <div class="control robot-buttons">
     <label class="radio" v-for="robot in robots" v-bind:key="robot.id">
-      <input
-        type="radio"
-        name="robotbuttons"
-        v-bind:value="robot.id"
-        @change="onChange($event)"
-      />
+      <input type="radio" name="robotbuttons" v-bind:value="robot.id" @change="onChange($event)" />
       <RobotButton
+        v-bind:selected="robot.selected"
         v-bind:id="robot.id"
         v-bind:description="robot.description"
         v-bind:bgcolor="robot.color"
-        v-bind:style="{ 'margin-right': '1rem'}"
-        v-bind:selected="robot.selected"
+        v-bind:style="{'margin-right': '1rem'}"
       ></RobotButton>
     </label>
   </div>
@@ -32,7 +27,7 @@ export default {
           id: "123456",
           description: "kitchen",
           color: "var(--robot1)",
-          selected: false
+          selected: true
         },
         {
           id: "789023",
@@ -45,12 +40,11 @@ export default {
   },
   created: async function() {},
   methods: {
-   onChange: function(event) {
+    onChange: function(event) {
       this.robots.forEach(element => {
-        if(element.id != event.target.value) {
-          element.selected = false
-        }
-        else element.selected = true
+        if (element.id != event.target.value) {
+          element.selected = false;
+        } else element.selected = true;
       });
     }
   }
@@ -67,10 +61,10 @@ export default {
 .radio input[type="radio"] {
   opacity: 0;
   position: fixed;
-  width: 0;
+  width: 0
 }
 
-.radio input[type="radio"]:checked + div {
+.radio input[type="radio"] + div[selected="selected"] {
   border: 0.5rem solid white;
   border-radius: 0.7rem;
   -webkit-box-shadow: 0px 0px 64px -1px rgba(0, 0, 0, 0.21);
