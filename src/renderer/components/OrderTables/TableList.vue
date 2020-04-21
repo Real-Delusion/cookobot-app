@@ -142,7 +142,7 @@ export default {
       this.$refs.deleteTableIcon[this.indexTables].style.display='none'
       this.serving = true;
 
-      waitResponse();
+      this.waitResponse();
     },
     deleteTable: function(table) {
       this.tables.splice(this.tables.indexOf(table), 1);
