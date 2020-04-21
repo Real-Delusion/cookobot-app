@@ -3,10 +3,14 @@
     <input v-model="checked" type="checkbox" id="navigation" />
     <transition name="fade">
       <label v-if="!checked" for="navigation">
-        <div class="eyelash"></div>
+        <span class="icon" style="padding-left: 1.3rem">
+          <font-awesome-icon icon="chevron-right" />
+        </span>
       </label>
       <label v-if="checked" for="navigation">
-        <div class="eyelash"></div>
+        <span class="icon" style="padding-left: 1.2rem">
+          <font-awesome-icon icon="chevron-left" />
+        </span>
       </label>
     </transition>
     <nav>
@@ -137,27 +141,27 @@ nav a:hover {
   background: #4e5a66;
 }
 label {
-  display: block;
   font-weight: 700;
-  width: 42px;
-  height: 42px;
-  line-height: 42px;
-  color: #b4b4b4;
+  color: white;
   text-align: center;
-  font-size: 2em;
+  font-size: 1.7em;
   line-height: 1.1em;
-  background-color: red;
+  background-color: var(--darker);
   position: fixed;
   top: 80%;
   left: 0;
-  width: 10%;
-  height: 10%;
+  width: 47px;
+  height: 85px;
+  cursor: pointer;
+  border-radius: 0 3rem 3rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   -moz-transition: all 200ms ease-in;
   -webkit-transition: all 200ms ease-in;
   -o-transition: all 200ms ease-in;
   transition: all 200ms ease-in;
   z-index: 500;
-  cursor: pointer;
 }
 input[type="checkbox"] {
   display: none;
@@ -211,5 +215,8 @@ input[type="checkbox"]:checked ~ label {
   border-left: 0.5rem solid white;
   border-top: 1px solid #6f838e;
   border-bottom: 1px solid #6f838e;
+}
+.lid {
+  padding-left: 1.2rem;
 }
 </style>

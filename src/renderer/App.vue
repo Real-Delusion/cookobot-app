@@ -33,6 +33,7 @@ body {
   --success: rgb(126, 179, 66);
   --danger: rgb(204, 80, 80);
   --darkbackground: #293948;
+  --darker: #0D161D;
   --lightbackground: #eaebed;
   --disabled: rgba(149, 149, 149, 0.712);
   --primary: #579597;
