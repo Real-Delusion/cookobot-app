@@ -2,14 +2,14 @@
   <div class="card">
     <div class="card-content">
       <div class="content">
-        <div class="loading" v-if="!connected">
+        <div class="loading" v-show="!connected">
           <progress class="progress is-small is-primary" max="100">15%</progress>
           <p>Loading map ...</p>
         </div>
-        <div v-if="connected">
+        <div v-show="connected">
           <div class="columns">
             <div class="column has-text-centered">
-              <img id="map" src="@/assets/restaurantMap.png" alt />
+              <img id="map" ref="map" src="@/assets/restaurantMap.png" alt />
               <font-awesome-icon
                 icon="robot"
                 v-bind:style="{bottom: robotBottom+'px', left: robotLeft+'px' }"
@@ -22,7 +22,7 @@
           <TableButton
             v-for="button in buttons"
             v-bind:table="button.tableNumber"
-            v-bind:style="calcTablePos(button)"
+            v-bind:style="button.style"
             v-bind:key="button.tableNumber"
           ></TableButton>
         </div>
@@ -47,57 +47,72 @@ export default {
       robotBottom: 0,
       //Table buttons
       buttons: [
-        { tableNumber: 0, x: 4.63, y: 1.64 },
-        { tableNumber: 1, x: 4.28, y: 3.24 },
-        { tableNumber: 2, x: 2.35, y: 3.25 },
-        { tableNumber: 3, x: 3.83, y: 4.65 },
-        { tableNumber: 4, x: 2.37, y: 4.7 },
-        { tableNumber: 5, x: 0.92, y: 4.7 }
+        { tableNumber: 0, x: 4.63, y: 1.64, style: null },
+        { tableNumber: 1, x: 4.28, y: 3.24, style: null },
+        { tableNumber: 2, x: 2.35, y: 3.25, style: null },
+        { tableNumber: 3, x: 3.83, y: 4.65, style: null },
+        { tableNumber: 4, x: 2.37, y: 4.7, style: null },
+        { tableNumber: 5, x: 0.92, y: 4.7, style: null }
       ]
     };
   },
   watch: {
+    // On position change update robot position
     position: function() {
       this.updateRobotPosition();
     }
   },
   created: async function() {
+    // Connect to rosbridge server
     await this.connectRos();
-    bus.$on("sendTables", async (table) => {
+
+    // TODO: Remove events
+    bus.$on("sendTables", async table => {
+      if(table!=-1){
       console.log("Enviando mesa:" + table);
       let res = await this.goToTable(parseInt(table));
       bus.$emit("sendRes", res);
+      }else{
+        this.sendStop()
+      }
     });
+
+    // Update tables position on window resize
+    window.addEventListener("resize", this.calcTablePos);
+    window.addEventListener("load", this.calcTablePos);
+  },
+  destroyed() {
+    // Remove resize event
+    window.removeEventListener("resize", this.calcTablePos);
+    window.removeEventListener("load", this.calcTablePos);
+  },
+  mounted: function () {
+    this.calcTablePos()
   },
   methods: {
     updateRobotPosition: function() {
-      let x = this.position.x.toFixed(2);
-      let y = this.position.y.toFixed(2);
-
-      let width = document.getElementById("map").width;
-      let height = document.getElementById("map").height;
-
-      let xWidth = 5.26;
-      let yHeight = 5.27;
-
-      this.robotLeft = ((x * width) / xWidth).toFixed(2);
-      this.robotBottom = ((y * height) / yHeight).toFixed(2);
-
-      //console.log(this.robotLeft, this.robotTop)
+      // Calc new pos
+      let pos = this.calcPos(this.position.x, this.position.y);
+      // Update pos
+      this.robotLeft = pos.left;
+      this.robotBottom = pos.bottom;
     },
-    calcTablePos: function name(table) {
-      let x = table.x;
-      let y = table.y; 
-      let width = 925;
-      let height = 845;
+    calcTablePos: function() {
+      // For each table button
+      for (let i = 0; i < this.buttons.length; i++) {
+        let pos = this.calcPos(this.buttons[i].x, this.buttons[i].y); // Calc new pos
+        this.buttons[i].style = {left: pos.left + "px",bottom: pos.bottom + "px"}; // Update pos
+      }
+    },
+    calcPos: function(x, y) {
+      let realMapSize = { x: 5.26, y: 5.27 }; // Map size in coords
 
-      let xWidth = 5.26;
-      let yHeight = 5.27;
-
-      let left = ((x * width) / xWidth).toFixed(2);
-      let bottom = ((y * height) / yHeight).toFixed(2);
-
-      return { left: left + "px", bottom: bottom + "px" };
+      // Calc new left and bottom using a simple rule of three
+      let left = (((x * this.$refs.map.width) / realMapSize.x)+this.$refs.map.x).toFixed(2);
+      let bottom = ((y * this.$refs.map.height) / realMapSize.y).toFixed(2);
+      
+      // Return result
+      return { left: left, bottom: bottom };
     },
     goToTable: function(table) {
       return new Promise((resolve, reject) => {
@@ -156,8 +171,8 @@ a {
   color: #00b7ff;
 }
 #map {
-  max-height: 80vh;
-  width: 925px;
+  width: 83%;
+  height: auto;
 }
 .table_button:hover {
   background-color: #00b7ff;
@@ -167,10 +182,6 @@ a {
   box-shadow: 0 2px rgb(22, 22, 22);
   transform: translateY(2px);
 }
-.table_double {
-  width: 226px;
-}
-
 .kitchen_button {
   float: left;
   position: absolute;
