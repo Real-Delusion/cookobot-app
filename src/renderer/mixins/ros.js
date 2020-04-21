@@ -3,7 +3,7 @@ export default {
         return {
             // ros connection
             ros: null,
-            rosbridge_address: "ws://127.0.0.1:9090/",
+            rosbridge_address: "ws://192.168.1.148:9090/",
             connected: false,
             position: { x: 0, y: 0, z: 0 }
         }
