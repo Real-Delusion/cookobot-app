@@ -245,7 +245,7 @@ export default {
   padding-bottom: 0rem;
 }
 .card-content {
-  height: 75%;
+  height: 74%;
 }
 .card-footer {
   align-items: center;
@@ -261,7 +261,7 @@ export default {
   font-size: 1.5rem;
 }
 .card-content-message {
-  height: 70%;
+  height: 74%;
   align-items: center;
   font-size: 2rem;
   text-align: center;
