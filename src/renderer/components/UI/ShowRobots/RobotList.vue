@@ -1,19 +1,24 @@
 <template>
   <div class="control robot-buttons">
     <label class="radio" v-for="robot in robots" v-bind:key="robot.id">
-      <input type="radio" name="foobar" />
+      <input
+        type="radio"
+        name="robotbuttons"
+        v-bind:value="robot.id"
+        @change="onChange($event)"
+      />
       <RobotButton
         v-bind:id="robot.id"
         v-bind:description="robot.description"
         v-bind:bgcolor="robot.color"
         v-bind:style="{ 'margin-right': '1rem'}"
+        v-bind:selected="robot.selected"
       ></RobotButton>
     </label>
   </div>
 </template>
 
 <script>
-// import bus for events
 import RobotButton from "@/components/UI/ShowRobots/RobotButton";
 
 export default {
@@ -21,14 +26,34 @@ export default {
   components: { RobotButton },
   data() {
     return {
+      selectedRobot: "",
       robots: [
-        { id: "123456", description: "kitchen", color: "var(--robot1)" },
-        { id: "789023", description: "terrace", color: "var(--robot2)" }
+        {
+          id: "123456",
+          description: "kitchen",
+          color: "var(--robot1)",
+          selected: false
+        },
+        {
+          id: "789023",
+          description: "terrace",
+          color: "var(--robot2)",
+          selected: false
+        }
       ]
     };
   },
   created: async function() {},
-  methods: {}
+  methods: {
+   onChange: function(event) {
+      this.robots.forEach(element => {
+        if(element.id != event.target.value) {
+          element.selected = false
+        }
+        else element.selected = true
+      });
+    }
+  }
 };
 </script>
 
@@ -51,8 +76,5 @@ export default {
   -webkit-box-shadow: 0px 0px 64px -1px rgba(0, 0, 0, 0.21);
   -moz-box-shadow: 0px 0px 64px -1px rgba(0, 0, 0, 0.21);
   box-shadow: 0px 0px 64px -1px rgba(0, 0, 0, 0.21);
-}
-.radio input[type="radio"]:checked + div:first-child .robot-text {
-  border-radius: 0;
 }
 </style>
