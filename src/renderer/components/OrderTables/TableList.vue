@@ -29,9 +29,11 @@
           ref="table"
           :disabled="serving"
         >
-          <font-awesome-icon 
-          :style="{'color':colorDraggableIcon}"
-          class="draggable_icon" icon="grip-vertical" />
+          <font-awesome-icon
+            :style="{'color':colorDraggableIcon}"
+            class="draggable_icon"
+            icon="grip-vertical"
+          />
           <p v-if="table!=0">Table {{ table }}</p>
           <p v-else>Kitchen</p>
           <div
@@ -41,7 +43,7 @@
             @touchstart="deleteTable(table)"
             @mousedown="deleteTable(table)"
           >
-            <font-awesome-icon icon="times-circle"/>
+            <font-awesome-icon icon="times-circle" />
           </div>
         </SlickItem>
       </SlickList>
@@ -107,7 +109,7 @@ export default {
       serving: false,
       displayServing: "",
       served: false,
-      colorDraggableIcon: ''
+      colorDraggableIcon: ""
     };
   },
 
@@ -131,17 +133,8 @@ export default {
     accept: async function() {
       // Send robot to serve the tables from the list
       bus.$emit("sendTables", this.tables[this.indexTables]);
-
-      // Changing style for the table that is serving
-      let $refServing = this.$refs.table[this.indexTables].$el;
-      $refServing.style.backgroundColor = "#ffff";
-      $refServing.style.border = "solid";
-      $refServing.style.borderColor = "var(--robot1)";
-
-      this.colorDraggableIcon= "white"
-      this.$refs.deleteTableIcon[this.indexTables].style.display='none'
+      this.changeServingTableStyle();
       this.serving = true;
-
       this.waitResponse();
     },
     deleteTable: function(table) {
@@ -153,25 +146,40 @@ export default {
       this.deleteAllTables();
       this.serving = false;
     },
-    waitResponse: function(){
-      // Waiting for the response
+    waitResponse: function() {
+      // Waiting for the robot response
       bus.$on("sendRes", async res => {
-        // Changing style for the table that is served
-        let $refServed = this.$refs.table[this.indexTables].$el;
-        $refServed.style.border = "solid";
-        $refServed.style.borderColor = "var(--success)";
-
-        this.served = true;
-
+        console.log("----- TABLE SERVED ----");
         if (this.indexTables < this.tables.length - 1) {
+          this.changeServedTableStyle();
           this.indexTables++;
+          this.served = true;
           this.accept();
         } else {
+          //When the robot finishes it's sent to the kitchen
+          //bus.$emit("sendTables", 0);
           console.log("END SERVING TABLES");
           this.deleteAllTables();
+          this.indexTables=0;
           this.serving = false;
         }
       });
+    },
+    changeServedTableStyle: function() {
+      // Changing style for the table that is served
+      let $refServed = this.$refs.table[this.indexTables].$el;
+      $refServed.style.border = "solid";
+      $refServed.style.borderColor = "var(--success)";
+    },
+    changeServingTableStyle: function() {
+      // Changing style for the table that is serving
+      let $refServing = this.$refs.table[this.indexTables].$el;
+      $refServing.style.backgroundColor = "#ffff";
+      $refServing.style.border = "solid";
+      $refServing.style.borderColor = "var(--robot1)";
+
+      this.colorDraggableIcon = "white"; //Change for a tick
+      this.$refs.deleteTableIcon[this.indexTables].style.display = "none";
     }
   }
 };
@@ -196,7 +204,6 @@ export default {
   font-size: 1.8rem;
   display: flex;
   align-items: center;
-  
 }
 .draggable_icon {
   margin-right: 1ch;
