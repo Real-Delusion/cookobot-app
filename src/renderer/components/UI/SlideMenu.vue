@@ -2,8 +2,12 @@
   <div>
     <input v-model="checked" type="checkbox" id="navigation" />
     <transition name="fade">
-      <label v-if="!checked" for="navigation">&#9776;</label>
-      <label v-if="checked" for="navigation">x</label>
+      <label v-if="!checked" for="navigation">
+        <div class="eyelash"></div>
+      </label>
+      <label v-if="checked" for="navigation">
+        <div class="eyelash"></div>
+      </label>
     </transition>
     <nav>
       <ul>
@@ -142,14 +146,18 @@ label {
   text-align: center;
   font-size: 2em;
   line-height: 1.1em;
+  background-color: red;
   position: fixed;
-  top: 10px;
-  left: 10px;
+  top: 80%;
+  left: 0;
+  width: 10%;
+  height: 10%;
   -moz-transition: all 200ms ease-in;
   -webkit-transition: all 200ms ease-in;
   -o-transition: all 200ms ease-in;
   transition: all 200ms ease-in;
   z-index: 500;
+  cursor: pointer;
 }
 input[type="checkbox"] {
   display: none;
