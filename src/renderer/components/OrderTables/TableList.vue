@@ -79,7 +79,7 @@
         v-else
       >
         <span class="btn_icon">
-          <font-awesome-icon icon="trash-alt" />
+          <font-awesome-icon icon="times-circle" />
         </span>
         Cancel
       </button>
