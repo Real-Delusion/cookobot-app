@@ -4,7 +4,7 @@
       <div class="content">
         <div class="loading" v-show="!connected">
           <progress class="progress is-small is-primary" max="100">15%</progress>
-          <p>Loading map ...</p>
+          <p>Connecting to ROS server ...</p>
         </div>
         <div v-show="connected">
           <div class="columns">
@@ -66,7 +66,6 @@ export default {
     // Connect to rosbridge server
     await this.connectRos();
 
-    // TODO: Remove events
     bus.$on("sendTables", async table => {
       if(table!=-1){
       console.log("Enviando mesa:" + table);
