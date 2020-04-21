@@ -114,6 +114,7 @@ export default {
   },
 
   created: async function() {
+    this.indexTables=0;
     bus.$on("tableAdded", table => {
       //Adding data to the list
       //console.log(this.tables)
