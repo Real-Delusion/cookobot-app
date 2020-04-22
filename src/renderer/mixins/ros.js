@@ -3,9 +3,11 @@ export default {
         return {
             // ros connection
             ros: null,
-            rosbridge_address: "ws://192.168.1.148:9090/",
+            //rosbridge_address: "ws://192.168.1.148:9090/",
+            rosbridge_address: "ws://localhost:9090/",
             connected: false,
             position: { x: 0, y: 0, z: 0 },
+            navService: null,
             failed: false,
             connectionTries: 0
         }
@@ -34,6 +36,14 @@ export default {
                         this.position = message.pose.pose.position;
                         //console.log(message);
                     });
+
+                    this.navService = new ROSLIB.Service({
+                        ros: this.ros,
+                        name: "navegacion_autonoma_servicio",
+                        serviceType: "rossrv/Type"
+                    });
+
+                    console.log("Service created!");
                 });
                 this.ros.on("error", error => {
                     console.log("Something went wrong when trying to connect");

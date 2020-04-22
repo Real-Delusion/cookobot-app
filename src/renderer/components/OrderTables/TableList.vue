@@ -22,29 +22,30 @@
       <SlickList lockAxis="y" v-model="tables">
         <SlickItem
           v-for="(table, index) in tables"
-          :key="table"
+          :key="table.id"
           :index="index"
-          class="card box_element_list"
+          v-bind:class="[table.serving ? 'draw' : '', 'card box_element_list']"
           v-bind:style="{ 'backgroundColor': 'white' }"
           ref="table"
-          :disabled="serving"
+          :disabled="servingTables"
           v-bind:served="table.served"
         >
-          <font-awesome-icon
-            :style="{'color':colorDraggableIcon}"
-            class="draggable_icon"
-            icon="grip-vertical"
-          />
+          <div
+            class="icon draggable_icon"
+            :style="[servingTables ? {'color': 'white'} : {'color': ''}]"
+          >
+            <font-awesome-icon icon="grip-vertical" />
+          </div>
           <p v-if="table.id!=0">Table {{ table.id }}</p>
           <p v-else>Kitchen</p>
           <div
             class="icon delete_icon"
-            :v-show="!serving"
-            ref="deleteTableIcon"
+            v-show="!table.serving"
             @touchstart="deleteTable(table)"
             @mousedown="deleteTable(table)"
+            :style="[table.served ? {'color': 'var(--success)'} : {'color': ''}]"
           >
-            <font-awesome-icon v-bind:icon="served ? 'check-circle' : 'times-circle'" />
+            <font-awesome-icon v-bind:icon="table.served ? 'check-circle' : 'times-circle'" />
           </div>
         </SlickItem>
       </SlickList>
@@ -55,7 +56,7 @@
         type="button"
         v-on:click="deleteAllTables()"
         :disabled="tables.length==0"
-        v-if="serving==false"
+        v-if="servingTables==false"
       >
         <span class="btn_icon">
           <font-awesome-icon icon="trash-alt" />
@@ -67,7 +68,7 @@
         type="button"
         v-on:click="accept()"
         :disabled="tables.length==0"
-        v-if="serving==false"
+        v-if="servingTables==false"
       >
         <span class="btn_icon">
           <font-awesome-icon icon="check-circle" />
@@ -94,11 +95,13 @@
 <script>
 // import bus for events
 import { bus } from "../../main";
+import Ros from "@/mixins/ros.js";
+
 // import slicksort for draggable list elements
 import { SlickList, SlickItem } from "vue-slicksort";
 
 export default {
-  mixins: [],
+  mixins: [Ros],
   components: {
     SlickItem,
     SlickList
@@ -106,38 +109,62 @@ export default {
   data() {
     return {
       tables: [],
-      indexTables: 0,
-      serving: false,
-      displayServing: "",
-      served: false,
-      colorDraggableIcon: ""
+      servingTables: false
     };
   },
-
   created: async function() {
-    this.indexTables = 0;
+    await this.connectRos();
+
     bus.$on("tableAdded", table => {
       //Adding data to the list
       //console.log(this.tables)
-      if (this.tables.includes(table.id)) {
+      if (this.tables.includes(table)) {
         this.tables.splice(this.tables.indexOf(table), 1);
       } else {
         this.tables.push(table);
       }
     });
   },
-
   methods: {
     deleteAllTables: function() {
       this.tables = [];
       bus.$emit("deleteTables", this.tables);
     },
     accept: async function() {
+      this.servingTables = true;
       // Send robot to serve the tables from the list
-      bus.$emit("sendTables", this.tables[this.indexTables].id);
+      console.log(this.tables[0]);
+      for (var i = 0; i < this.tables.length; i++) {
+        let table = this.tables[i];
+        console.log("Await table ", table.id);
+        table.serving = true;
+        let res = await this.goToTable(table.id);
+        console.log(res);
+        if (!res["success"]) {
+          console.log("Something went wrong...");
+          break;
+        }
+        table.served = true;
+        table.serving = false;
+      }
+      console.log("END SERVING TABLES, sending to kitchen");
+
+      // Send to kitchen when finished
+      let res = await this.goToTable(0);
+      console.log(res);
+      if (!res["success"]) {
+        console.log("Something went wrong...");
+      }
+      for (var i = 0; i < this.tables.length; i++) {
+        let table = this.tables[i];
+        table.served = false;
+      }
+      this.servingTables = false;
+      this.deleteAllTables();
+
+      /*
       this.changeServingTableStyle();
-      this.serving = true;
-      this.waitResponse();
+      this.waitResponse();*/
     },
     deleteTable: function(table) {
       this.tables.splice(this.tables.indexOf(table), 1);
@@ -146,25 +173,28 @@ export default {
     cancelServing: function() {
       bus.$emit("sendTables", -1);
       this.deleteAllTables();
-      this.serving = false;
+      this.servingTables = false;
     },
-    waitResponse: function() {
-      // Waiting for the robot response
-      bus.$on("sendRes", async res => {
-        console.log("----- TABLE SERVED ----");
-        if (this.indexTables < this.tables.length - 1) {
-          this.changeServedTableStyle();
-          this.indexTables++;
-          this.served = true;
-          this.accept();
-        } else {
-          //When the robot finishes it's sent to the kitchen
-          //bus.$emit("sendTables", 0);
-          console.log("END SERVING TABLES");
-          this.deleteAllTables();
-          this.indexTables = 0;
-          this.serving = false;
-        }
+    goToTable: function(table) {
+      return new Promise((resolve, reject) => {
+        //console.log("ESTOY DENTRO DE GO TO TABLE");
+
+        // define the request
+        let request = new ROSLIB.ServiceRequest({
+          numeroMesa: table
+        });
+
+        this.navService.callService(
+          request,
+          result => {
+            console.log("This is the response of the service ");
+            resolve(result);
+          },
+          error => {
+            console.log("This is the error response of the service ");
+            reject(error);
+          }
+        );
       });
     },
     changeServedTableStyle: function() {
@@ -234,10 +264,10 @@ export default {
   margin-right: 1.5rem;
   margin-left: auto;
 }
-.delete_icon:hover {
+/*.delete_icon:hover {
   color: rgb(204, 80, 80);
   transform: scale(1.05);
-}
+}*/
 .card-header {
   height: 15%;
   justify-content: space-between;

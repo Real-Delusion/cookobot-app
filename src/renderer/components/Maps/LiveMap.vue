@@ -31,7 +31,8 @@
                   v-bind:class="'table_button '+ button.type"
                   v-bind:key="button.id"
                   v-bind:selected="button.selected"
-
+                  v-bind:served="button.served"
+                  v-bind:serving="button.serving"
                 ></TableButton>
               </div>
             </div>
@@ -58,12 +59,12 @@ export default {
       robotTop: 0,
       //Table buttons
       buttons: [
-        { id: 0, x: 4.63, y: 1.64, style: null, selected:false, type:' kitchen', served:false },
-        { id: 1, x: 4.28, y: 3.24, style: null, selected:false, type:' single', served:false },
-        { id: 2, x: 2.35, y: 3.25, style: null, selected:false, type:' single', served:false },
-        { id: 3, x: 3.83, y: 4.65, style: null, selected:false, type:' double_horizontal', served:false },
-        { id: 4, x: 2.37, y: 4.7, style: null, selected:false,  type:' single', served:false },
-        { id: 5, x: 0.92, y: 4.7, style: null, selected:false,  type:' double_vertical', served:false }
+        { id: 0, x: 4.63, y: 1.64, style: null, selected:false, type:' kitchen', served:false, serving:false },
+        { id: 1, x: 4.28, y: 3.24, style: null, selected:false, type:' single', served:false, serving:false },
+        { id: 2, x: 2.35, y: 3.25, style: null, selected:false, type:' single', served:false, serving:false },
+        { id: 3, x: 3.83, y: 4.65, style: null, selected:false, type:' double_horizontal', served:false, serving:false },
+        { id: 4, x: 2.37, y: 4.7, style: null, selected:false,  type:' single', served:false, serving:false },
+        { id: 5, x: 0.92, y: 4.7, style: null, selected:false,  type:' double_vertical', served:false, serving:false }
       ]
     };
   },
@@ -77,16 +78,6 @@ export default {
     // Connect to rosbridge server
     await this.connectRos();
 
-    bus.$on("sendTables", async table => {
-      if(table!=-1){
-      console.log("Enviando mesa:" + table);
-      let res = await this.goToTable(parseInt(table));
-      bus.$emit("sendRes", res);
-      }else{
-        this.sendStop()
-      }
-    });
-
     // Update tables position on window resize
     window.addEventListener("resize", this.calcTablePos);
     window.addEventListener("load", this.calcTablePos);
@@ -96,8 +87,8 @@ export default {
     window.removeEventListener("resize", this.calcTablePos);
     window.removeEventListener("load", this.calcTablePos);
   },
-  mounted: function () {
-    this.calcTablePos()
+  mounted: function() {
+    this.calcTablePos();
   },
   methods: {
     updateRobotPosition: function() {
@@ -133,36 +124,6 @@ export default {
       
       // Return result
       return { left: left, top: top };
-    },
-    goToTable: function(table) {
-      return new Promise((resolve, reject) => {
-        console.log("ESTOY DENTRO DE GO TO TABLE");
-
-        // define the service to be called
-        let service = new ROSLIB.Service({
-          ros: this.ros,
-          name: "navegacion_autonoma_servicio",
-          serviceType: "rossrv/Type"
-        });
-
-        // define the request
-        let request = new ROSLIB.ServiceRequest({
-          numeroMesa: tablecomponent
-        });
-
-        service.callService(
-          request,
-          result => {
-            console.log("This is the response of the service ");
-            console.log(result);
-            resolve(result);
-          },
-          error => {
-            console.error(error);
-            reject(error);
-          }
-        );
-      });
     },
     sendStop: function() {
       let topic = new ROSLIB.Topic({
