@@ -14,7 +14,7 @@ export default {
   props: ["table", 'selected'],
   data() {
     return {
-      buttonSelected: selected
+      buttonSelected: this.selected
     };
   },
   created: async function() {
