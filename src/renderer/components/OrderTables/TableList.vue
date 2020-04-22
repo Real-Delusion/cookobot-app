@@ -161,6 +161,11 @@ export default {
       }
       console.log("END SERVING TABLES, sending to kitchen");
 
+      for (var i = 0; i < this.tables.length; i++) {
+        let table = this.tables[i];
+        table.served = false;
+      }
+
       // Send to kitchen when finished
       this.serviceCancelled=false;
       this.goingKitchen = true;
@@ -169,10 +174,6 @@ export default {
       console.log(res);
       if (!res["success"]) {
         console.log("Something went wrong...");
-      }
-      for (var i = 0; i < this.tables.length; i++) {
-        let table = this.tables[i];
-        table.served = false;
       }
       this.goingKitchen = false;
       this.servingTables = false;
