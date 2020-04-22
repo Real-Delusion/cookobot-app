@@ -61,7 +61,7 @@
         // let userId = this.input.userid;
         let userId = this.userid;
 
-        if (userId != "") {
+        if (userId != "" && userId.length == 4) {
           // Get user data from db
           let getUser;
           await getUserById(userId).then(data => {
@@ -87,7 +87,7 @@
           }
         } else {
           this.errorMessage = true;
-          this.message = "Please, fill the user id";
+          this.message = "Please, fill the user id with 4 digits";
           setTimeout(this.hideError, 5000);
         }
       },
