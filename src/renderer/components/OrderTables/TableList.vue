@@ -28,13 +28,14 @@
           v-bind:style="{ 'backgroundColor': 'white' }"
           ref="table"
           :disabled="serving"
+          v-bind:served="table.served"
         >
           <font-awesome-icon
             :style="{'color':colorDraggableIcon}"
             class="draggable_icon"
             icon="grip-vertical"
           />
-          <p v-if="table!=0">Table {{ table }}</p>
+          <p v-if="table.id!=0">Table {{ table.id }}</p>
           <p v-else>Kitchen</p>
           <div
             class="icon delete_icon"
@@ -43,7 +44,7 @@
             @touchstart="deleteTable(table)"
             @mousedown="deleteTable(table)"
           >
-            <font-awesome-icon icon="times-circle" />
+            <font-awesome-icon v-bind:icon="served ? 'check-circle' : 'times-circle'" />
           </div>
         </SlickItem>
       </SlickList>
@@ -114,11 +115,11 @@ export default {
   },
 
   created: async function() {
-    this.indexTables=0;
+    this.indexTables = 0;
     bus.$on("tableAdded", table => {
       //Adding data to the list
       //console.log(this.tables)
-      if (this.tables.includes(table)) {
+      if (this.tables.includes(table.id)) {
         this.tables.splice(this.tables.indexOf(table), 1);
       } else {
         this.tables.push(table);
@@ -133,14 +134,14 @@ export default {
     },
     accept: async function() {
       // Send robot to serve the tables from the list
-      bus.$emit("sendTables", this.tables[this.indexTables]);
+      bus.$emit("sendTables", this.tables[this.indexTables].id);
       this.changeServingTableStyle();
       this.serving = true;
       this.waitResponse();
     },
     deleteTable: function(table) {
       this.tables.splice(this.tables.indexOf(table), 1);
-      bus.$emit("deleteTable", table);
+      bus.$emit("deleteTable", table.id);
     },
     cancelServing: function() {
       bus.$emit("sendTables", -1);
@@ -161,7 +162,7 @@ export default {
           //bus.$emit("sendTables", 0);
           console.log("END SERVING TABLES");
           this.deleteAllTables();
-          this.indexTables=0;
+          this.indexTables = 0;
           this.serving = false;
         }
       });
@@ -171,16 +172,20 @@ export default {
       let $refServed = this.$refs.table[this.indexTables].$el;
       $refServed.style.border = "solid";
       $refServed.style.borderColor = "var(--success)";
+      $refServed.className = "card box_element_list";
+      this.$refs.deleteTableIcon[this.indexTables].style.display = "";
+      console.log(this.$refs.iconElement);
     },
     changeServingTableStyle: function() {
       // Changing style for the table that is serving
       let $refServing = this.$refs.table[this.indexTables].$el;
-      $refServing.style.backgroundColor = "#ffff";
-      $refServing.style.border = "solid";
-      $refServing.style.borderColor = "var(--robot1)";
+      //$refServing.style.border = "solid";
+      //$refServing.style.borderColor = "var(--robot1)";
 
-      this.colorDraggableIcon = "white"; //Change for a tick
+      this.colorDraggableIcon = "white"; //Change for a tick icon
       this.$refs.deleteTableIcon[this.indexTables].style.display = "none";
+
+      $refServing.className = "card box_element_list draw";
     }
   }
 };
@@ -242,7 +247,7 @@ export default {
   padding-bottom: 0rem;
 }
 .card-content {
-  height: 75%;
+  height: 74%;
 }
 .card-footer {
   align-items: center;
@@ -258,7 +263,7 @@ export default {
   font-size: 1.5rem;
 }
 .card-content-message {
-  height: 70%;
+  height: 74%;
   align-items: center;
   font-size: 2rem;
   text-align: center;
@@ -291,5 +296,70 @@ export default {
 .description_robot {
   margin-left: 1rem;
   font-size: 1.5rem;
+}
+
+/* ANIMATED BORDER */
+.draw {
+  overflow: hidden;
+  position: relative;
+}
+.draw::before,
+.draw::after {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  border: 3px solid transparent;
+  border-radius: 0.5ch;
+  width: 0;
+  height: 0;
+}
+.draw::before {
+  top: 0;
+  left: 0;
+  border-top-color: var(--robot1);
+  border-right-color: var(--robot1);
+  animation: border 2s infinite;
+}
+.draw::after {
+  bottom: 0;
+  right: 0;
+  animation: border 2s 1s infinite, borderColor 2s 1s infinite;
+}
+
+@keyframes border {
+  0% {
+    width: 0;
+    height: 0;
+  }
+  25% {
+    width: 100%;
+    height: 0;
+  }
+  50% {
+    width: 100%;
+    height: 100%;
+  }
+  100% {
+    width: 100%;
+    height: 100%;
+  }
+}
+@keyframes borderColor {
+  0% {
+    border-bottom-color: var(--robot1);
+    border-left-color: var(--robot1);
+  }
+  50% {
+    border-bottom-color: var(--robot1);
+    border-left-color: var(--robot1);
+  }
+  51% {
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+  }
+  100% {
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+  }
 }
 </style>

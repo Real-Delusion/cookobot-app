@@ -2,14 +2,30 @@
   <div class="card">
     <div class="card-content">
       <div class="content">
-        <div class="loading" v-show="!connected">
+        <div class="loading" v-show="!connected && failed == false">
           <progress class="progress is-small is-primary" max="100">15%</progress>
           <p>Connecting to ROS server ...</p>
+        </div>
+        <div class="loading" v-show="failed">
+          <p>Failed to connect server</p>
+          <button v-on:click="manualConnect()" class="button is-primary">Try again</button>
         </div>
         <div v-show="connected">
           <div class="columns">
             <div class="column has-text-centered">
-              <img id="map" ref="map" src="@/assets/restaurantMap.png" alt />
+              <!-- <img id="map" ref="map" src="@/assets/restaurantMap.jpg" alt /> -->
+              <div id="map" ref="map" class="restaurant">
+                <!-- I create the TableButton component -->
+                <TableButton
+                  v-for="button in buttons"
+                  v-bind:table="button"
+                  v-bind:style="button.style"
+                  v-bind:class="'table_button '+ button.type"
+                  v-bind:key="button.id"
+                  v-bind:selected="button.selected"
+
+                ></TableButton>
+              </div>
               <font-awesome-icon
                 icon="robot"
                 v-bind:style="{bottom: robotBottom+'px', left: robotLeft+'px' }"
@@ -18,13 +34,6 @@
               />
             </div>
           </div>
-          <!-- I create the TableButton component -->
-          <TableButton
-            v-for="button in buttons"
-            v-bind:table="button.tableNumber"
-            v-bind:style="button.style"
-            v-bind:key="button.tableNumber"
-          ></TableButton>
         </div>
       </div>
     </div>
@@ -47,12 +56,12 @@ export default {
       robotBottom: 0,
       //Table buttons
       buttons: [
-        { tableNumber: 0, x: 4.63, y: 1.64, style: null },
-        { tableNumber: 1, x: 4.28, y: 3.24, style: null },
-        { tableNumber: 2, x: 2.35, y: 3.25, style: null },
-        { tableNumber: 3, x: 3.83, y: 4.65, style: null },
-        { tableNumber: 4, x: 2.37, y: 4.7, style: null },
-        { tableNumber: 5, x: 0.92, y: 4.7, style: null }
+        { id: 0, x: 4.63, y: 1.64, style: null, selected:false, type:' kitchen', served:false },
+        { id: 1, x: 4.28, y: 3.24, style: null, selected:false, type:' single', served:false },
+        { id: 2, x: 2.35, y: 3.25, style: null, selected:false, type:' single', served:false },
+        { id: 3, x: 3.83, y: 4.65, style: null, selected:false, type:' double_horizontal', served:false },
+        { id: 4, x: 2.37, y: 4.7, style: null, selected:false,  type:' single', served:false },
+        { id: 5, x: 0.92, y: 4.7, style: null, selected:false,  type:' double_vertical', served:false }
       ]
     };
   },
@@ -156,8 +165,9 @@ export default {
         angular: { x: 0, y: 0, z: 0 }
       });
       topic.publish(message);
-    }
+    },
   }
+  
 };
 </script>
 
@@ -168,33 +178,6 @@ export default {
   align-items: center;
   justify-content: center;
 }
-a {
-  color: #00b7ff;
-}
-#map {
-  width: 83%;
-  height: auto;
-}
-.table_button:hover {
-  background-color: #00b7ff;
-}
-.table_button:active {
-  color: white;
-  box-shadow: 0 2px rgb(22, 22, 22);
-  transform: translateY(2px);
-}
-.kitchen_button {
-  float: left;
-  position: absolute;
-  background-color: white;
-  border: 4px solid black;
-  font-size: 37px;
-  width: 463px;
-  height: 116px;
-  box-shadow: 0 2px rgb(22, 22, 22);
-  height: 199px;
-}
-
 #robotIndicator {
   position: absolute;
   width: 50px;
@@ -202,5 +185,11 @@ a {
 }
 .loading {
   text-align: center;
+}
+.restaurant{
+  height: 45vw;
+  width: 45vw;
+  border:0.7rem solid black;
+  background-color: var(--darkbackground);
 }
 </style>

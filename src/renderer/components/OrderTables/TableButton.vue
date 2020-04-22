@@ -1,11 +1,11 @@
 <template>
   <button
-    class="table_button"
     @click="addTable(table)"
-    v-bind:value="table"
-    v-bind:style="{ 'background-color': backgroundColor }"
-    v-on:click="changeColor($event)"
-  >{{table}}</button>
+    v-bind:class="[selected ? 'selected' : '']"
+  >
+    <p v-if="table.id!=0">{{ table.id }}</p>
+    <p v-else>Kitchen</p>
+  </button>
 </template>
 
 <script>
@@ -14,46 +14,29 @@ import { bus } from "../../main";
 
 export default {
   mixins: [],
-  props: ["table"],
+  props: ["table", 'selected'],
   data() {
     return {
-      backgroundColor: "white",
-      buttonsEvents: []
     };
   },
   created: async function() {
     bus.$on("deleteTables", tables => {
       //if the list of tables is cancelled
-      if (tables == 0) {
-        this.backgroundColor = "white";
-      }
+      this.selected = false;
+
     });
     bus.$on("deleteTable", table => {
       //if the table is deleted from the list
-      for (var i = 0; i < this.buttonsEvents.length; i++) {
-        if (this.buttonsEvents[i].value == table) {
-          this.buttonsEvents[i].style.backgroundColor = "white";
-          this.backgroundColor="white"
-        }
+      if(table == this.table.id){
+        this.selected=false;
       }
     });
   },
   methods: {
     addTable: function(table) {
       //Send table value to TableList
+      this.selected = !this.selected;
       bus.$emit("tableAdded", table);
-    },
-    changeColor: function(event) {
-      if (!this.buttonsEvents.includes(event.currentTarget)) {
-        this.buttonsEvents.push(event.currentTarget);
-      }
-
-      if (this.backgroundColor == "white") {
-        var style = getComputedStyle(document.body);
-        this.backgroundColor = style.getPropertyValue('--primary');
-      } else {
-        this.backgroundColor = "white";
-      }
     }
   }
 };
@@ -61,21 +44,39 @@ export default {
 
 <style scoped>
 .table_button {
-  position: absolute;
-  background-color: white;
-  border: 4px solid black;
-  border-radius: 29px;
+  color: white;
+  position: relative;
+  background-color: var(--darkbackground);
+  border: 4px solid white;
+  border-radius: 0.7rem;
   font-size: 2rem;
-  width: 12%;
-  height: 12%;
-  box-shadow: 0 2px rgb(22, 22, 22);
+
+  /*box-shadow: 0 2px rgb(22, 22, 22);*/
 }
 .table_button:active {
-  color: white;
+  color: var(--darkbackground);
   box-shadow: 0 2px rgb(22, 22, 22);
   transform: translateY(2px);
 }
-.table_double {
-  width: 226px;
+
+.single {
+  width: 7.5vw;
+  height: 7.5vw;
+}
+.double_horizontal {
+  width: 12vw;
+  height: 7.5vw;
+}
+.double_vertical {
+  width: 7.5vw;
+  height: 12vw;
+}
+.kitchen {
+  width: 15vw;
+  height: 8vw;
+}
+.selected{
+  background-color: white;
+  color: black;
 }
 </style>
