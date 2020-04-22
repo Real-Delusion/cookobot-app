@@ -24,7 +24,7 @@
           v-for="(table, index) in tables"
           :key="table.id"
           :index="index"
-          class="card box_element_list"
+          v-bind:class="[table.serving ? 'draw' : '', 'card box_element_list']"
           v-bind:style="{ 'backgroundColor': 'white' }"
           ref="table"
           :disabled="servingTables"
@@ -114,7 +114,6 @@ export default {
   created: async function() {
     await this.connectRos();
 
-    this.indexTables = 0;
     bus.$on("tableAdded", table => {
       //Adding data to the list
       //console.log(this.tables)
