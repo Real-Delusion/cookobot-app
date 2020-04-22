@@ -15,9 +15,6 @@ import { faTimesCircle, faGripVertical, faChevronRight, faChevronLeft, faCog, fa
 
 library.add([faTimesCircle, faUsers, faGripVertical, faChevronRight, faChevronLeft, faGripLinesVertical, faCog, faExclamationCircle, faUtensils, faSignOutAlt, faUser, faTrashAlt, faCheckCircle, faRobot, faSignInAlt, faBackspace])
 
-// Socket.io
-import io from './utils/socket.js'
-
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))

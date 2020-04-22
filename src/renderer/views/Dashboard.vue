@@ -26,8 +26,12 @@ import TableList from "@/components/OrderTables/TableList";
 import SlideMenu from "@/components/UI/SlideMenu";
 import RobotList from "@/components/UI/ShowRobots/RobotList";
 
+import SocketServer from "@/mixins/socket.js";
+
+
 export default {
   name: "dashboard",
+  mixins: [SocketServer],
   components: { LiveMap, TableList, SlideMenu, RobotList },
   data() {
     return {
