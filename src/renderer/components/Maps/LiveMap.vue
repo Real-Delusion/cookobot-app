@@ -50,12 +50,12 @@ export default {
       robotBottom: 0,
       //Table buttons
       buttons: [
-        { tableNumber: 0, x: 3.23, y: 0.53, style: null, selected:false, type:'table_button kitchen' },
-        { tableNumber: 1, x: 3.75, y: 2.6, style: null, selected:false, type:'table_button single' },
-        { tableNumber: 2, x: 1.9, y: 2.6, style: null, selected:false, type:'table_button single' },
-        { tableNumber: 3, x: 3.5, y: 4.45, style: null, selected:false, type:'table_button double_horizontal' },
-        { tableNumber: 4, x: 1.9, y: 4.45, style: null, selected:false,  type:'table_button single' },
-        { tableNumber: 5, x: 0.23, y: 3.9, style: null, selected:false,  type:'table_button double_vertical' }
+        { tableNumber: 0, x: 4.63, y: 1.64, style: null, selected:false, type:'table_button kitchen' },
+        { tableNumber: 1, x: 4.28, y: 3.24, style: null, selected:false, type:'table_button single' },
+        { tableNumber: 2, x: 2.35, y: 3.25, style: null, selected:false, type:'table_button single' },
+        { tableNumber: 3, x: 3.83, y: 4.65, style: null, selected:false, type:'table_button double_horizontal' },
+        { tableNumber: 4, x: 2.37, y: 4.7, style: null, selected:false,  type:'table_button single' },
+        { tableNumber: 5, x: 0.92, y: 4.7, style: null, selected:false,  type:'table_button double_vertical' }
       ]
     };
   },
