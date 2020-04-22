@@ -45,12 +45,11 @@ export default {
 <style scoped>
 .table_button {
   color: white;
-  position: relative;
+  position: absolute;
   background-color: var(--darkbackground);
   border: 4px solid white;
   border-radius: 0.7rem;
   font-size: 2rem;
-
   /*box-shadow: 0 2px rgb(22, 22, 22);*/
 }
 .table_button:active {
