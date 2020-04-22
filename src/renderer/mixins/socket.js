@@ -32,7 +32,7 @@ export default {
             console.log("Client connected")
         },
         issueReceived: function (table, message) {
-            console.log('Issue received: ' + msg);
+            console.log('Issue received: ', table, message);
             this.issue = true;
             this.tableIssue = table;
             this.issueTopic = message;
