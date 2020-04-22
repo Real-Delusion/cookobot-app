@@ -134,7 +134,12 @@ export default {
   },
   watch: {
     connected: function() {
-      if (!this.connected) this.cancelServing();
+      if (!this.connected) {
+        this.serviceDisconnected();
+      }
+    },
+    goingKitchen: function() {
+      console.log(this.goingKitchen);
     }
   },
   created: async function() {
@@ -200,6 +205,13 @@ export default {
       this.deleteAllTables();
       this.serviceCancelled = true;
       this.goingKitchen = true;
+    },
+    serviceDisconnected: function() {
+      this.resetAllTables();
+      this.deleteAllTables();
+      this.goingKitchen = false;
+      this.serviceCancelled = false;
+      this.servingTables = false;
     },
     resetAllTables: function() {
       for (var i = 0; i < this.tables.length; i++) {
