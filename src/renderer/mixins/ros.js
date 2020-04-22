@@ -5,7 +5,9 @@ export default {
             ros: null,
             rosbridge_address: "ws://localhost:9090/",
             connected: false,
-            position: { x: 0, y: 0, z: 0 }
+            position: { x: 0, y: 0, z: 0 },
+            failed: false,
+            connectionTries: 0
         }
     },
     created: function () {
@@ -40,10 +42,20 @@ export default {
                 this.ros.on("close", () => {
                     this.connected = false;
                     console.log("Connection to ROSBridge was closed! Trying to reconnect ...");
-                    setTimeout(this.connectRos, 5000);
+                    if (this.connectionTries < 5) {
+                        setTimeout(this.connectRos, 5000);
+                        this.connectionTries++;
+                    }else{
+                        this.failed = true;
+                    }
                 });
                 return resolve(0);
             });
+        },
+        manualConnect(){
+            this.failed = false;
+            this.connectionTries=0;
+            this.connectionTries();
         },
         disconnect: function () {
             this.ros.close();
