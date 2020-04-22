@@ -122,7 +122,7 @@ export default {
     bus.$on("tableAdded", table => {
       //Adding data to the list
       //console.log(this.tables)
-      if (this.tables.includes(table.id)) {
+      if (this.tables.includes(table)) {
         this.tables.splice(this.tables.indexOf(table), 1);
       } else {
         this.tables.push(table);
