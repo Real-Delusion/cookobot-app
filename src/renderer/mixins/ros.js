@@ -55,7 +55,7 @@ export default {
         manualConnect(){
             this.failed = false;
             this.connectionTries=0;
-            this.connectionTries();
+            this.connectRos();
         },
         disconnect: function () {
             this.ros.close();
