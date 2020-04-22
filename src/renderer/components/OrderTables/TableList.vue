@@ -14,7 +14,7 @@
     <div class="card-content-message" v-if="tables.length==0">
       <div class="loading" v-show="goingKitchen">
         <progress class="progress is-small is-primary" max="100">15%</progress>
-        <p>Returning to kitchen</p>
+        <p>Returning to kitchen...</p>
       </div>
       <div v-show="!goingKitchen">
         <span class="icon warning_icon">
@@ -117,7 +117,7 @@ export default {
       tables: [],
       servingTables: false,
       goingKitchen: false,
-      serviceCancelled:false,
+      serviceCancelled: false
     };
   },
   created: async function() {
@@ -143,31 +143,28 @@ export default {
       // Send robot to serve the tables from the list
       console.log(this.tables[0]);
       for (var i = 0; i < this.tables.length; i++) {
-        if(this.serviceCancelled){
+        if (this.serviceCancelled) {
           break;
-        }else{
-        let table = this.tables[i];
-        console.log("Await table ", table.id);
-        table.serving = true;
-        let res = await this.goToTable(table.id);
-        console.log(res);
-        if (!res["success"]) {
-          console.log("Something went wrong...");
-          break;
-        }
-        table.served = true;
-        table.serving = false;
+        } else {
+          let table = this.tables[i];
+          console.log("Await table ", table.id);
+          table.serving = true;
+          let res = await this.goToTable(table.id);
+          console.log(res);
+          if (!res["success"]) {
+            console.log("Something went wrong...");
+            break;
+          }
+          table.served = true;
+          table.serving = false;
         }
       }
       console.log("END SERVING TABLES, sending to kitchen");
 
-      for (var i = 0; i < this.tables.length; i++) {
-        let table = this.tables[i];
-        table.served = false;
-      }
+      this.resetAllTables();
 
       // Send to kitchen when finished
-      this.serviceCancelled=false;
+      this.serviceCancelled = false;
       this.goingKitchen = true;
       this.deleteAllTables();
       let res = await this.goToTable(0);
@@ -183,11 +180,16 @@ export default {
       bus.$emit("deleteTable", table.id);
     },
     cancelServing: function() {
-      bus.$emit("sendTables", -1);
+      this.resetAllTables();
       this.deleteAllTables();
-      this.serviceCancelled=true;
+      this.serviceCancelled = true;
       this.goingKitchen = true;
-
+    },
+    resetAllTables: function() {
+      for (var i = 0; i < this.tables.length; i++) {
+        let table = this.tables[i];
+        table.served = false;
+      }
     },
     goToTable: function(table) {
       return new Promise((resolve, reject) => {
