@@ -79,7 +79,7 @@ export default {
       if (table != -1) {
         console.log("Enviando mesa:" + table);
         let res = await this.goToTable(parseInt(table));
-        console.log("res se ha resuelto",res);
+        console.log("res se ha resuelto", res);
         bus.$emit("sendRes", res);
       } else {
         //this.sendStop();
@@ -128,31 +128,6 @@ export default {
 
       // Return result
       return { left: left, bottom: bottom };
-    },
-    goToTable: function(table) {
-      return new Promise((resolve, reject) => {
-        console.log("ESTOY DENTRO DE GO TO TABLE");
-
-        // define the request
-        let request = new ROSLIB.ServiceRequest({
-          numeroMesa: table
-        });
-
-        console.log("despues de definir service y request");
-        this.navService.callService(
-          request,
-          result => {
-            console.log("This is the response of the service ");
-            console.log(result);
-            resolve(result);
-          },
-          error => {
-            console.log("This is the error response of the service ");
-            console.error(error);
-            reject(error);
-          }
-        );
-      });
     },
     sendStop: function() {
       let topic = new ROSLIB.Topic({

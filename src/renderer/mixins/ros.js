@@ -41,6 +41,8 @@ export default {
                         name: "navegacion_autonoma_servicio",
                         serviceType: "rossrv/Type"
                     });
+
+                    console.log("Service created!");
                 });
                 this.ros.on("error", error => {
                     console.log("Something went wrong when trying to connect");

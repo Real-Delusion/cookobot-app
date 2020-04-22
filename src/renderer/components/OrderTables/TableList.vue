@@ -94,11 +94,13 @@
 <script>
 // import bus for events
 import { bus } from "../../main";
+import Ros from "@/mixins/ros.js";
+
 // import slicksort for draggable list elements
 import { SlickList, SlickItem } from "vue-slicksort";
 
 export default {
-  mixins: [],
+  mixins: [Ros],
   components: {
     SlickItem,
     SlickList
@@ -113,8 +115,9 @@ export default {
       colorDraggableIcon: ""
     };
   },
-
   created: async function() {
+    await this.connectRos();
+
     this.indexTables = 0;
     bus.$on("tableAdded", table => {
       //Adding data to the list
@@ -126,7 +129,6 @@ export default {
       }
     });
   },
-
   methods: {
     deleteAllTables: function() {
       this.tables = [];
@@ -134,10 +136,20 @@ export default {
     },
     accept: async function() {
       // Send robot to serve the tables from the list
-      bus.$emit("sendTables", this.tables[this.indexTables].id);
+      //bus.$emit("sendTables", this.tables[this.indexTables]);
+
+      for (let table in this.tables) {
+        console.log("Await table ", table.id);
+        let res = await this.goToTable(table.id);
+        if (!res["succeeded"]) {
+          console.log("Something went wrong...");
+          break;
+        }
+      }
+      /*
       this.changeServingTableStyle();
       this.serving = true;
-      this.waitResponse();
+      this.waitResponse();*/
     },
     deleteTable: function(table) {
       this.tables.splice(this.tables.indexOf(table), 1);
@@ -162,9 +174,34 @@ export default {
           //bus.$emit("sendTables", 0);
           console.log("END SERVING TABLES");
           this.deleteAllTables();
-          this.indexTables = 0;
+          //  this.indexTables=0;
           this.serving = false;
         }
+      });
+    },
+    goToTable: function(table) {
+      return new Promise((resolve, reject) => {
+        console.log("ESTOY DENTRO DE GO TO TABLE");
+
+        // define the request
+        let request = new ROSLIB.ServiceRequest({
+          numeroMesa: table
+        });
+
+        console.log("despues de definir service y request");
+        this.navService.callService(
+          request,
+          result => {
+            console.log("This is the response of the service ");
+            console.log(result);
+            resolve(result);
+          },
+          error => {
+            console.log("This is the error response of the service ");
+            console.error(error);
+            reject(error);
+          }
+        );
       });
     },
     changeServedTableStyle: function() {
