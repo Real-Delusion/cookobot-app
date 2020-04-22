@@ -8,7 +8,9 @@ const io = require('socket.io')();
 export default {
     data() {
         return {
-
+            tableIssue: "",
+            issueTopic: "",
+            issue: false,
         }
     },
     created: function () {
@@ -31,6 +33,7 @@ export default {
         },
         issueReceived: function (msg) {
             console.log('Issue received: ' + msg);
+            this.issue = true;
         },
     }
 }
