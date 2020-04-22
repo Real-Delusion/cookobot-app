@@ -67,12 +67,13 @@ export default {
     await this.connectRos();
 
     bus.$on("sendTables", async table => {
-      if(table!=-1){
-      console.log("Enviando mesa:" + table);
-      let res = await this.goToTable(parseInt(table));
-      bus.$emit("sendRes", res);
-      }else{
-        this.sendStop()
+      if (table != -1) {
+        console.log("Enviando mesa:" + table);
+        let res = await this.goToTable(parseInt(table));
+        console.log("res se ha resuelto",res);
+        bus.$emit("sendRes", res);
+      } else {
+        //this.sendStop();
       }
     });
 
@@ -85,8 +86,8 @@ export default {
     window.removeEventListener("resize", this.calcTablePos);
     window.removeEventListener("load", this.calcTablePos);
   },
-  mounted: function () {
-    this.calcTablePos()
+  mounted: function() {
+    this.calcTablePos();
   },
   methods: {
     updateRobotPosition: function() {
@@ -100,16 +101,22 @@ export default {
       // For each table button
       for (let i = 0; i < this.buttons.length; i++) {
         let pos = this.calcPos(this.buttons[i].x, this.buttons[i].y); // Calc new pos
-        this.buttons[i].style = {left: pos.left + "px",bottom: pos.bottom + "px"}; // Update pos
+        this.buttons[i].style = {
+          left: pos.left + "px",
+          bottom: pos.bottom + "px"
+        }; // Update pos
       }
     },
     calcPos: function(x, y) {
       let realMapSize = { x: 5.26, y: 5.27 }; // Map size in coords
 
       // Calc new left and bottom using a simple rule of three
-      let left = (((x * this.$refs.map.width) / realMapSize.x)+this.$refs.map.x).toFixed(2);
+      let left = (
+        (x * this.$refs.map.width) / realMapSize.x +
+        this.$refs.map.x
+      ).toFixed(2);
       let bottom = ((y * this.$refs.map.height) / realMapSize.y).toFixed(2);
-      
+
       // Return result
       return { left: left, bottom: bottom };
     },
@@ -117,19 +124,13 @@ export default {
       return new Promise((resolve, reject) => {
         console.log("ESTOY DENTRO DE GO TO TABLE");
 
-        // define the service to be called
-        let service = new ROSLIB.Service({
-          ros: this.ros,
-          name: "navegacion_autonoma_servicio",
-          serviceType: "rossrv/Type"
-        });
-
         // define the request
         let request = new ROSLIB.ServiceRequest({
           numeroMesa: table
         });
 
-        service.callService(
+        console.log("despues de definir service y request");
+        this.navService.callService(
           request,
           result => {
             console.log("This is the response of the service ");
@@ -137,6 +138,7 @@ export default {
             resolve(result);
           },
           error => {
+            console.log("This is the error response of the service ");
             console.error(error);
             reject(error);
           }

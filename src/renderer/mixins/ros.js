@@ -5,7 +5,8 @@ export default {
             ros: null,
             rosbridge_address: "ws://localhost:9090/",
             connected: false,
-            position: { x: 0, y: 0, z: 0 }
+            position: { x: 0, y: 0, z: 0 },
+            navService: null
         }
     },
     created: function () {
@@ -31,6 +32,12 @@ export default {
                     topic.subscribe(message => {
                         this.position = message.pose.pose.position;
                         //console.log(message);
+                    });
+
+                    this.navService = new ROSLIB.Service({
+                        ros: this.ros,
+                        name: "navegacion_autonoma_servicio",
+                        serviceType: "rossrv/Type"
                     });
                 });
                 this.ros.on("error", error => {
