@@ -18,12 +18,13 @@
                 <!-- Robot indicator -->
                 <font-awesome-icon
                 icon="robot"
+                ref="robot"
                 v-bind:style="{top: robotTop+'px', left: robotLeft+'px' }"
                 id="robotIndicator"
                 style="font-size: 4rem"
                 />  
                 <!-- TableButtons -->
-                <TableButton
+                <TableButton ref="table"
                   v-for="button in buttons"
                   v-bind:table="button"
                   v-bind:style="button.style"
@@ -101,7 +102,7 @@ export default {
   methods: {
     updateRobotPosition: function() {
       // Calc new pos
-      let pos = this.calcPos(this.position.x, this.position.y);
+      let pos = this.calcPos(this.position.x, this.position.y, "robot");
       // Update pos
       this.robotLeft = pos.left;
       this.robotTop = pos.top;
@@ -109,16 +110,26 @@ export default {
     calcTablePos: function() {
       // For each table button
       for (let i = 0; i < this.buttons.length; i++) {
-        let pos = this.calcPos(this.buttons[i].x, this.buttons[i].y); // Calc new pos
+        let pos = this.calcPos(this.buttons[i].x, this.buttons[i].y, "table"); // Calc new pos
         this.buttons[i].style = {left: pos.left + "px",top: pos.top + "px"}; // Update pos
       }
     },
-    calcPos: function(x, y) {
+    calcPos: function(x, y, element) {
       let realMapSize = { x: 5.26, y: 5.27 }; // Map size in coords
 
       // Calc new left and bottom using a simple rule of three
       let left = (((x * this.$refs.map.clientWidth) / realMapSize.x)).toFixed(2);
-      let top = this.$refs.map.clientHeight-((y * this.$refs.map.clientHeight) / realMapSize.y).toFixed(2);
+      let top = (this.$refs.map.clientHeight-((y * this.$refs.map.clientHeight) / realMapSize.y)).toFixed(2);
+
+      // Fix offset
+      if(element == "robot"){
+        left = left-((this.$refs.robot.clientWidth)/2).toFixed(2)
+      }
+      if(element == "table"){
+        left = left-((this.$refs.table[0].$el.clientWidth)/2).toFixed(2)
+      }
+
+      //console.log(left)
       
       // Return result
       return { left: left, top: top };
