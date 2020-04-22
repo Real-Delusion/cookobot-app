@@ -116,7 +116,8 @@ export default {
     return {
       tables: [],
       servingTables: false,
-      goingKitchen: false
+      goingKitchen: false,
+      serviceCancelled:false,
     };
   },
   created: async function() {
@@ -142,6 +143,9 @@ export default {
       // Send robot to serve the tables from the list
       console.log(this.tables[0]);
       for (var i = 0; i < this.tables.length; i++) {
+        if(this.serviceCancelled){
+          break;
+        }else{
         let table = this.tables[i];
         console.log("Await table ", table.id);
         table.serving = true;
@@ -153,10 +157,12 @@ export default {
         }
         table.served = true;
         table.serving = false;
+        }
       }
       console.log("END SERVING TABLES, sending to kitchen");
 
       // Send to kitchen when finished
+      this.serviceCancelled=false;
       this.goingKitchen = true;
       this.deleteAllTables();
       let res = await this.goToTable(0);
@@ -178,7 +184,7 @@ export default {
     cancelServing: function() {
       bus.$emit("sendTables", -1);
       this.deleteAllTables();
-      this.servingTables = false;
+      this.serviceCancelled=true;
     },
     goToTable: function(table) {
       return new Promise((resolve, reject) => {
