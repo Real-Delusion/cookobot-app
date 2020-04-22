@@ -43,6 +43,7 @@
             v-show="!table.serving"
             @touchstart="deleteTable(table)"
             @mousedown="deleteTable(table)"
+            :style="[table.served ? {'color': 'var(--success)'} : {'color': ''}]"
           >
             <font-awesome-icon v-bind:icon="table.served ? 'check-circle' : 'times-circle'" />
           </div>
@@ -154,6 +155,10 @@ export default {
       if (!res["success"]) {
         console.log("Something went wrong...");
       }
+      for (var i = 0; i < this.tables.length; i++) {
+        let table = this.tables[i];
+        table.served = false;
+      }
       this.servingTables = false;
       this.deleteAllTables();
 
@@ -259,10 +264,10 @@ export default {
   margin-right: 1.5rem;
   margin-left: auto;
 }
-.delete_icon:hover {
+/*.delete_icon:hover {
   color: rgb(204, 80, 80);
   transform: scale(1.05);
-}
+}*/
 .card-header {
   height: 15%;
   justify-content: space-between;
