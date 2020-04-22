@@ -146,7 +146,7 @@ label {
   text-align: center;
   font-size: 1.7em;
   line-height: 1.1em;
-  background-color: var(--darker);
+  background-color: rgb(31, 40, 47);
   position: fixed;
   top: 80%;
   left: 0;
