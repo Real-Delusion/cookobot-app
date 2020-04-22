@@ -2,9 +2,13 @@
   <div class="card">
     <div class="card-content">
       <div class="content">
-        <div class="loading" v-show="!connected">
+        <div class="loading" v-show="!connected && failed == false">
           <progress class="progress is-small is-primary" max="100">15%</progress>
           <p>Connecting to ROS server ...</p>
+        </div>
+        <div v-show="failed">
+          <p>Failed to connect server</p>
+          <button v-on:click="manualConnect()" class="button is-primary">Try again</button>
         </div>
         <div v-show="connected">
           <div class="columns">
