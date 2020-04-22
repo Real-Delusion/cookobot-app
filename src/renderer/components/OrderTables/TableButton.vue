@@ -71,8 +71,11 @@ export default {
   height: 12vw;
 }
 .kitchen {
-  width: 15vw;
-  height: 8vw;
+    width: 18vw;
+    height: 8vw;
+    top: 81.3% !important;
+    left: 58.4% !important;
+    border-radius: 0;
 }
 .selected{
   background-color: white;

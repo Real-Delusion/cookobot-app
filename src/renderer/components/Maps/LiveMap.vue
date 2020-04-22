@@ -126,7 +126,7 @@ export default {
         left = left-((this.$refs.robot.clientWidth)/2).toFixed(2)
       }
       if(element == "table"){
-        left = left-((this.$refs.table[0].$el.clientWidth)/2).toFixed(2)
+        left = left-((this.$refs.table[0].$el.clientWidth)/4).toFixed(2)
       }
 
       //console.log(left)
