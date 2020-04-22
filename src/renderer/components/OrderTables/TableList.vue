@@ -28,6 +28,7 @@
           v-bind:style="{ 'backgroundColor': 'white' }"
           ref="table"
           :disabled="serving"
+          v-bind:served="table.served"
         >
           <font-awesome-icon
             :style="{'color':colorDraggableIcon}"
@@ -43,7 +44,7 @@
             @touchstart="deleteTable(table)"
             @mousedown="deleteTable(table)"
           >
-            <font-awesome-icon icon="times-circle" />
+            <font-awesome-icon v-bind:icon="served ? 'check-circle' : 'times-circle'" />
           </div>
         </SlickItem>
       </SlickList>
@@ -114,7 +115,7 @@ export default {
   },
 
   created: async function() {
-    this.indexTables=0;
+    this.indexTables = 0;
     bus.$on("tableAdded", table => {
       //Adding data to the list
       //console.log(this.tables)
@@ -161,7 +162,7 @@ export default {
           //bus.$emit("sendTables", 0);
           console.log("END SERVING TABLES");
           this.deleteAllTables();
-          this.indexTables=0;
+          this.indexTables = 0;
           this.serving = false;
         }
       });
@@ -169,10 +170,11 @@ export default {
     changeServedTableStyle: function() {
       // Changing style for the table that is served
       let $refServed = this.$refs.table[this.indexTables].$el;
-      console.log(this.$refs.table[this.indexTables])
       $refServed.style.border = "solid";
       $refServed.style.borderColor = "var(--success)";
-      $refServed.className="card box_element_list"
+      $refServed.className = "card box_element_list";
+      this.$refs.deleteTableIcon[this.indexTables].style.display = "";
+      console.log(this.$refs.iconElement);
     },
     changeServingTableStyle: function() {
       // Changing style for the table that is serving
@@ -183,7 +185,7 @@ export default {
       this.colorDraggableIcon = "white"; //Change for a tick icon
       this.$refs.deleteTableIcon[this.indexTables].style.display = "none";
 
-      $refServing.className="card box_element_list draw"
+      $refServing.className = "card box_element_list draw";
     }
   }
 };
@@ -301,12 +303,13 @@ export default {
   overflow: hidden;
   position: relative;
 }
-.draw::before, .draw::after {
-  content: '';
+.draw::before,
+.draw::after {
+  content: "";
   box-sizing: border-box;
   position: absolute;
   border: 3px solid transparent;
-  border-radius:0.5ch;;
+  border-radius: 0.5ch;
   width: 0;
   height: 0;
 }
