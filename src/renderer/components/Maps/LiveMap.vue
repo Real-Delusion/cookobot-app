@@ -13,10 +13,18 @@
         <div v-show="connected">
           <div class="columns">
             <div class="column has-text-centered">
-              <!-- <img id="map" ref="map" src="@/assets/restaurantMap.jpg" alt /> -->
+              <!-- Restaurant Map -->
               <div id="map" ref="map" class="restaurant">
-                <!-- I create the TableButton component -->
-                <TableButton
+                <!-- Robot indicator -->
+                <font-awesome-icon
+                icon="robot"
+                ref="robot"
+                v-bind:style="{top: robotTop+'px', left: robotLeft+'px' }"
+                id="robotIndicator"
+                style="font-size: 4rem"
+                />  
+                <!-- TableButtons -->
+                <TableButton ref="table"
                   v-for="button in buttons"
                   v-bind:table="button"
                   v-bind:style="button.style"
@@ -27,12 +35,6 @@
                   v-bind:serving="button.serving"
                 ></TableButton>
               </div>
-              <font-awesome-icon
-                icon="robot"
-                v-bind:style="{bottom: robotBottom+'px', left: robotLeft+'px' }"
-                id="robotIndicator"
-                style="font-size: 4rem"
-              />
             </div>
           </div>
         </div>
@@ -54,7 +56,7 @@ export default {
   data() {
     return {
       robotLeft: 0,
-      robotBottom: 0,
+      robotTop: 0,
       //Table buttons
       buttons: [
         { id: 0, x: 4.63, y: 1.64, style: null, selected:false, type:' kitchen', served:false, serving:false },
@@ -91,33 +93,37 @@ export default {
   methods: {
     updateRobotPosition: function() {
       // Calc new pos
-      let pos = this.calcPos(this.position.x, this.position.y);
+      let pos = this.calcPos(this.position.x, this.position.y, "robot");
       // Update pos
       this.robotLeft = pos.left;
-      this.robotBottom = pos.bottom;
+      this.robotTop = pos.top;
     },
     calcTablePos: function() {
       // For each table button
       for (let i = 0; i < this.buttons.length; i++) {
-        let pos = this.calcPos(this.buttons[i].x, this.buttons[i].y); // Calc new pos
-        this.buttons[i].style = {
-          left: pos.left + "px",
-          bottom: pos.bottom + "px"
-        }; // Update pos
+        let pos = this.calcPos(this.buttons[i].x, this.buttons[i].y, "table"); // Calc new pos
+        this.buttons[i].style = {left: pos.left + "px",top: pos.top + "px"}; // Update pos
       }
     },
-    calcPos: function(x, y) {
+    calcPos: function(x, y, element) {
       let realMapSize = { x: 5.26, y: 5.27 }; // Map size in coords
 
       // Calc new left and bottom using a simple rule of three
-      let left = (
-        (x * this.$refs.map.width) / realMapSize.x +
-        this.$refs.map.x
-      ).toFixed(2);
-      let bottom = ((y * this.$refs.map.height) / realMapSize.y).toFixed(2);
+      let left = (((x * this.$refs.map.clientWidth) / realMapSize.x)).toFixed(2);
+      let top = (this.$refs.map.clientHeight-((y * this.$refs.map.clientHeight) / realMapSize.y)).toFixed(2);
 
+      // Fix offset
+      if(element == "robot"){
+        left = left-((this.$refs.robot.clientWidth)/2).toFixed(2)
+      }
+      if(element == "table"){
+        left = left-((this.$refs.table[0].$el.clientWidth)/2).toFixed(2)
+      }
+
+      //console.log(left)
+      
       // Return result
-      return { left: left, bottom: bottom };
+      return { left: left, top: top };
     },
     sendStop: function() {
       let topic = new ROSLIB.Topic({
@@ -143,10 +149,17 @@ export default {
   align-items: center;
   justify-content: center;
 }
+#map{
+  position: relative;
+}
 #robotIndicator {
-  position: absolute;
+  position: relative;
   width: 50px;
   z-index: 90;
+  color: white;
+  float: left;
+  left:0;
+  bottom:0;
 }
 .loading {
   text-align: center;
