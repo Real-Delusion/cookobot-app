@@ -23,7 +23,8 @@
                   v-bind:class="'table_button '+ button.type"
                   v-bind:key="button.id"
                   v-bind:selected="button.selected"
-
+                  v-bind:served="button.served"
+                  v-bind:serving="button.serving"
                 ></TableButton>
               </div>
               <font-awesome-icon
@@ -56,12 +57,12 @@ export default {
       robotBottom: 0,
       //Table buttons
       buttons: [
-        { id: 0, x: 4.63, y: 1.64, style: null, selected:false, type:' kitchen', served:false },
-        { id: 1, x: 4.28, y: 3.24, style: null, selected:false, type:' single', served:false },
-        { id: 2, x: 2.35, y: 3.25, style: null, selected:false, type:' single', served:false },
-        { id: 3, x: 3.83, y: 4.65, style: null, selected:false, type:' double_horizontal', served:false },
-        { id: 4, x: 2.37, y: 4.7, style: null, selected:false,  type:' single', served:false },
-        { id: 5, x: 0.92, y: 4.7, style: null, selected:false,  type:' double_vertical', served:false }
+        { id: 0, x: 4.63, y: 1.64, style: null, selected:false, type:' kitchen', served:false, serving:false },
+        { id: 1, x: 4.28, y: 3.24, style: null, selected:false, type:' single', served:false, serving:false },
+        { id: 2, x: 2.35, y: 3.25, style: null, selected:false, type:' single', served:false, serving:false },
+        { id: 3, x: 3.83, y: 4.65, style: null, selected:false, type:' double_horizontal', served:false, serving:false },
+        { id: 4, x: 2.37, y: 4.7, style: null, selected:false,  type:' single', served:false, serving:false },
+        { id: 5, x: 0.92, y: 4.7, style: null, selected:false,  type:' double_vertical', served:false, serving:false }
       ]
     };
   },

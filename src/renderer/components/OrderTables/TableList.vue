@@ -44,7 +44,7 @@
             @touchstart="deleteTable(table)"
             @mousedown="deleteTable(table)"
           >
-            <font-awesome-icon v-bind:icon="served ? 'check-circle' : 'times-circle'" />
+            <font-awesome-icon v-bind:icon="table.served ? 'check-circle' : 'times-circle'" />
           </div>
         </SlickItem>
       </SlickList>
@@ -147,6 +147,7 @@ export default {
           console.log("Something went wrong...");
           break;
         }
+        table.served=true
       }
       console.log("END SERVING TABLES, sending to kitchen");
 
