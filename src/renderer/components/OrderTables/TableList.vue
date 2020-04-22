@@ -22,7 +22,7 @@
       <SlickList lockAxis="y" v-model="tables">
         <SlickItem
           v-for="(table, index) in tables"
-          :key="table"
+          :key="table.id"
           :index="index"
           class="card box_element_list"
           v-bind:style="{ 'backgroundColor': 'white' }"
@@ -135,20 +135,32 @@ export default {
       bus.$emit("deleteTables", this.tables);
     },
     accept: async function() {
+      this.serving = true;
       // Send robot to serve the tables from the list
-      //bus.$emit("sendTables", this.tables[this.indexTables]);
-
-      for (let table in this.tables) {
+      console.log(this.tables[0]);
+      for (var i = 0; i < this.tables.length; i++) {
+        let table = this.tables[i];
         console.log("Await table ", table.id);
         let res = await this.goToTable(table.id);
-        if (!res["succeeded"]) {
+        console.log(res);
+        if (!res["success"]) {
           console.log("Something went wrong...");
           break;
         }
       }
+      console.log("END SERVING TABLES, sending to kitchen");
+
+      // Send to kitchen when finished
+      let res = await this.goToTable(0);
+      console.log(res);
+      if (!res["success"]) {
+        console.log("Something went wrong...");
+      }
+      this.serving = false;
+      this.deleteAllTables();
+
       /*
       this.changeServingTableStyle();
-      this.serving = true;
       this.waitResponse();*/
     },
     deleteTable: function(table) {
@@ -160,45 +172,23 @@ export default {
       this.deleteAllTables();
       this.serving = false;
     },
-    waitResponse: function() {
-      // Waiting for the robot response
-      bus.$on("sendRes", async res => {
-        console.log("----- TABLE SERVED ----");
-        if (this.indexTables < this.tables.length - 1) {
-          this.changeServedTableStyle();
-          this.indexTables++;
-          this.served = true;
-          this.accept();
-        } else {
-          //When the robot finishes it's sent to the kitchen
-          //bus.$emit("sendTables", 0);
-          console.log("END SERVING TABLES");
-          this.deleteAllTables();
-          //  this.indexTables=0;
-          this.serving = false;
-        }
-      });
-    },
     goToTable: function(table) {
       return new Promise((resolve, reject) => {
-        console.log("ESTOY DENTRO DE GO TO TABLE");
+        //console.log("ESTOY DENTRO DE GO TO TABLE");
 
         // define the request
         let request = new ROSLIB.ServiceRequest({
           numeroMesa: table
         });
 
-        console.log("despues de definir service y request");
         this.navService.callService(
           request,
           result => {
             console.log("This is the response of the service ");
-            console.log(result);
             resolve(result);
           },
           error => {
             console.log("This is the error response of the service ");
-            console.error(error);
             reject(error);
           }
         );

@@ -75,17 +75,6 @@ export default {
     // Connect to rosbridge server
     await this.connectRos();
 
-    bus.$on("sendTables", async table => {
-      if (table != -1) {
-        console.log("Enviando mesa:" + table);
-        let res = await this.goToTable(parseInt(table));
-        console.log("res se ha resuelto", res);
-        bus.$emit("sendRes", res);
-      } else {
-        //this.sendStop();
-      }
-    });
-
     // Update tables position on window resize
     window.addEventListener("resize", this.calcTablePos);
     window.addEventListener("load", this.calcTablePos);
