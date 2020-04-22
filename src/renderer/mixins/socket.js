@@ -19,8 +19,8 @@ export default {
             this.clientConnected();
 
             // Receive issue event
-            client.on('issue', (msg) => {
-                this.issueReceived()
+            client.on('issue', (table,message) => {
+                this.issueReceived(table, message)
             });
         });
 
@@ -31,9 +31,11 @@ export default {
         clientConnected: function () {
             console.log("Client connected")
         },
-        issueReceived: function (msg) {
+        issueReceived: function (table, message) {
             console.log('Issue received: ' + msg);
             this.issue = true;
+            this.tableIssue = table;
+            this.issueTopic = message;
         },
     }
 }
