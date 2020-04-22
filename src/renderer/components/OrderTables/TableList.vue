@@ -35,7 +35,7 @@
             class="draggable_icon"
             icon="grip-vertical"
           />
-          <p v-if="table!=0">Table {{ table }}</p>
+          <p v-if="table.id!=0">Table {{ table.id }}</p>
           <p v-else>Kitchen</p>
           <div
             class="icon delete_icon"
@@ -119,7 +119,7 @@ export default {
     bus.$on("tableAdded", table => {
       //Adding data to the list
       //console.log(this.tables)
-      if (this.tables.includes(table)) {
+      if (this.tables.includes(table.id)) {
         this.tables.splice(this.tables.indexOf(table), 1);
       } else {
         this.tables.push(table);
@@ -134,14 +134,14 @@ export default {
     },
     accept: async function() {
       // Send robot to serve the tables from the list
-      bus.$emit("sendTables", this.tables[this.indexTables]);
+      bus.$emit("sendTables", this.tables[this.indexTables].id);
       this.changeServingTableStyle();
       this.serving = true;
       this.waitResponse();
     },
     deleteTable: function(table) {
       this.tables.splice(this.tables.indexOf(table), 1);
-      bus.$emit("deleteTable", table);
+      bus.$emit("deleteTable", table.id);
     },
     cancelServing: function() {
       bus.$emit("sendTables", -1);

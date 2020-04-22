@@ -1,11 +1,9 @@
 <template>
   <button
     @click="addTable(table)"
-    v-bind:value="table"
-    v-bind:style="{ 'background-color': backgroundColor, 'color': textColor}"
-    v-on:click="changeColor($event)"
+    v-bind:class="[selected ? 'selected' : '']"
   >
-    <p v-if="table!=0">{{ table }}</p>
+    <p v-if="table.id!=0">{{ table.id }}</p>
     <p v-else>Kitchen</p>
   </button>
 </template>
@@ -16,51 +14,29 @@ import { bus } from "../../main";
 
 export default {
   mixins: [],
-  props: ["table"],
+  props: ["table", 'selected'],
   data() {
     return {
-      backgroundColor: "var(--darkbackground)",
-      buttonsEvents: [],
-      textColor: "white"
     };
   },
   created: async function() {
     bus.$on("deleteTables", tables => {
       //if the list of tables is cancelled
-      if (tables == 0) {
-        this.backgroundColor = "var(--darkbackground)";
-      }
+      this.selected = false;
+
     });
     bus.$on("deleteTable", table => {
       //if the table is deleted from the list
-      //this.selected=false;
-      for (var i = 0; i < this.buttonsEvents.length; i++) {
-        if (this.buttonsEvents[i].value == table) {
-          this.buttonsEvents[i].style.backgroundColor = "var(--darkbackground)";
-          this.backgroundColor = "var(--darkbackground)";
-          this.buttonsEvents[i].style.color = "white";
-        }
+      if(table == this.table.id){
+        this.selected=false;
       }
     });
   },
   methods: {
     addTable: function(table) {
       //Send table value to TableList
+      this.selected = !this.selected;
       bus.$emit("tableAdded", table);
-    },
-    changeColor: function(event) {
-      if (!this.buttonsEvents.includes(event.currentTarget)) {
-        this.buttonsEvents.push(event.currentTarget);
-      }
-
-      if (this.backgroundColor == "white") {
-        var style = getComputedStyle(document.body);
-        this.backgroundColor = "var(--darkbackground)";
-        this.textColor = "white";
-      } else {
-        this.textColor = "var(--darkbackground)";
-        this.backgroundColor = "white";
-      }
     }
   }
 };
@@ -98,5 +74,9 @@ export default {
 .kitchen {
   width: 15vw;
   height: 8vw;
+}
+.selected{
+  background-color: white;
+  color: black;
 }
 </style>
