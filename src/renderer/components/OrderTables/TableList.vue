@@ -2,8 +2,8 @@
   <div class="card queue_list">
     <header class="card-header">
       <div class="robot_info">
-        <p class="card-header-title">Robot 98R2X3</p>
-        <p class="card-header-description description_robot">Description</p>
+        <p class="card-header-title">Robot #123456</p>
+        <p class="card-header-description description_robot">Kitchen</p>
       </div>
       <a href="#" class="card-header-icon" aria-label="Settings">
         <span class="icon">
@@ -141,7 +141,6 @@ export default {
     accept: async function() {
       this.servingTables = true;
       // Send robot to serve the tables from the list
-      console.log(this.tables[0]);
       for (var i = 0; i < this.tables.length; i++) {
         if (this.serviceCancelled) {
           break;

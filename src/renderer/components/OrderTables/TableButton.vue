@@ -21,13 +21,11 @@ export default {
     bus.$on("deleteTables", tables => {
       //if the list of tables is cancelled
       this.buttonSelected = false;
-      console.log("tables deleted")
     });
     bus.$on("deleteTable", table => {
       //if the table is deleted from the list
       if (table == this.table.id) {
         this.buttonSelected = false;
-        console.log("table deleted")
       }
     });
   },
@@ -36,7 +34,6 @@ export default {
       //Send table value to TableList
       this.buttonSelected = !this.buttonSelected;
       bus.$emit("tableAdded", table);
-      console.log("table added")
     }
   }
 };
