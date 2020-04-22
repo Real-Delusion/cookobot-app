@@ -27,20 +27,20 @@
           class="card box_element_list"
           v-bind:style="{ 'backgroundColor': 'white' }"
           ref="table"
-          :disabled="serving"
+          :disabled="servingTables"
           v-bind:served="table.served"
         >
-          <font-awesome-icon
-            :style="{'color':colorDraggableIcon}"
-            class="draggable_icon"
-            icon="grip-vertical"
-          />
+          <div
+            class="icon draggable_icon"
+            :style="[servingTables ? {'color': 'white'} : {'color': ''}]"
+          >
+            <font-awesome-icon icon="grip-vertical" />
+          </div>
           <p v-if="table.id!=0">Table {{ table.id }}</p>
           <p v-else>Kitchen</p>
           <div
             class="icon delete_icon"
-            :v-show="!serving"
-            ref="deleteTableIcon"
+            v-show="!table.serving"
             @touchstart="deleteTable(table)"
             @mousedown="deleteTable(table)"
           >
@@ -55,7 +55,7 @@
         type="button"
         v-on:click="deleteAllTables()"
         :disabled="tables.length==0"
-        v-if="serving==false"
+        v-if="servingTables==false"
       >
         <span class="btn_icon">
           <font-awesome-icon icon="trash-alt" />
@@ -67,7 +67,7 @@
         type="button"
         v-on:click="accept()"
         :disabled="tables.length==0"
-        v-if="serving==false"
+        v-if="servingTables==false"
       >
         <span class="btn_icon">
           <font-awesome-icon icon="check-circle" />
@@ -108,11 +108,7 @@ export default {
   data() {
     return {
       tables: [],
-      indexTables: 0,
-      serving: false,
-      displayServing: "",
-      served: false,
-      colorDraggableIcon: ""
+      servingTables: false
     };
   },
   created: async function() {
@@ -135,19 +131,21 @@ export default {
       bus.$emit("deleteTables", this.tables);
     },
     accept: async function() {
-      this.serving = true;
+      this.servingTables = true;
       // Send robot to serve the tables from the list
       console.log(this.tables[0]);
       for (var i = 0; i < this.tables.length; i++) {
         let table = this.tables[i];
         console.log("Await table ", table.id);
+        table.serving = true;
         let res = await this.goToTable(table.id);
         console.log(res);
         if (!res["success"]) {
           console.log("Something went wrong...");
           break;
         }
-        table.served=true
+        table.served = true;
+        table.serving = false;
       }
       console.log("END SERVING TABLES, sending to kitchen");
 
@@ -157,7 +155,7 @@ export default {
       if (!res["success"]) {
         console.log("Something went wrong...");
       }
-      this.serving = false;
+      this.servingTables = false;
       this.deleteAllTables();
 
       /*
@@ -171,7 +169,7 @@ export default {
     cancelServing: function() {
       bus.$emit("sendTables", -1);
       this.deleteAllTables();
-      this.serving = false;
+      this.servingTables = false;
     },
     goToTable: function(table) {
       return new Promise((resolve, reject) => {
