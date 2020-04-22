@@ -6,7 +6,7 @@
           <progress class="progress is-small is-primary" max="100">15%</progress>
           <p>Connecting to ROS server ...</p>
         </div>
-        <div v-show="failed">
+        <div class="loading" v-show="failed">
           <p>Failed to connect server</p>
           <button v-on:click="manualConnect()" class="button is-primary">Try again</button>
         </div>
