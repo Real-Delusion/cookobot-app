@@ -186,6 +186,8 @@ export default {
       bus.$emit("sendTables", -1);
       this.deleteAllTables();
       this.serviceCancelled=true;
+      this.goingKitchen = true;
+
     },
     goToTable: function(table) {
       return new Promise((resolve, reject) => {
