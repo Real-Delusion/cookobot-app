@@ -12,20 +12,32 @@
       </a>
     </header>
     <div class="card-content-message" v-if="tables.length==0">
-      <div class="loading" v-show="goingKitchen">
+      <div class="loading" v-show="goingKitchen && connected">
         <progress class="progress is-small is-primary" max="100">15%</progress>
         <p>Returning to kitchen...</p>
       </div>
-      <div v-show="!goingKitchen">
+      <div v-show="!goingKitchen && connected">
         <span class="icon warning_icon">
           <font-awesome-icon class icon="exclamation-circle" />
         </span>
         <span>Please select the tables that the robot has to attend</span>
       </div>
+      <div v-show="!connected">
+        <span class="icon warning_icon">
+          <font-awesome-icon class icon="exclamation-triangle" />
+        </span>
+        <span>Not connected to the server</span>
+      </div>
     </div>
-    <div class="card-content" v-else>
+    <div class="card-content" v-else v-bind:class="[!connected ? 'card-content-message' : '' , '']">
+      <div v-show="!connected">
+        <span class="icon warning_icon">
+          <font-awesome-icon class icon="exclamation-triangle" />
+        </span>
+        <span>Not connected to the server</span>
+      </div>
       <!-- Draggable list -->
-      <SlickList lockAxis="y" v-model="tables">
+      <SlickList lockAxis="y" v-model="tables" v-show="connected">
         <SlickItem
           v-for="(table, index) in tables"
           :key="table.id"
@@ -119,6 +131,11 @@ export default {
       goingKitchen: false,
       serviceCancelled: false
     };
+  },
+  watch: {
+    connected: function() {
+      if (!this.connected) this.cancelServing();
+    }
   },
   created: async function() {
     await this.connectRos();

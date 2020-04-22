@@ -11,9 +11,9 @@ import 'bulma/css/bulma.css';
 // Font Awesome
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faTimesCircle, faGripVertical, faChevronRight, faChevronLeft, faCog, faUsers, faExclamationCircle, faUtensils, faSignOutAlt, faUser, faTrashAlt, faCheckCircle, faRobot, faSignInAlt, faBackspace, faGripLinesVertical } from '@fortawesome/free-solid-svg-icons'
+import { faTimesCircle, faGripVertical, faChevronRight, faExclamationTriangle, faChevronLeft, faCog, faUsers, faExclamationCircle, faUtensils, faSignOutAlt, faUser, faTrashAlt, faCheckCircle, faRobot, faSignInAlt, faBackspace, faGripLinesVertical } from '@fortawesome/free-solid-svg-icons'
 
-library.add([faTimesCircle, faUsers, faGripVertical, faChevronRight, faChevronLeft, faGripLinesVertical, faCog, faExclamationCircle, faUtensils, faSignOutAlt, faUser, faTrashAlt, faCheckCircle, faRobot, faSignInAlt, faBackspace])
+library.add([faTimesCircle, faUsers, faGripVertical, faChevronRight, faExclamationTriangle, faChevronLeft, faGripLinesVertical, faCog, faExclamationCircle, faUtensils, faSignOutAlt, faUser, faTrashAlt, faCheckCircle, faRobot, faSignInAlt, faBackspace])
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
