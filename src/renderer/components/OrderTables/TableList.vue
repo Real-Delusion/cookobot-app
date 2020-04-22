@@ -12,10 +12,16 @@
       </a>
     </header>
     <div class="card-content-message" v-if="tables.length==0">
-      <span class="icon warning_icon">
-        <font-awesome-icon class icon="exclamation-circle" />
-      </span>
-      <span>Please select the tables that the robot has to attend</span>
+      <div class="loading" v-show="goingKitchen">
+        <progress class="progress is-small is-primary" max="100">15%</progress>
+        <p>Returning to kitchen</p>
+      </div>
+      <div v-show="!goingKitchen">
+        <span class="icon warning_icon">
+          <font-awesome-icon class icon="exclamation-circle" />
+        </span>
+        <span>Please select the tables that the robot has to attend</span>
+      </div>
     </div>
     <div class="card-content" v-else>
       <!-- Draggable list -->
@@ -109,7 +115,8 @@ export default {
   data() {
     return {
       tables: [],
-      servingTables: false
+      servingTables: false,
+      goingKitchen: false
     };
   },
   created: async function() {
@@ -150,6 +157,8 @@ export default {
       console.log("END SERVING TABLES, sending to kitchen");
 
       // Send to kitchen when finished
+      this.goingKitchen = true;
+      this.deleteAllTables();
       let res = await this.goToTable(0);
       console.log(res);
       if (!res["success"]) {
@@ -159,12 +168,8 @@ export default {
         let table = this.tables[i];
         table.served = false;
       }
+      this.goingKitchen = false;
       this.servingTables = false;
-      this.deleteAllTables();
-
-      /*
-      this.changeServingTableStyle();
-      this.waitResponse();*/
     },
     deleteTable: function(table) {
       this.tables.splice(this.tables.indexOf(table), 1);
@@ -196,26 +201,6 @@ export default {
           }
         );
       });
-    },
-    changeServedTableStyle: function() {
-      // Changing style for the table that is served
-      let $refServed = this.$refs.table[this.indexTables].$el;
-      $refServed.style.border = "solid";
-      $refServed.style.borderColor = "var(--success)";
-      $refServed.className = "card box_element_list";
-      this.$refs.deleteTableIcon[this.indexTables].style.display = "";
-      console.log(this.$refs.iconElement);
-    },
-    changeServingTableStyle: function() {
-      // Changing style for the table that is serving
-      let $refServing = this.$refs.table[this.indexTables].$el;
-      //$refServing.style.border = "solid";
-      //$refServing.style.borderColor = "var(--robot1)";
-
-      this.colorDraggableIcon = "white"; //Change for a tick icon
-      this.$refs.deleteTableIcon[this.indexTables].style.display = "none";
-
-      $refServing.className = "card box_element_list draw";
     }
   }
 };
@@ -310,6 +295,9 @@ export default {
   font-size: 6rem;
   padding: 4rem;
   color: var(--disabled);
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
 }
 .btn_icon {
   margin-right: inherit;
@@ -326,6 +314,9 @@ export default {
 .description_robot {
   margin-left: 1rem;
   font-size: 1.5rem;
+}
+.loading {
+  text-align: center;
 }
 
 /* ANIMATED BORDER */
