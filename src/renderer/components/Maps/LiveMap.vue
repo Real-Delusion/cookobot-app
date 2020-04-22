@@ -195,7 +195,7 @@ export default {
   position: relative;
   width: 50px;
   z-index: 90;
-  color: white;
+  color: var(--robot1);
   float: left;
   left:0;
   bottom:0;
