@@ -72,7 +72,8 @@ export default {
     // On position change update robot position
     position: function() {
       this.updateRobotPosition();
-    }
+      this.calcTablePos();
+    },
   },
   created: async function() {
     // Connect to rosbridge server
