@@ -1,9 +1,9 @@
 <template>
   <div class="card queue_list">
     <header class="card-header">
-      <div class="robot_info">
-        <p class="card-header-title">Robot #123456</p>
-        <p class="card-header-description description_robot">Kitchen</p>
+      <div class="robot_info" v-for="robot in robots" v-bind:key="robot.id" v-show="robot.selected" v-bind:style="{'border-left-color': robot.color}">
+          <p class="card-header-title">Robot #{{robot.id}}</p>
+          <p class="card-header-description description_robot">{{robot.description}}</p>
       </div>
       <a href="#" class="card-header-icon" aria-label="Settings">
         <span class="icon">
@@ -124,6 +124,7 @@ export default {
     SlickItem,
     SlickList
   },
+  props: ["robots"],
   data() {
     return {
       tables: [],
@@ -343,11 +344,11 @@ export default {
 }
 .robot_info {
   margin: 1.8rem;
-  border-left-color: var(--robot1);
   border-left-style: solid;
   border-left-width: 1rem;
   display: flex;
   flex-direction: column;
+  text-transform: capitalize;
 }
 
 .description_robot {

@@ -19,23 +19,10 @@ import RobotButton from "@/components/UI/ShowRobots/RobotButton";
 export default {
   mixins: [],
   components: { RobotButton },
+  props: ['robots'],
   data() {
     return {
       selectedRobot: "",
-      robots: [
-        {
-          id: "123456",
-          description: "kitchen",
-          color: "var(--robot1)",
-          selected: true
-        },
-        {
-          id: "789023",
-          description: "terrace",
-          color: "var(--robot2)",
-          selected: false
-        }
-      ]
     };
   },
   created: async function() {},

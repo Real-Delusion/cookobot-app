@@ -10,7 +10,7 @@
     <section>
       <div class="columns is-marginless">
         <div class="column is-full has-margin-7" style="height: 13vh">
-          <RobotList></RobotList>
+          <RobotList v-bind:robots="robots"></RobotList>
         </div>
       </div>
       <div class="columns is-marginless">
@@ -18,7 +18,7 @@
           <LiveMap></LiveMap>
         </div>
         <div class="column has-margin-7" style="height: 87vh">
-          <TableList></TableList>
+          <TableList v-bind:robots="robots"></TableList>
         </div>
       </div>
     </section>
@@ -41,6 +41,20 @@ export default {
   data() {
     return {
       notification: true,
+      robots: [
+        {
+          id: "123456",
+          description: "kitchen",
+          color: "var(--robot1)",
+          selected: true
+        },
+        {
+          id: "789023",
+          description: "terrace",
+          color: "var(--robot2)",
+          selected: false
+        }
+      ],
     };
   },
   methods: {
