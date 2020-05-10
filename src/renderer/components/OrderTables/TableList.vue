@@ -140,7 +140,7 @@ export default {
       }
     },
     goingKitchen: function() {
-      console.log(this.goingKitchen);
+      //console.log(this.goingKitchen);
     }
   },
   created: async function() {
@@ -177,6 +177,16 @@ export default {
             console.log("Something went wrong...");
             break;
           }
+
+          // The robot is at a table. Now we check it's at the correct table
+          let atCorrectTable = await this.recognizeTableNumber(table.id)
+          
+          // If it's not, we send it to kitchen
+          if (!atCorrectTable) {
+            console.log("This is not the correct table")
+            break;
+          }
+
           table.served = true;
           table.serving = false;
         }
@@ -232,15 +242,29 @@ export default {
         this.navService.callService(
           request,
           result => {
-            console.log("This is the response of the service ");
+            //console.log("This is the response of the service ");
             resolve(result);
           },
           error => {
-            console.log("This is the error response of the service ");
+            //console.log("This is the error response of the service ");
             reject(error);
           }
         );
       });
+    },
+    recognizeTableNumber: function(table) {
+      return new Promise((resolve, reject) => {
+        console.log("recognizeTableNumber")
+
+        // define the request
+        let number = 2
+
+        // check if the table number recognized is correct
+        if (table == number) {
+          resolve(true)
+        }
+        else resolve(false)
+      })
     }
   }
 };
