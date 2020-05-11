@@ -1,9 +1,15 @@
 <template>
   <div class="card queue_list">
     <header class="card-header">
-      <div class="robot_info" v-for="robot in robots" v-bind:key="robot.id" v-show="robot.selected" v-bind:style="{'border-left-color': robot.color}">
-          <p class="card-header-title">Robot #{{robot.id}}</p>
-          <p class="card-header-description description_robot">{{robot.description}}</p>
+      <div
+        class="robot_info"
+        v-for="robot in robots"
+        v-bind:key="robot.id"
+        v-show="robot.selected"
+        v-bind:style="{'border-left-color': robot.color}"
+      >
+        <p class="card-header-title">Robot #{{robot.id}}</p>
+        <p class="card-header-description description_robot">{{robot.description}}</p>
       </div>
       <a href="#" class="card-header-icon" aria-label="Settings">
         <span class="icon">
@@ -179,11 +185,11 @@ export default {
           }
 
           // The robot is at a table. Now we check it's at the correct table
-          let atCorrectTable = await this.recognizeTableNumber(table.id)
-          
+          let atCorrectTable = await this.recognizeTableNumber(table.id);
+
           // If it's not, we send it to kitchen
           if (!atCorrectTable) {
-            console.log("This is not the correct table")
+            console.log("This is not the correct table");
             break;
           }
 
@@ -254,17 +260,20 @@ export default {
     },
     recognizeTableNumber: function(table) {
       return new Promise((resolve, reject) => {
-        console.log("recognizeTableNumber")
+        console.log("recognizeTableNumber");
 
         // define the request
-        let number = 2
+        let number = 2;
+        this.rekognitionGoal.send()
 
+        while(this.photoTaken == false){
+          
+        }
         // check if the table number recognized is correct
         if (table == number) {
-          resolve(true)
-        }
-        else resolve(false)
-      })
+          resolve(true);
+        } else resolve(false);
+      });
     }
   }
 };
