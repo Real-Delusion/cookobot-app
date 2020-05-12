@@ -3,23 +3,15 @@ export default {
         return {
             // ros connection
             ros: null,
-            rosbridge_address: "ws://192.168.1.148:9090/",
-            //rosbridge_address: "ws://localhost:9090/",
+            //rosbridge_address: "ws://192.168.1.148:9090/",
+            rosbridge_address: "ws://localhost:9090/",
             connected: false,
             position: { x: 0, y: 0, z: 0 },
             navService: null,
             failed: false,
             connectionTries: 0,
             rekognitionGoal: null,
-            predictionGoal: null,
-            arm: {
-                topics: [
-                    "arm_elbow_flex_controller",
-                    "arm_shoulder_lift_controller",
-                    "arm_wrist_flex_controller"
-                ],
-                positions: [0, 0, 0]
-            }
+            predictionGoal: null
         }
     },
     created: function () {
