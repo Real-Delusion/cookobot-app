@@ -76,7 +76,7 @@ export default {
         serveArm: function () {
             return new Promise(async (resolve, reject) => {
                 console.log("started")
-                await this.moveArm([1, 0.1, 1]);
+                await this.moveArm([1, 0.1, 0.1]);
                 console.log("finished")
                 resolve()
             })
