@@ -1,11 +1,7 @@
 /*------------------------------------
 ----------- Polly Controller -----------
 -------------------------------------*/
-
-import Ros from "@/mixins/ros.js";
-
 export default {
-    mixins: [Ros],
     data() {
         return {
             pollyGoal: null,
@@ -73,6 +69,6 @@ export default {
                     }
                 })
             })
-        }
+        },
     }
 }

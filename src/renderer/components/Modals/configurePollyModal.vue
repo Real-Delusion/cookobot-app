@@ -1,5 +1,5 @@
 <template>
-  <div class="modal">
+  <div class="modal {{active}}">
     <div class="modal-background"></div>
     <div class="modal-card">
       <header class="modal-card-head">
@@ -8,7 +8,8 @@
       </header>
       <section class="modal-card-body">
         <!-- Content ... -->
-        <button @click="generarAudio()" class="button is-medium is-primary">{{ key + 1}}</button>
+        <input class="input" type="text" placeholder="Put something">
+        <button @click="generarAudio()" class="button is-medium is-primary">Generar Audio</button>
 
       </section>
       <footer class="modal-card-foot">
@@ -20,26 +21,55 @@
 </template>
 
 <script>
-  // import bus for events
-  import { bus } from "../../main";
 
 
   export default {
     mixins: [Polly],
-    props: ["table", 'selected'],
+    props: ["active"],
     data() {
       return {
+        textos: [
+          "Hola, está disfrutando de su comida",
+          "Muchas gracias, hasta pronto"
+        ],
+        disabled: true
       };
     },
     created: async function () {
     },
     methods: {
-      generarAudio: function (table) {
-
+      generateAudio: async function (nombreArchivo, texto) {
+        try{
+          this.runPollyAction(nombreArchivo, texto, 1)
+          control = this.awaitPolly()
+          this.disabled = false
+          if(control){ this.disabled = true}
+        }
+        catch (error) {
+          console.log(error);
+        }
       },
-      borrarAudio: function (table) {
+      playAudio: async function (nombreArchivo) {
+        try{
+          this.runPollyAction(nombreArchivo, '', 2)
+          control = this.awaitPolly()
+          this.disabled = false
+          if(control){ this.disabled = true}
+        }
+        catch (error) {
+          console.log(error);
+        }
       },
-      borrarAudio: function (table) {
+      deleteAudio: async function (nombreArchivo) {
+        try{
+          this.runPollyAction(nombreArchivo, '', 3)
+          control = this.awaitPolly()
+          this.disabled = false
+          if(control){ this.disabled = true}
+        }
+        catch (error) {
+          console.log(error);
+        }
       }
     }
   };

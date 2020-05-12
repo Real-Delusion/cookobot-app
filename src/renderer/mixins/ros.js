@@ -1,4 +1,7 @@
+import Polly from "@/mixins/polly.js";
+
 export default {
+    mixins: [Polly],
     data() {
         return {
             // ros connection
@@ -101,6 +104,10 @@ export default {
 
                 console.log("Prediction Action Client created!")
 
+                // polly initial conf -----------------------------------------------------------------
+                this.runPollyAction('','',0)
+                console.log("Polly Action Client created!")
+
 
                 // ros -----------------------------------------------------------------
                 this.ros.on("error", error => {
@@ -149,6 +156,6 @@ export default {
         },
         disconnect: function () {
             this.ros.close();
-        }
+        },
     }
 }
