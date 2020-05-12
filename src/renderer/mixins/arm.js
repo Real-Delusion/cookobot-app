@@ -8,14 +8,7 @@ export default {
     mixins: [Ros],
     data() {
         return {
-            arm: {
-                topics: [
-                    "arm_elbow_flex_controller",
-                    "arm_shoulder_lift_controller",
-                    "arm_wrist_flex_controller"
-                ],
-                positions: [0, 0, 0]
-            }
+
         }
     },
     methods: {
