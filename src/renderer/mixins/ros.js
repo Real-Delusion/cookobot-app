@@ -9,7 +9,15 @@ export default {
             position: { x: 0, y: 0, z: 0 },
             navService: null,
             failed: false,
-            connectionTries: 0
+            connectionTries: 0,
+            arm: {
+                topics: [
+                    "arm_elbow_flex_controller",
+                    "arm_shoulder_lift_controller",
+                    "arm_wrist_flex_controller"
+                ],
+                positions: [0,0,0]
+            }
         }
     },
     created: function () {
@@ -44,6 +52,20 @@ export default {
                     });
                     console.log("Service created!");
 
+                    // Init arm topics subscription
+                    for (let i = 0; i < this.arm.topics.length; i++) {
+                        let topic = new ROSLIB.Topic({
+                            ros: this.ros,
+                            name: "/" + this.arm.topics[i] + "/state",
+                            messageType: "control_msgs/JointControllerState"
+                        });
+                        topic.subscribe(message => {
+                            //console.log(message.set_point);
+                            this.arm.positions[i] = message.set_point;
+                        });
+
+                    }
+
                     // Fold arm
                     this.foldArm();
                 });
@@ -74,45 +96,36 @@ export default {
         },
         moveArm: function (part, goal) {
 
-            // Get topic from part
-            switch (part) {
-                case "elbow":
-                    part = "arm_elbow_flex_controller";
-                    break;
-                case "shoulder":
-                    part = "arm_shoulder_lift_controller";
-                    break;
-                case "wrist":
-                    part = "arm_wrist_flex_controller";
-                    break;
-                default:
-                    break;
-            }
-
-            // Set topic
+            // Create move topic
             let topic = new ROSLIB.Topic({
                 ros: this.ros,
-                name: '/' + part + '/command',
+                name: '/' + this.arm.topics[part] + '/command',
                 messageType: 'std_msgs/Float64'
             })
 
+            // Initial arm position
+            let initPos = this.arm.positions[part];
+            console.log(this.arm.topics[part]," ",initPos)
+
             let timeSpace = 0;
+
             if (Math.sign(goal) == 1) {
-                for (let i = 0; i < goal; i += 0.01) {
+                for (initPos; initPos < goal; initPos += 0.01) {
                     timeSpace += 50;
                     setTimeout(() => {
                         let message = new ROSLIB.Message({
-                            data: i
+                            data: initPos
                         })
                         topic.publish(message)
                     }, timeSpace);
                 }
-            } else {
-                for (let i = 0; i > goal; i -= 0.01) {
+            }
+            if (Math.sign(goal) == -1) {
+                for (initPos; initPos > goal; initPos -= 0.01) {
                     timeSpace += 50;
                     setTimeout(() => {
                         let message = new ROSLIB.Message({
-                            data: i
+                            data: initPos
                         })
                         topic.publish(message)
                     }, timeSpace);
@@ -120,9 +133,15 @@ export default {
             }
         },
         foldArm: function () {
-            setTimeout(this.moveArm('elbow', -1), 0);
-            setTimeout(this.moveArm('shoulder', -1), 0);
-            setTimeout(this.moveArm('wrist', -1), 0);
+            // 0 --> Elbow, 1 -> Shoulder, 2 --> Wrist
+            setTimeout(this.moveArm(0, -1), 0);
+            setTimeout(this.moveArm(1, -1), 0);
+            setTimeout(this.moveArm(2, -1), 0);
+        },
+        serveArm: function () {
+            setTimeout(this.moveArm(0, 1), 0);
+            setTimeout(this.moveArm(1, 0.1), 0);
+            setTimeout(this.moveArm(2, 1), 0);
         }
     }
 }
