@@ -120,12 +120,13 @@
 // import bus for events
 import { bus } from "../../main";
 import Ros from "@/mixins/ros.js";
+import Ros from "@/mixins/arm.js";
 
 // import slicksort for draggable list elements
 import { SlickList, SlickItem } from "vue-slicksort";
 
 export default {
-  mixins: [Ros],
+  mixins: [Ros, Arm],
   components: {
     SlickItem,
     SlickList
@@ -194,6 +195,13 @@ export default {
               table.serving = false;
               break;
             }
+            // Serve food
+            await this.serveArm();
+            // Wait 5s
+            await new Promise(r => setTimeout(r, 5000));
+
+            // Fold arm
+            await this.foldArm();
           }
 
           table.served = true;
