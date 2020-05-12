@@ -1,5 +1,4 @@
 <template>
-  <div class="tableList">
     <div class="card queue_list">
       <header class="card-header">
         <div
@@ -121,8 +120,7 @@
           Cancel
         </button>
       </footer>
-    </div>
-    <!-- Confirmation modal -->
+      <!-- Confirmation modal -->
     <div class="modal" v-bind:class="{ 'is-active': confirmationModal }">
       <div class="modal-background"></div>
       <div class="modal-card">
@@ -138,7 +136,8 @@
         
       </div>
     </div>
-  </div>
+    </div>
+    
 </template>
 
 
