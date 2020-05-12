@@ -1,9 +1,15 @@
 <template>
   <div class="card queue_list">
     <header class="card-header">
-      <div class="robot_info" v-for="robot in robots" v-bind:key="robot.id" v-show="robot.selected" v-bind:style="{'border-left-color': robot.color}">
-          <p class="card-header-title">Robot #{{robot.id}}</p>
-          <p class="card-header-description description_robot">{{robot.description}}</p>
+      <div
+        class="robot_info"
+        v-for="robot in robots"
+        v-bind:key="robot.id"
+        v-show="robot.selected"
+        v-bind:style="{'border-left-color': robot.color}"
+      >
+        <p class="card-header-title">Robot #{{robot.id}}</p>
+        <p class="card-header-description description_robot">{{robot.description}}</p>
       </div>
       <a href="#" class="card-header-icon" aria-label="Settings">
         <span class="icon">
@@ -140,7 +146,7 @@ export default {
       }
     },
     goingKitchen: function() {
-      console.log(this.goingKitchen);
+      //console.log(this.goingKitchen);
     }
   },
   created: async function() {
@@ -177,6 +183,19 @@ export default {
             console.log("Something went wrong...");
             break;
           }
+
+          if (table.id != 0) {
+            // The robot is at a table. Now we check it's at the correct table
+            let atCorrectTable = await this.recognizeTableNumber(table.id);
+
+            // If it's not, we send it to kitchen
+            if (!atCorrectTable) {
+              console.log("This is not the correct table");
+              table.serving = false;
+              break;
+            }
+          }
+
           table.served = true;
           table.serving = false;
         }
@@ -232,14 +251,53 @@ export default {
         this.navService.callService(
           request,
           result => {
-            console.log("This is the response of the service ");
+            //console.log("This is the response of the service ");
             resolve(result);
           },
           error => {
-            console.log("This is the error response of the service ");
+            //console.log("This is the error response of the service ");
             reject(error);
           }
         );
+      });
+    },
+    recognizeTableNumber: function(table) {
+      return new Promise(async (resolve, reject) => {
+        console.log("recognizeTableNumber");
+
+        // send goal to take photo
+        this.rekognitionGoal.send();
+
+        console.log("rekognition goal sent");
+        let taken = null;
+        let predicted = null;
+        try {
+          taken = await this.awaitPhoto();
+        } catch (error) {
+          console.log(error);
+        }
+
+        if (taken) {
+          console.log("Photo is taken");
+
+          // Now we predict the number in the photo
+          this.predictionGoal.send();
+
+          console.log("prediction goal sent");
+          predicted = null;
+          try {
+            predicted = await this.awaitPrediction();
+          } catch (error) {
+            console.log(error);
+          }
+          console.log("el predicted: ")
+          console.log(predicted)
+        }
+
+        // check if the table number recognized is correct
+        if (table == predicted) {
+          resolve(true);
+        } else resolve(false);
       });
     }
   }

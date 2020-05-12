@@ -3,13 +3,15 @@ export default {
         return {
             // ros connection
             ros: null,
-            //rosbridge_address: "ws://192.168.1.148:9090/",
-            rosbridge_address: "ws://localhost:9090/",
+            rosbridge_address: "ws://192.168.1.148:9090/",
+            //rosbridge_address: "ws://localhost:9090/",
             connected: false,
             position: { x: 0, y: 0, z: 0 },
             navService: null,
             failed: false,
             connectionTries: 0,
+            rekognitionGoal: null,
+            predictionGoal: null,
             arm: {
                 topics: [
                     "arm_elbow_flex_controller",
@@ -45,12 +47,15 @@ export default {
                         //console.log(message);
                     });
 
+
+                    // navegacion_autonoma_servicio
                     this.navService = new ROSLIB.Service({
                         ros: this.ros,
                         name: "navegacion_autonoma_servicio",
                         serviceType: "rossrv/Type"
                     });
-                    console.log("Service created!");
+
+                    console.log(" Navigation Service created!");
 
                     // Init arm topics subscription
                     for (let i = 0; i < this.arm.topics.length; i++) {
@@ -65,7 +70,39 @@ export default {
                         });
 
                     }
+
                 });
+
+                // rekognition_action_server -----------------------------------------------------------------
+                var rekognitionClient = new ROSLIB.ActionClient({
+                    ros: this.ros,
+                    serverName: '/rekognition',
+                    actionName: 'rekognition_action/RekognitionAction'
+                });
+
+                this.rekognitionGoal = new ROSLIB.Goal({
+                    actionClient: rekognitionClient,
+                    goalMessage: {}
+                });
+
+                console.log("Rekognition Action Client created!")
+
+                // prediction_action_server -----------------------------------------------------------------
+                var predictionClient = new ROSLIB.ActionClient({
+                    ros: this.ros,
+                    serverName: '/prediction',
+                    actionName: 'prediction_action/PredictionAction'
+                });
+
+                this.predictionGoal = new ROSLIB.Goal({
+                    actionClient: predictionClient,
+                    goalMessage: {}
+                });
+
+                console.log("Prediction Action Client created!")
+
+
+                // ros -----------------------------------------------------------------
                 this.ros.on("error", error => {
                     console.log("Something went wrong when trying to connect");
                     console.log(error);
@@ -80,8 +117,30 @@ export default {
                         this.failed = true;
                     }
                 });
+
                 return resolve(0);
             });
+        },
+        awaitPhoto: function () {
+            return new Promise((resolve, reject) => {
+                this.rekognitionGoal.on('status', (status) => {
+                    if (status.status == 3) {
+                        resolve(true)
+                    }
+                    else if (status.status == 4 || status.status == 5) {
+                        console.log("ERROR ", status.status)
+                        resolve(false)
+                    }
+                })
+            })
+        },
+        awaitPrediction: function () {
+            console.log("awaitprediction")
+            return new Promise((resolve, reject) => {
+                this.predictionGoal.on('result', (result) => {
+                    resolve(result.table_number)
+                })
+            })
         },
         manualConnect() {
             this.failed = false;
