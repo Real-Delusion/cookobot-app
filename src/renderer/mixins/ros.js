@@ -11,7 +11,7 @@ export default {
             failed: false,
             connectionTries: 0,
             rekognitionGoal: null,
-            predictionClient: null,
+            predictionGoal: null,
         }
     },
     created: function () {
@@ -49,20 +49,13 @@ export default {
 
                     console.log(" Navigation Service created!");
 
-
-                    this.predictionClient = new ROSLIB.ActionClient({
-                        ros: this.ros,
-                        serverName: '/prediction',
-                        actionName: 'prediction_action_server'
-                    });
-
                 });
 
-                // rekognition_action_server
+                // rekognition_action_server -----------------------------------------------------------------
                 var rekognitionClient = new ROSLIB.ActionClient({
                     ros: this.ros,
                     serverName: '/rekognition',
-                    actionName: 'rekognition_action_server/RekognitionAction'
+                    actionName: 'rekognition_action/RekognitionAction'
                 });
 
                 this.rekognitionGoal = new ROSLIB.Goal({
@@ -70,12 +63,24 @@ export default {
                     goalMessage: {}
                 });
 
-                /*this.rekognitionGoal.on("result", (result) => {
-                    console.log("Final Result: " + result.sequence);
-                });*/
-
                 console.log("Rekognition Action Client created!")
 
+                // prediction_action_server -----------------------------------------------------------------
+                var predictionClient = new ROSLIB.ActionClient({
+                    ros: this.ros,
+                    serverName: '/prediction',
+                    actionName: 'prediction_action/PredictionAction'
+                });
+
+                this.predictionGoal = new ROSLIB.Goal({
+                    actionClient: predictionClient,
+                    goalMessage: {}
+                });
+
+                console.log("Prediction Action Client created!")
+
+
+                // ros -----------------------------------------------------------------
                 this.ros.on("error", error => {
                     console.log("Something went wrong when trying to connect");
                     console.log(error);
@@ -99,21 +104,29 @@ export default {
                 this.rekognitionGoal.on('status', (status) => {
                     if (status.status == 3) {
                         resolve(true)
-                    }                
+                    }
                     else if (status.status == 4 || status.status == 5) {
                         console.log("ERROR ", status.status)
                         resolve(false)
                     }
                 })
-        })
-    },
-    manualConnect() {
-        this.failed = false;
-        this.connectionTries = 0;
-        this.connectRos();
-    },
-    disconnect: function () {
-        this.ros.close();
+            })
+        },
+        awaitPrediction: function () {
+            console.log("awaitprediction")
+            return new Promise((resolve, reject) => {
+                this.predictionGoal.on('result', (result) => {
+                    resolve(result.table_number)
+                })
+            })
+        },
+        manualConnect() {
+            this.failed = false;
+            this.connectionTries = 0;
+            this.connectRos();
+        },
+        disconnect: function () {
+            this.ros.close();
+        }
     }
-}
 }

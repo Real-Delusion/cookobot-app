@@ -191,6 +191,7 @@ export default {
             // If it's not, we send it to kitchen
             if (!atCorrectTable) {
               console.log("This is not the correct table");
+              table.serving = false;
               break;
             }
           }
@@ -264,12 +265,12 @@ export default {
       return new Promise(async (resolve, reject) => {
         console.log("recognizeTableNumber");
 
-        // define the request
-        let number = 2;
+        // send goal to take photo
         this.rekognitionGoal.send();
 
-        console.log("goal sent");
+        console.log("rekognition goal sent");
         let taken = null;
+        let predicted = null;
         try {
           taken = await this.awaitPhoto();
         } catch (error) {
@@ -279,11 +280,22 @@ export default {
         if (taken) {
           console.log("Photo is taken");
 
-          // Now we predcit the number in the photo
+          // Now we predict the number in the photo
+          this.predictionGoal.send();
+
+          console.log("prediction goal sent");
+          predicted = null;
+          try {
+            predicted = await this.awaitPrediction();
+          } catch (error) {
+            console.log(error);
+          }
+          console.log("el predicted: ")
+          console.log(predicted)
         }
 
         // check if the table number recognized is correct
-        if (table == number) {
+        if (table == predicted) {
           resolve(true);
         } else resolve(false);
       });
