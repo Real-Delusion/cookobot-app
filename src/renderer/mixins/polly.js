@@ -59,5 +59,20 @@ export default {
         cancelPollyGoal: function() {
             this.pollyGoal.cancel()
         },
+
+        awaitPolly: function () {
+            return new Promise((resolve, reject) => {
+                this.pollyGoal.on('status', (status) => {
+                    if (status.status == 3) {
+                        resolve(true)
+                        console.log("Resolved")
+                    }
+                    else if (status.status == 4 || status.status == 5) {
+                        console.log("ERROR ", status.status)
+                        resolve(false)
+                    }
+                })
+            })
+        }
     }
 }
