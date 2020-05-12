@@ -1,117 +1,143 @@
 <template>
-  <div class="card queue_list">
-    <header class="card-header">
-      <div
-        class="robot_info"
-        v-for="robot in robots"
-        v-bind:key="robot.id"
-        v-show="robot.selected"
-        v-bind:style="{'border-left-color': robot.color}"
-      >
-        <p class="card-header-title">Robot #{{robot.id}}</p>
-        <p class="card-header-description description_robot">{{robot.description}}</p>
-      </div>
-      <a href="#" class="card-header-icon" aria-label="Settings">
-        <span class="icon">
-          <font-awesome-icon icon="cog" class="settings_icon" />
-        </span>
-      </a>
-    </header>
-    <div class="card-content-message" v-if="tables.length==0">
-      <div class="loading" v-show="goingKitchen && connected">
-        <progress class="progress is-small is-primary" max="100">15%</progress>
-        <p>Returning to kitchen...</p>
-      </div>
-      <div v-show="!goingKitchen && connected">
-        <span class="icon warning_icon">
-          <font-awesome-icon class icon="exclamation-circle" />
-        </span>
-        <span>Please select the tables that the robot has to attend</span>
-      </div>
-      <div v-show="!connected">
-        <span class="icon warning_icon">
-          <font-awesome-icon class icon="exclamation-triangle" />
-        </span>
-        <span>Not connected to the server</span>
-      </div>
-    </div>
-    <div class="card-content" v-else v-bind:class="[!connected ? 'card-content-message' : '' , '']">
-      <div v-show="!connected">
-        <span class="icon warning_icon">
-          <font-awesome-icon class icon="exclamation-triangle" />
-        </span>
-        <span>Not connected to the server</span>
-      </div>
-      <!-- Draggable list -->
-      <SlickList lockAxis="y" v-model="tables" v-show="connected">
-        <SlickItem
-          v-for="(table, index) in tables"
-          :key="table.id"
-          :index="index"
-          v-bind:class="[table.serving ? 'draw' : '', 'card box_element_list']"
-          v-bind:style="{ 'backgroundColor': 'white' }"
-          ref="table"
-          :disabled="servingTables"
-          v-bind:served="table.served"
+  <div class="tableList">
+    <div class="card queue_list">
+      <header class="card-header">
+        <div
+          class="robot_info"
+          v-for="robot in robots"
+          v-bind:key="robot.id"
+          v-show="robot.selected"
+          v-bind:style="{'border-left-color': robot.color}"
         >
-          <div
-            class="icon draggable_icon"
-            :style="[servingTables ? {'color': 'white'} : {'color': ''}]"
-          >
-            <font-awesome-icon icon="grip-vertical" />
-          </div>
-          <p v-if="table.id!=0">Table {{ table.id }}</p>
-          <p v-else>Kitchen</p>
-          <div
-            class="icon delete_icon"
-            v-show="!table.serving"
-            @touchstart="deleteTable(table)"
-            @mousedown="deleteTable(table)"
-            :style="[table.served ? {'color': 'var(--success)'} : {'color': ''}]"
-          >
-            <font-awesome-icon v-bind:icon="table.served ? 'check-circle' : 'times-circle'" />
-          </div>
-        </SlickItem>
-      </SlickList>
-    </div>
-    <footer class="card-footer footer is-fixed-bottom">
-      <button
-        class="button cancel_button is-danger is-fullwidth is-flex-tablet-only"
-        type="button"
-        v-on:click="deleteAllTables()"
-        :disabled="tables.length==0"
-        v-if="servingTables==false"
-      >
-        <span class="btn_icon">
-          <font-awesome-icon icon="trash-alt" />
-        </span>
-        Clear all
-      </button>
-      <button
-        class="button accept_button is-success is-fullwidth is-flex-tablet-only"
-        type="button"
-        v-on:click="accept()"
-        :disabled="tables.length==0"
-        v-if="servingTables==false"
-      >
-        <span class="btn_icon">
-          <font-awesome-icon icon="check-circle" />
-        </span>
-        Accept
-      </button>
-      <button
-        class="button cancel_button is-danger is-fullwidth is-flex-tablet-only"
-        type="button"
-        v-on:click="cancelServing()"
-        :disabled="tables.length==0"
+          <p class="card-header-title">Robot #{{robot.id}}</p>
+          <p class="card-header-description description_robot">{{robot.description}}</p>
+        </div>
+        <a href="#" class="card-header-icon" aria-label="Settings">
+          <span class="icon">
+            <font-awesome-icon icon="cog" class="settings_icon" />
+          </span>
+        </a>
+      </header>
+      <!-- Empty Draggable list -->
+      <div class="card-content-message" v-if="tables.length==0">
+        <div class="loading" v-show="goingKitchen && connected">
+          <progress class="progress is-small is-primary" max="100">15%</progress>
+          <p>Returning to kitchen...</p>
+        </div>
+        <div v-show="!goingKitchen && connected">
+          <span class="icon warning_icon">
+            <font-awesome-icon class icon="exclamation-circle" />
+          </span>
+          <span>Please select the tables that the robot has to attend</span>
+        </div>
+        <div v-show="!connected">
+          <span class="icon warning_icon">
+            <font-awesome-icon class icon="exclamation-triangle" />
+          </span>
+          <span>Not connected to the server</span>
+        </div>
+      </div>
+      <div
+        class="card-content"
         v-else
+        v-bind:class="[!connected ? 'card-content-message' : '' , '']"
       >
-        <span class="btn_icon">
-          <font-awesome-icon icon="times-circle" />
-        </span>
-        Cancel
-      </button>
-    </footer>
+        <div v-show="!connected">
+          <span class="icon warning_icon">
+            <font-awesome-icon class icon="exclamation-triangle" />
+          </span>
+          <span>Not connected to the server</span>
+        </div>
+        <!-- Draggable list -->
+        <SlickList lockAxis="y" v-model="tables" v-show="connected">
+          <SlickItem
+            v-for="(table, index) in tables"
+            :key="table.id"
+            :index="index"
+            v-bind:class="[table.serving ? 'draw' : '', 'card box_element_list']"
+            v-bind:style="{ 'backgroundColor': 'white' }"
+            ref="table"
+            :disabled="servingTables"
+            v-bind:served="table.served"
+          >
+            <div
+              class="icon draggable_icon"
+              :style="[servingTables ? {'color': 'white'} : {'color': ''}]"
+            >
+              <font-awesome-icon icon="grip-vertical" />
+            </div>
+            <p v-if="table.id!=0">Table {{ table.id }}</p>
+            <p v-else>Kitchen</p>
+            <div
+              class="icon delete_icon"
+              v-show="!table.serving"
+              @touchstart="deleteTable(table)"
+              @mousedown="deleteTable(table)"
+              :style="[table.served ? {'color': 'var(--success)'} : {'color': ''}]"
+            >
+              <font-awesome-icon v-bind:icon="table.served ? 'check-circle' : 'times-circle'" />
+            </div>
+          </SlickItem>
+        </SlickList>
+      </div>
+      <footer class="card-footer footer is-fixed-bottom">
+        <!-- Cancel button -->
+        <button
+          class="button cancel_button is-danger is-fullwidth is-flex-tablet-only"
+          type="button"
+          v-on:click="deleteAllTables()"
+          :disabled="tables.length==0"
+          v-if="servingTables==false"
+        >
+          <span class="btn_icon">
+            <font-awesome-icon icon="trash-alt" />
+          </span>
+          Clear all
+        </button>
+        <!-- Accept button -->
+        <button
+          class="button accept_button is-success is-fullwidth is-flex-tablet-only"
+          type="button"
+          v-on:click="accept()"
+          :disabled="tables.length==0"
+          v-if="servingTables==false"
+        >
+          <span class="btn_icon">
+            <font-awesome-icon icon="check-circle" />
+          </span>
+          Accept
+        </button>
+        <!-- Cancel serving button -->
+        <button
+          class="button cancel_button is-danger is-fullwidth is-flex-tablet-only"
+          type="button"
+          v-on:click="confirmationModal=true"
+          :disabled="tables.length==0"
+          v-else
+        >
+          <span class="btn_icon">
+            <font-awesome-icon icon="times-circle" />
+          </span>
+          Cancel
+        </button>
+      </footer>
+    </div>
+    <!-- Confirmation modal -->
+    <div class="modal" v-bind:class="{ 'is-active': confirmationModal }">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <section class="modal-card-body">
+          <div class="confirmation_message">
+            Are you sure you want to cancel the serving?
+          </div>
+          <div class="confirmation_buttons">
+          <button class="button accept_button is-success" v-on:click="acceptModal()">Confirm</button>
+          <button class="button cancel_button is-danger" v-on:click="cancelModal()">Cancel</button>
+          </div>
+        </section>
+        
+      </div>
+    </div>
   </div>
 </template>
 
@@ -137,7 +163,8 @@ export default {
       tables: [],
       servingTables: false,
       goingKitchen: false,
-      serviceCancelled: false
+      serviceCancelled: false,
+      confirmationModal: false,
     };
   },
   watch: {
@@ -228,6 +255,13 @@ export default {
       this.tables.splice(this.tables.indexOf(table), 1);
       bus.$emit("deleteTable", table.id);
     },
+    acceptModal: function(){
+      this.confirmationModal=false
+      this.cancelServing()
+    },
+    cancelModal: function(){
+      this.confirmationModal=false
+    },
     cancelServing: function() {
       this.resetAllTables();
       this.deleteAllTables();
@@ -298,8 +332,8 @@ export default {
           } catch (error) {
             console.log(error);
           }
-          console.log("el predicted: ")
-          console.log(predicted)
+          console.log("el predicted: ");
+          console.log(predicted);
         }
 
         // check if the table number recognized is correct
@@ -425,6 +459,25 @@ export default {
   text-align: center;
 }
 
+.modal{
+  z-index: 95;
+}
+
+
+.modal-card-body {
+  border-radius: 0.3rem;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 1.8rem;
+}
+
+.confirmation_buttons{
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 /* ANIMATED BORDER */
 .draw {
   overflow: hidden;
@@ -452,6 +505,7 @@ export default {
   right: 0;
   animation: border 2s 1s infinite, borderColor 2s 1s infinite;
 }
+
 
 @keyframes border {
   0% {
