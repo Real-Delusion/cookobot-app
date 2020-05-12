@@ -94,7 +94,7 @@ export default {
         disconnect: function () {
             this.ros.close();
         },
-        moveJoin: function (joint, goal) {
+        moveJoin: async function (joint, goal) {
             // Create move topic
             let topic = new ROSLIB.Topic({
                 ros: this.ros,
@@ -105,28 +105,29 @@ export default {
             // Initial arm position
             let initPos = this.arm.positions[joint];
 
-            let timeSpace = 0;
+            // Movement config
+            let increment = 0.01 // Effort per iteration
+            let interval = 50; // Time between iterations
 
+            // Move joint
             if (Math.sign(goal) == 1) {
-                for (initPos; initPos < goal; initPos += 0.01) {
-                    timeSpace += 50;
-                    setTimeout(() => {
-                        let message = new ROSLIB.Message({
-                            data: initPos
-                        })
-                        topic.publish(message)
-                    }, timeSpace);
+                for (initPos; initPos < goal; initPos += increment) {
+
+                    let message = new ROSLIB.Message({
+                        data: initPos
+                    })
+                    topic.publish(message)
+                    await new Promise(r => setTimeout(r, interval));
                 }
             }
             if (Math.sign(goal) == -1) {
-                for (initPos; initPos > goal; initPos -= 0.01) {
-                    timeSpace += 50;
-                    setTimeout(() => {
-                        let message = new ROSLIB.Message({
-                            data: initPos
-                        })
-                        topic.publish(message)
-                    }, timeSpace);
+                for (initPos; initPos > goal; initPos -= increment) {
+
+                    let message = new ROSLIB.Message({
+                        data: initPos
+                    })
+                    topic.publish(message)
+                    await new Promise(r => setTimeout(r, interval));
                 }
             }
         },
@@ -138,12 +139,13 @@ export default {
                     this.moveJoin(i, goals[i]);
                 }
 
-                while (true) {
+                resolve();
+
+                /*while (true) {
                     if (((Math.abs(this.arm.positions[2]) - Math.abs(goals[2])) < 0.2)) {
-                        resolve();
                         break;
                     }
-                }
+                }*/
             })
         },
         serveArm: function () {
