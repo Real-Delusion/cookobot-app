@@ -120,7 +120,7 @@
 // import bus for events
 import { bus } from "../../main";
 import Ros from "@/mixins/ros.js";
-import Ros from "@/mixins/arm.js";
+import Arm from "@/mixins/arm.js";
 
 // import slicksort for draggable list elements
 import { SlickList, SlickItem } from "vue-slicksort";
