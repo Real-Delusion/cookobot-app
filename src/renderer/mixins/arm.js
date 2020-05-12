@@ -76,14 +76,14 @@ export default {
         serveArm: function () {
             return new Promise(async (resolve, reject) => {
                 console.log("started")
-                await this.moveArm([1, 0.1, 0.1]);
+                await this.moveArm([-0.1, 0.01,2]);
                 console.log("finished")
                 resolve()
             })
         },
         foldArm: function () {
             return new Promise(async (resolve, reject) => {
-                await this.moveArm([-1, -1, -1]);
+                await this.moveArm([2.13, -2.33, 1.4]);
                 resolve()
             })
         }
