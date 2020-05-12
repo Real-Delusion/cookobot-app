@@ -56,12 +56,14 @@ export default {
         },
         moveArm: function (goals) {
             // 0 --> Elbow, 1 -> Shoulder, 2 --> Wrist
-            return new Promise((resolve, reject) => {
+            return new Promise(async (resolve, reject) => {
 
                 for (let i = 0; i < goals.length; i++) {
                     this.moveJoin(i, goals[i]);
                 }
 
+                // To do: detect end of movement
+                await new Promise(r => setTimeout(r, 10000));
                 resolve();
 
                 /*while (true) {
