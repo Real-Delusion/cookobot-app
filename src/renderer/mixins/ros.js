@@ -12,6 +12,14 @@ export default {
             connectionTries: 0,
             rekognitionGoal: null,
             predictionGoal: null,
+            arm: {
+                topics: [
+                    "arm_elbow_flex_controller",
+                    "arm_shoulder_lift_controller",
+                    "arm_wrist_flex_controller"
+                ],
+                positions: [0, 0, 0]
+            }
         }
     },
     created: function () {
@@ -48,6 +56,20 @@ export default {
                     });
 
                     console.log(" Navigation Service created!");
+
+                    // Init arm topics subscription
+                    for (let i = 0; i < this.arm.topics.length; i++) {
+                        let topic = new ROSLIB.Topic({
+                            ros: this.ros,
+                            name: "/" + this.arm.topics[i] + "/state",
+                            messageType: "control_msgs/JointControllerState"
+                        });
+                        topic.subscribe(message => {
+                            //console.log(message.set_point);
+                            this.arm.positions[i] = message.set_point;
+                        });
+
+                    }
 
                 });
 
