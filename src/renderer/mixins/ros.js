@@ -12,7 +12,6 @@ export default {
             connectionTries: 0,
             rekognitionGoal: null,
             predictionClient: null,
-            photoTaken: false,
         }
     },
     created: function () {
@@ -49,7 +48,7 @@ export default {
                     });
 
                     console.log(" Navigation Service created!");
-              
+
 
                     this.predictionClient = new ROSLIB.ActionClient({
                         ros: this.ros,
@@ -71,18 +70,6 @@ export default {
                     goalMessage: {}
                 });
 
-                this.rekognitionGoal.on('status', (status) => { 
-                    console.log(status.status) 
-                    if(status.status == 3){
-                        this.photoTaken = true
-                    }
-                    else{
-                        console.log("ERROR ",status.status) 
-                        this.photoTaken = false
-                    }
-                }) 
-
-                
                 /*this.rekognitionGoal.on("result", (result) => {
                     console.log("Final Result: " + result.sequence);
                 });*/
@@ -107,13 +94,26 @@ export default {
                 return resolve(0);
             });
         },
-        manualConnect() {
-            this.failed = false;
-            this.connectionTries = 0;
-            this.connectRos();
-        },
-        disconnect: function () {
-            this.ros.close();
-        }
+        awaitPhoto: function () {
+            return new Promise((resolve, reject) => {
+                this.rekognitionGoal.on('status', (status) => {
+                    if (status.status == 3) {
+                        resolve(true)
+                    }                
+                    else if (status.status == 4 || status.status == 5) {
+                        console.log("ERROR ", status.status)
+                        resolve(false)
+                    }
+                })
+        })
+    },
+    manualConnect() {
+        this.failed = false;
+        this.connectionTries = 0;
+        this.connectRos();
+    },
+    disconnect: function () {
+        this.ros.close();
     }
+}
 }

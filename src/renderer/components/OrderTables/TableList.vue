@@ -184,13 +184,15 @@ export default {
             break;
           }
 
-          // The robot is at a table. Now we check it's at the correct table
-          let atCorrectTable = await this.recognizeTableNumber(table.id);
+          if (table.id != 0) {
+            // The robot is at a table. Now we check it's at the correct table
+            let atCorrectTable = await this.recognizeTableNumber(table.id);
 
-          // If it's not, we send it to kitchen
-          if (!atCorrectTable) {
-            console.log("This is not the correct table");
-            break;
+            // If it's not, we send it to kitchen
+            if (!atCorrectTable) {
+              console.log("This is not the correct table");
+              break;
+            }
           }
 
           table.served = true;
@@ -259,16 +261,27 @@ export default {
       });
     },
     recognizeTableNumber: function(table) {
-      return new Promise((resolve, reject) => {
+      return new Promise(async (resolve, reject) => {
         console.log("recognizeTableNumber");
 
         // define the request
         let number = 2;
-        this.rekognitionGoal.send()
+        this.rekognitionGoal.send();
 
-        while(this.photoTaken == false){
-          
+        console.log("goal sent");
+        let taken = null;
+        try {
+          taken = await this.awaitPhoto();
+        } catch (error) {
+          console.log(error);
         }
+
+        if (taken) {
+          console.log("Photo is taken");
+
+          // Now we predcit the number in the photo
+        }
+
         // check if the table number recognized is correct
         if (table == number) {
           resolve(true);
