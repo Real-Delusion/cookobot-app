@@ -16,7 +16,7 @@ export default {
                     "arm_shoulder_lift_controller",
                     "arm_wrist_flex_controller"
                 ],
-                positions: [0,0,0]
+                positions: [0, 0, 0]
             }
         }
     },
@@ -94,18 +94,16 @@ export default {
         disconnect: function () {
             this.ros.close();
         },
-        moveArm: function (part, goal) {
-
+        moveJoin: function (joint, goal) {
             // Create move topic
             let topic = new ROSLIB.Topic({
                 ros: this.ros,
-                name: '/' + this.arm.topics[part] + '/command',
+                name: '/' + this.arm.topics[joint] + '/command',
                 messageType: 'std_msgs/Float64'
             })
 
             // Initial arm position
-            let initPos = this.arm.positions[part];
-            console.log(this.arm.topics[part]," ",initPos)
+            let initPos = this.arm.positions[joint];
 
             let timeSpace = 0;
 
@@ -132,16 +130,35 @@ export default {
                 }
             }
         },
-        foldArm: function () {
+        moveArm: function (goals) {
             // 0 --> Elbow, 1 -> Shoulder, 2 --> Wrist
-            setTimeout(this.moveArm(0, -1), 0);
-            setTimeout(this.moveArm(1, -1), 0);
-            setTimeout(this.moveArm(2, -1), 0);
+            return new Promise((resolve, reject) => {
+
+                for (let i = 0; i < goals.length; i++) {
+                    this.moveJoin(i, goals[i]);
+                }
+
+                while (true) {
+                    if (((Math.abs(this.arm.positions[2]) - Math.abs(goals[2])) < 0.2)) {
+                        resolve();
+                        break;
+                    }
+                }
+            })
         },
         serveArm: function () {
-            setTimeout(this.moveArm(0, 1), 0);
-            setTimeout(this.moveArm(1, 0.1), 0);
-            setTimeout(this.moveArm(2, 1), 0);
+            return new Promise(async (resolve, reject) => {
+                console.log("started")
+                await this.moveArm([1, 0.1, 1]);
+                console.log("finished")
+                resolve()
+            })
+        },
+        foldArm: function () {
+            return new Promise(async (resolve, reject) => {
+                await this.moveArm([-1, -1, -1]);
+                resolve()
+            })
         }
     }
 }
