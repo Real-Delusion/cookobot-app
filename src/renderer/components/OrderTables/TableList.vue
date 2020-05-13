@@ -178,6 +178,7 @@ export default {
   },
   created: async function() {
     await this.connectRos();
+    await this.foldArm();
 
     bus.$on("tableAdded", table => {
       //Adding data to the list
