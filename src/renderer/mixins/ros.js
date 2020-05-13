@@ -15,6 +15,7 @@ export default {
             connectionTries: 0,
             rekognitionGoal: null,
             predictionGoal: null,
+            pollyGoal: null,
             arm: {
                 topics: [
                     "arm_elbow_flex_controller",
@@ -22,6 +23,22 @@ export default {
                     "arm_wrist_flex_controller"
                 ],
                 positions: [0, 0, 0]
+            },
+            action_polly: {
+                goal: {  
+                    nombreArchivo: "",
+                    texto: "",
+                    funcion: 0,
+                },
+                feedback: {  
+                    time_elapsed: 0
+                },
+                result: { 
+                    success: null,
+                },
+                status: { 
+                    status: 0, text: '' 
+                },
             }
         }
     },
@@ -156,6 +173,52 @@ export default {
         },
         disconnect: function () {
             this.ros.close();
+        },
+        runPollyAction: function(nombreArchivo, texto, funcion) {
+            let actionClient = new ROSLIB.ActionClient({
+                ros : this.ros,
+                serverName : '/awsPolly',
+                actionName : 'aws_polly_action/AwsPolly'
+            })
+
+            this.pollyGoal = new ROSLIB.Goal({
+                actionClient : actionClient,
+                goalMessage: {
+                    nombreArchivo: nombreArchivo,
+                    texto: texto,
+                    funcion: funcion,
+
+                }
+            })
+
+            this.pollyGoal.on('status', (status) => {
+                this.action_polly.status= status
+            })
+
+            this.pollyGoal.on('feedback', (feedback) => {
+                this.action_polly.feedback= feedback.time_elapsed
+
+            })
+            this.pollyGoal.send()
+            console.log("ACION PoLLY EJECUTADA")
+        },
+        cancelPollyGoal: function() {
+            this.pollyGoal.cancel()
+        },
+
+        awaitPolly: function () {
+            return new Promise((resolve, reject) => {
+                this.pollyGoal.on('status', (status) => {
+                    if (status.status == 3) {
+                        resolve(true)
+                        console.log("Resolved")
+                    }
+                    else if (status.status == 4 || status.status == 5) {
+                        console.log("ERROR ", status.status)
+                        resolve(false)
+                    }
+                })
+            })
         },
     }
 }
