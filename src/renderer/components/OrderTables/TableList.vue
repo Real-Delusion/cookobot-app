@@ -218,7 +218,7 @@
               }
               // Serve food
               await this.serveArm();
-              playWhenServe('serveText')
+              this.playWhenServe('serveText')
               // Wait 5s
               await new Promise(r => setTimeout(r, 5000));
 
@@ -379,8 +379,8 @@
       playWhenServe: async function (nombreArchivo) {
         try{
           this.runPollyAction(nombreArchivo+'.ogg', '', 2);
-          let played = await this.awaitPolly();
-          if(played == true){ this.disabledActionButtons = false}
+          let playedServe = await this.awaitPolly();
+          if(playedServe == true){ this.disabledActionButtons = false}
           else { this.disabledActionButtons = true}
         }
         catch (error) {
