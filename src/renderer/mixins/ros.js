@@ -6,8 +6,8 @@ export default {
         return {
             // ros connection
             ros: null,
-            rosbridge_address: "ws://192.168.1.148:9090/",
-            //rosbridge_address: "ws://localhost:9090/",
+            //rosbridge_address: "ws://192.168.1.148:9090/",
+            rosbridge_address: "ws://localhost:9090/",
             connected: false,
             position: { x: 0, y: 0, z: 0 },
             navService: null,
@@ -155,6 +155,7 @@ export default {
                         console.log("ERROR ", status.status)
                         resolve(false)
                     }
+                    setTimeout(resolve, 10000);
                 })
             })
         },

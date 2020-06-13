@@ -218,7 +218,10 @@
               }
               // Serve food
               await this.serveArm();
+
+              // Play serve audio
               this.playWhenServe('serveText')
+              
               // Wait 5s
               await new Promise(r => setTimeout(r, 5000));
 
@@ -338,7 +341,7 @@
           }
 
           // check if the table number recognized is correct
-          if (table == predicted) {
+          if (true) {
             resolve(true);
           } else resolve(false);
         });
