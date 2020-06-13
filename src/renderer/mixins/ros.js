@@ -1,7 +1,5 @@
-import Polly from "@/mixins/polly.js";
-
 export default {
-    mixins: [Polly],
+    mixins: [],
     data() {
         return {
             // ros connection

@@ -102,21 +102,32 @@
     <!-- <ConfigureModal :isActive=configureModal></ConfigureModal> -->
     <div class="modal" v-bind:class="{ 'is-active': configureModal }">
       <div class="modal-background"></div>
-      <div class="modal-card">
-        <header class="modal-card-head">
-          <p class="modal-card-title">Configure audios</p>
-          <button class="delete" aria-label="close" v-on:click="closeConfigModal()"></button>
-        </header>
-        <section class="modal-card-body">
-          <!-- Content ... -->
-          <label>File name:</label>
-          <input class="input" type="text" placeholder="Put something" v-model="nombreArchivo">
-          <label>Text to speech:</label>
-          <input class="input" type="text" placeholder="Put something" v-model="textToSpeech">
-          <button v-on:click="generateAudio()" class="button is-medium is-primary" :disabled="disabledActionButtons">Generate Audio</button>
-          <button v-on:click="playAudio()" class="button is-medium is-success" :disabled="disabledActionButtons">Play Audio</button>
-          <button v-on:click="deleteAudio()" class="button is-medium is-danger" :disabled="disabledActionButtons">Delete Audio</button>
-        </section>
+      <div class="modal-content">
+        <article class="message is-dark">
+          <div class="message-header" v-for="robot in robots" v-bind:key="robot.id" v-show="robot.selected"
+        v-bind:style="{'background-color': robot.color}" >
+            Configure Text to Speech
+            <button class="delete" aria-label="close" type="button" v-on:click="closeConfigModal()"></button>
+          </div>
+          <div class="message-body">
+            <div class="content columns">
+              <div class="column">
+                <div class="columns">
+                  <div class="column is-full">
+                    <label>Text to speech:</label>
+                    <input class="input" type="text" placeholder="Text to speech" v-model="textToSpeech">                    
+                  </div>
+                </div>
+                <div class="columns">
+                  <div class="column is-4 is-offset-8">
+                    <button v-on:click="updateServeAudio()" class="button is-success" :disabled="disabledActionButtons">Save & Update</button>
+                  </div> 
+                </div>
+              </div>
+              
+            </div>
+          </div>
+        </article>
       </div>
     </div>
   </div>
@@ -346,10 +357,10 @@
           } else resolve(false);
         });
       },
-      generateAudio: async function () {
+      updateServeAudio: async function () {
         try{
           console.log(this.generated)
-          this.runPollyAction(this.nombreArchivo+'.ogg', this.textToSpeech, 1);
+          this.runPollyAction('serveText.ogg', this.textToSpeech, 1);
           let generated = await this.awaitPolly();
           if(generated == true){ this.disabledActionButtons = false}
           else { this.disabledActionButtons = true}
@@ -573,6 +584,10 @@
     bottom: 0;
     right: 0;
     animation: border 2s 1s infinite, borderColor 2s 1s infinite;
+  }
+
+  .headerModal {
+
   }
 
 
